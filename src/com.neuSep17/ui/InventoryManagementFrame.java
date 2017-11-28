@@ -43,6 +43,9 @@ public class InventoryManagementFrame extends JFrame {
 	private JLabel priceLabel;
 	private JTextField priceTextField;
 	private JLabel priceAlertLabel;
+	private JButton saveButton;
+	private JButton clearButton;
+	private JButton cancelButton;
 
 	public InventoryManagementFrame() {
 		super();
@@ -94,6 +97,9 @@ public class InventoryManagementFrame extends JFrame {
 		priceTextField = new JTextField(10);
 		priceAlertLabel = new JLabel("Price should be integer.");
 		priceSetTrue();
+		saveButton = new JButton("SAVE");
+		clearButton = new JButton("CLEAR");
+		cancelButton = new JButton("CANCEL");
 	}
 
 	private void createPanel() {
@@ -129,6 +135,9 @@ public class InventoryManagementFrame extends JFrame {
 		componetsPanel.add(priceLabel);
 		componetsPanel.add(priceTextField);
 		componetsPanel.add(priceAlertLabel);
+		componetsPanel.add(saveButton);
+		componetsPanel.add(clearButton);
+		componetsPanel.add(cancelButton);
 		this.add(componetsPanel);
 	}
 
