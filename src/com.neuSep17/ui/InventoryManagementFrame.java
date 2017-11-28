@@ -25,6 +25,21 @@ public class InventoryManagementFrame extends JFrame {
 	private JLabel categoryLabel;
 	private JTextField categoryTextField;
 	private JLabel categoryAlertLabel;
+	private JLabel yearLabel;
+	private JTextField yearTextField;
+	private JLabel yearAlertLabel;
+	private JLabel makeLabel;
+	private JTextField makeTextField;
+	private JLabel makeAlertLabel;
+	private JLabel modelLabel;
+	private JTextField modelTextField;
+	private JLabel modelAlertLabel;
+	private JLabel trimLabel;
+	private JTextField trimTextField;
+	private JLabel trimAlertLabel;
+	private JLabel typeLabel;
+	private JTextField typeTextField;
+	private JLabel typeAlertLabel;
 	private JLabel priceLabel;
 	private JTextField priceTextField;
 	private JLabel priceAlertLabel;
@@ -42,10 +57,6 @@ public class InventoryManagementFrame extends JFrame {
 		idTextField = new JTextField(10);
 		idAlertLabel = new JLabel("ID's length should be 10, only number.");
 		idSetTrue();
-		priceLabel = new JLabel("Price");
-		priceTextField = new JTextField(10);
-		priceAlertLabel = new JLabel("Price should be integer.");
-		priceSetTrue();
 		webIdLabel = new JLabel("WebID");
 		webIdTextField = new JTextField(20);
 		webIdAlertLabel = new JLabel("Split by \"-\".");
@@ -59,6 +70,30 @@ public class InventoryManagementFrame extends JFrame {
 		setupAutoComplete(categoryTextField, categoryItems);
 		categoryAlertLabel = new JLabel("New, used or certified.");
 		categorySetTrue();
+		yearLabel = new JLabel("Year");
+		yearTextField = new JTextField(10);
+		yearAlertLabel = new JLabel("YEAR.");
+		yearSetTrue();
+		makeLabel = new JLabel("Make");
+		makeTextField = new JTextField(20);
+		makeAlertLabel = new JLabel("MAKE.");
+		makeSetTrue();
+		modelLabel = new JLabel("Model");
+		modelTextField = new JTextField(20);
+		modelAlertLabel = new JLabel("MODEL.");
+		modelSetTrue();
+		trimLabel = new JLabel("Trim");
+		trimTextField = new JTextField(20);
+		trimAlertLabel = new JLabel("TRIM.");
+		trimSetTrue();
+		typeLabel = new JLabel("Type");
+		typeTextField = new JTextField(10);
+		typeAlertLabel = new JLabel("TYPE.");
+		typeSetTrue();
+		priceLabel = new JLabel("Price");
+		priceTextField = new JTextField(10);
+		priceAlertLabel = new JLabel("Price should be integer.");
+		priceSetTrue();
 	}
 
 	private void createPanel() {
@@ -73,6 +108,24 @@ public class InventoryManagementFrame extends JFrame {
 		componetsPanel.add(categoryLabel);
 		componetsPanel.add(categoryTextField);
 		componetsPanel.add(categoryAlertLabel);
+		componetsPanel.add(yearLabel);
+		componetsPanel.add(yearTextField);
+		componetsPanel.add(yearAlertLabel);
+		componetsPanel.add(priceLabel);
+		componetsPanel.add(priceTextField);
+		componetsPanel.add(priceAlertLabel);
+		componetsPanel.add(makeLabel);
+		componetsPanel.add(makeTextField);
+		componetsPanel.add(makeAlertLabel);
+		componetsPanel.add(modelLabel);
+		componetsPanel.add(modelTextField);
+		componetsPanel.add(modelAlertLabel);
+		componetsPanel.add(trimLabel);
+		componetsPanel.add(trimTextField);
+		componetsPanel.add(trimAlertLabel);
+		componetsPanel.add(typeLabel);
+		componetsPanel.add(typeTextField);
+		componetsPanel.add(typeAlertLabel);
 		componetsPanel.add(priceLabel);
 		componetsPanel.add(priceTextField);
 		componetsPanel.add(priceAlertLabel);
@@ -209,6 +262,56 @@ public class InventoryManagementFrame extends JFrame {
 		categoryAlertLabel.setForeground(Color.black);
 	}
 
+	private void yearSetTrue() {
+		yearTextField.setBorder(new LineBorder(Color.black));
+		yearAlertLabel.setForeground(Color.black);
+	}
+
+	private void yearSetFalse() {
+		yearTextField.setBorder(new LineBorder(Color.red));
+		yearAlertLabel.setForeground(Color.red);
+	}
+
+	private void makeSetTrue() {
+		makeTextField.setBorder(new LineBorder(Color.black));
+		makeAlertLabel.setForeground(Color.black);
+	}
+
+	private void makeSetFalse() {
+		makeTextField.setBorder(new LineBorder(Color.red));
+		makeAlertLabel.setForeground(Color.red);
+	}
+
+	private void modelSetTrue() {
+		modelTextField.setBorder(new LineBorder(Color.black));
+		modelAlertLabel.setForeground(Color.black);
+	}
+
+	private void modelSetFalse() {
+		modelTextField.setBorder(new LineBorder(Color.red));
+		modelAlertLabel.setForeground(Color.red);
+	}
+
+	private void trimSetTrue() {
+		trimTextField.setBorder(new LineBorder(Color.black));
+		trimAlertLabel.setForeground(Color.black);
+	}
+
+	private void trimSetFalse() {
+		trimTextField.setBorder(new LineBorder(Color.red));
+		trimAlertLabel.setForeground(Color.red);
+	}
+
+	private void typeSetTrue() {
+		typeTextField.setBorder(new LineBorder(Color.black));
+		typeAlertLabel.setForeground(Color.black);
+	}
+
+	private void typeSetFalse() {
+		typeTextField.setBorder(new LineBorder(Color.red));
+		typeAlertLabel.setForeground(Color.red);
+	}
+
 	private void priceSetTrue() {
 		priceTextField.setBorder(new LineBorder(Color.black));
 		priceAlertLabel.setForeground(Color.black);
@@ -218,8 +321,6 @@ public class InventoryManagementFrame extends JFrame {
 		priceTextField.setBorder(new LineBorder(Color.red));
 		priceAlertLabel.setForeground(Color.red);
 	}
-
-
 
 	private void addListeners() {
 		idTextField.addKeyListener(new VIDListener());
