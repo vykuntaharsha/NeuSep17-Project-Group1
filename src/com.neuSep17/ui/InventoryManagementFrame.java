@@ -273,7 +273,7 @@ public class InventoryManagementFrame extends JFrame {
 		public boolean verify(JComponent input){
 			String vid = ((JTextField)input).getText();
 			if(vid.length() < 10){
-				idSetTrue();
+				idSetWrong();
 				return false;
 			}else if(vid.length() == 10){
 				idSetTrue();
@@ -329,6 +329,7 @@ public class InventoryManagementFrame extends JFrame {
 				priceSetTrue();
 				return true;
 			}else{
+				priceSetFalse();
 				return false;
 			}
 		}
@@ -384,10 +385,11 @@ public class InventoryManagementFrame extends JFrame {
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField)input).getText();
-			if(str.contains("-")){
+			if(str.contains("-") && str.charAt(str.length() - 1) != '-'){
 				webIdSetTrue();
 				return true;
 			}else{
+				webidSetWrong();
 				return false;
 			}
 		}
@@ -429,7 +431,7 @@ public class InventoryManagementFrame extends JFrame {
 				categorySetTrue();
 				return true;
 			}else {
-				categorySetTrue();
+				categorySetWrong();
 				return false;
 			}
 		}
