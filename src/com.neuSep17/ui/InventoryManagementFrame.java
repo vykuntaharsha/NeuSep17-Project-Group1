@@ -349,8 +349,7 @@ public class InventoryManagementFrame extends JFrame {
 		modelTextField.setInputVerifier(new ModelVerifier());
 		trimTextField.setInputVerifier(new TrimVerifier());
 	}
-
-	//VIDListener & VIDVerifier
+//VIDListener & VIDVerifier
 	private class VIDListener implements KeyListener {
 	    @Override
 	    public void keyPressed(KeyEvent e){}
@@ -390,19 +389,17 @@ public class InventoryManagementFrame extends JFrame {
 	private class VehicleIDVerifier extends InputVerifier {
 		public boolean verify(JComponent input){
 			String vid = ((JTextField)input).getText();
-			if(vid.length() < 10){
+			if(vid.length() != 10){
 				idSetWrong();
 				return false;
-			}else if(vid.length() == 10){
+			}else{
 				idSetTrue();
 				return true;
-			}else{
-				return false;
 			}
 		}
 
 		public boolean shouldYieldFocus(JComponent input) {
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 
@@ -421,18 +418,16 @@ public class InventoryManagementFrame extends JFrame {
 			if(keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
 					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)){
 				priceSetFalse();
-				e.consume();//invalid numeric input will be eliminated
+				e.consume();
 			}
 			String str = priceTextField.getText();
-
 			if(keyInput == KeyEvent.VK_ENTER){
-				if(str == "")
+				if(str.equals(""))
 					priceSetFalse();
 				else
 					priceSetTrue();
 			}
 			if(keyInput == KeyEvent.VK_BACK_SPACE){
-				if(str != "")
 					priceSetTrue();
 			}
 			if(keyInput >=KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9 ){
@@ -442,6 +437,7 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private class PriceVerifier extends InputVerifier {
+		@Override
 		public boolean verify(JComponent input){
 			String str = ((JTextField)input).getText();
 			if(!str.equals("")){
@@ -452,9 +448,9 @@ public class InventoryManagementFrame extends JFrame {
 				return false;
 			}
 		}
-
+		@Override
 		public boolean shouldYieldFocus(JComponent input) {
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
@@ -488,7 +484,7 @@ public class InventoryManagementFrame extends JFrame {
 				webIdSetTrue();
 			}
 			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
-				webIdSetTrue();
+				webIdSetTrue();//valid letter input
 			}
 		}
 
@@ -515,14 +511,13 @@ public class InventoryManagementFrame extends JFrame {
 
 		@Override
 		public boolean shouldYieldFocus(JComponent input) {
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
 
 	//CategoryListener & CategoryVerifier
 	private class CategoryListener implements KeyListener{
-
 		@Override
 		public void keyTyped(KeyEvent e) {
 			char keyInput = e.getKeyChar();
@@ -535,7 +530,6 @@ public class InventoryManagementFrame extends JFrame {
 				e.consume();
 			}
 		}
-
 		@Override
 		public void keyPressed(KeyEvent e) {}
 
@@ -555,10 +549,9 @@ public class InventoryManagementFrame extends JFrame {
 				return false;
 			}
 		}
-
 		@Override
 		public boolean shouldYieldFocus(JComponent input) {
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
@@ -604,19 +597,17 @@ public class InventoryManagementFrame extends JFrame {
 	private class YearVerifier extends InputVerifier{
 		public boolean verify(JComponent input){
 			String year = ((JTextField)input).getText();
-			if(year.equals("") || year.length() < 4){
-				yearSetFalse();
-				return false;
-			}else if(year.length() == 4){
+			if(year.length() == 4){
 				yearSetTrue();
 				return true;
 			}else{
+				yearSetFalse();
 				return false;
 			}
 		}
 
 		public boolean shouldYieldFocus(JComponent input) {
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
@@ -627,31 +618,29 @@ public class InventoryManagementFrame extends JFrame {
 			int keyInput = e.getKeyChar();
 			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
 					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97)
-					|| keyInput > 122)) {
+					|| keyInput > 122)) {//invalid input(only letters and special case)
 				makeSetFalse();
 				e.consume();
 			}
 			String str = makeTextField.getText();
 			if(keyInput == KeyEvent.VK_ENTER){
 				if(str.equals("") || str.equals(null))
-					makeSetTrue();
-				else
 					makeSetFalse();
+				else
+					makeSetTrue();
 			}
 			if(keyInput == KeyEvent.VK_BACK_SPACE){
 				if(str.equals("") || str.equals(null))
-					makeSetTrue();
-				else
 					makeSetFalse();
+				else
+					makeSetTrue();
 			}
 			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
-				makeSetTrue();
+				makeSetTrue();//valid letter input
 			}
-
 		}
 		@Override
 		public void keyPressed(KeyEvent e) {}
-
 		@Override
 		public void keyReleased(KeyEvent e) {}
 	}
@@ -671,7 +660,7 @@ public class InventoryManagementFrame extends JFrame {
 
 		@Override
 		public boolean shouldYieldFocus(JComponent input){
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
@@ -689,20 +678,20 @@ public class InventoryManagementFrame extends JFrame {
 			String str = makeTextField.getText();
 			if(keyInput == KeyEvent.VK_ENTER){
 				if(str.equals("") || str.equals(null))
-					typeSetTrue();
-				else
 					typeSetFalse();
+				else
+					typeSetTrue();
 			}
+			//
 			if(keyInput == KeyEvent.VK_BACK_SPACE){
 				if(str.equals("") || str.equals(null))
-					typeSetTrue();
-				else
 					typeSetFalse();
+				else
+					typeSetTrue();
 			}
 			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
 				typeSetTrue();
 			}
-
 		}
 		@Override
 		public void keyPressed(KeyEvent e) {}
@@ -726,7 +715,7 @@ public class InventoryManagementFrame extends JFrame {
 
 		@Override
 		public boolean shouldYieldFocus(JComponent input){
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
@@ -746,7 +735,7 @@ public class InventoryManagementFrame extends JFrame {
 
 		@Override
 		public boolean shouldYieldFocus(JComponent input){
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
@@ -765,7 +754,7 @@ public class InventoryManagementFrame extends JFrame {
 		}
 		@Override
 		public boolean shouldYieldFocus(JComponent input){
-			boolean valid = verify(input);
+			verify(input);
 			return true;
 		}
 	}
