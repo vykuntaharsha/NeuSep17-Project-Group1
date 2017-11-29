@@ -340,8 +340,17 @@ public class InventoryManagementFrame extends JFrame {
 		webIdTextField.setInputVerifier(new WebIDVerifier());
 		categoryTextField.addKeyListener(new CategoryListener());
 		categoryTextField.setInputVerifier(new CategoryVerifier());
+		yearTextField.addKeyListener(new YearListener());
+		yearTextField.setInputVerifier(new YearVerifier());
+		makeTextField.addKeyListener(new MakeListener());
+		makeTextField.setInputVerifier(new MakeVerifier());
+		typeTextField.addKeyListener(new TypeListener());
+		typeTextField.setInputVerifier(new TypeVerifier());
+		modelTextField.setInputVerifier(new ModelVerifier());
+		trimTextField.setInputVerifier(new TrimVerifier());
 	}
 
+	//VIDListener & VIDVerifier
 	private class VIDListener implements KeyListener {
 	    @Override
 	    public void keyPressed(KeyEvent e){}
@@ -379,7 +388,6 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private class VehicleIDVerifier extends InputVerifier {
-
 		public boolean verify(JComponent input){
 			String vid = ((JTextField)input).getText();
 			if(vid.length() < 10){
@@ -399,6 +407,8 @@ public class InventoryManagementFrame extends JFrame {
 		}
 
 	}
+
+	//PriceListener & PriceVerifier
 
 	private class PriceListener implements KeyListener {
 		@Override
@@ -432,7 +442,6 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private class PriceVerifier extends InputVerifier {
-
 		public boolean verify(JComponent input){
 			String str = ((JTextField)input).getText();
 			if(!str.equals("")){
@@ -450,8 +459,8 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
+	//WebIDListener & WebIDVerifier
 	private class WebIDListener implements KeyListener{
-
 		@Override
 		public void keyTyped(KeyEvent e) {
 			int keyInput = e.getKeyChar();
@@ -511,13 +520,14 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
+	//CategoryListener & CategoryVerifier
 	private class CategoryListener implements KeyListener{
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			int keyInput = e.getKeyChar();
-			if(keyInput == 67 || keyInput == 78 || keyInput == 85 || keyInput == 99
-					|| keyInput == 110 || keyInput == 117 || keyInput == KeyEvent.VK_ENTER
+			char keyInput = e.getKeyChar();
+			if(keyInput == 'c' || keyInput == 'C' || keyInput == 'u' || keyInput == 'U'
+					|| keyInput == 'n' || keyInput == 'N' || keyInput == KeyEvent.VK_ENTER
 					|| keyInput == KeyEvent.VK_BACK_SPACE) {
 				categorySetTrue();
 			}else{
@@ -548,6 +558,213 @@ public class InventoryManagementFrame extends JFrame {
 
 		@Override
 		public boolean shouldYieldFocus(JComponent input) {
+			boolean valid = verify(input);
+			return true;
+		}
+	}
+	//YearListener & YearVerifier
+	private class YearListener implements KeyListener{
+		@Override
+		public void keyTyped(KeyEvent e) {
+			int keyInput = e.getKeyChar();
+			if(keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)){
+				yearSetFalse();
+				e.consume();
+			}
+			String str = idTextField.getText();
+			if(keyInput == KeyEvent.VK_ENTER){//enter
+				if(str.length() != 4)
+					yearSetFalse();
+				else
+					yearSetTrue();
+			}
+			if(keyInput == KeyEvent.VK_BACK_SPACE){//backspace
+				if(str.length() < 4){
+					yearSetTrue();
+				}
+			}
+			if(keyInput >= KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9){//number
+				if(str.length() < 4)
+					yearSetTrue();
+				else{
+					yearSetFalse();
+					e.consume();
+				}
+			}
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
+	}
+
+	private class YearVerifier extends InputVerifier{
+		public boolean verify(JComponent input){
+			String year = ((JTextField)input).getText();
+			if(year.equals("") || year.length() < 4){
+				yearSetFalse();
+				return false;
+			}else if(year.length() == 4){
+				yearSetTrue();
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public boolean shouldYieldFocus(JComponent input) {
+			boolean valid = verify(input);
+			return true;
+		}
+	}
+	//MakeListener & MakeVerifier
+	private class MakeListener implements KeyListener{
+		@Override
+		public void keyTyped(KeyEvent e) {
+			int keyInput = e.getKeyChar();
+			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97)
+					|| keyInput > 122)) {
+				makeSetFalse();
+				e.consume();
+			}
+			String str = makeTextField.getText();
+			if(keyInput == KeyEvent.VK_ENTER){
+				if(str.equals("") || str.equals(null))
+					makeSetTrue();
+				else
+					makeSetFalse();
+			}
+			if(keyInput == KeyEvent.VK_BACK_SPACE){
+				if(str.equals("") || str.equals(null))
+					makeSetTrue();
+				else
+					makeSetFalse();
+			}
+			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
+				makeSetTrue();
+			}
+
+		}
+		@Override
+		public void keyPressed(KeyEvent e) {}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
+	}
+
+	private class MakeVerifier extends InputVerifier{
+		@Override
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				makeSetFalse();
+				return false;
+			}else{
+				makeSetTrue();
+				return true;
+			}
+		}
+
+		@Override
+		public boolean shouldYieldFocus(JComponent input){
+			boolean valid = verify(input);
+			return true;
+		}
+	}
+	//TypeListener & TypeVerifier
+	private class TypeListener implements KeyListener{
+		@Override
+		public void keyTyped(KeyEvent e) {
+			int keyInput = e.getKeyChar();
+			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97)
+					|| keyInput > 122)) {
+				typeSetFalse();
+				e.consume();
+			}
+			String str = makeTextField.getText();
+			if(keyInput == KeyEvent.VK_ENTER){
+				if(str.equals("") || str.equals(null))
+					typeSetTrue();
+				else
+					typeSetFalse();
+			}
+			if(keyInput == KeyEvent.VK_BACK_SPACE){
+				if(str.equals("") || str.equals(null))
+					typeSetTrue();
+				else
+					typeSetFalse();
+			}
+			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
+				typeSetTrue();
+			}
+
+		}
+		@Override
+		public void keyPressed(KeyEvent e) {}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
+	}
+
+	private class TypeVerifier extends InputVerifier{
+		@Override
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				typeSetFalse();
+				return false;
+			}else{
+				typeSetTrue();
+				return true;
+			}
+		}
+
+		@Override
+		public boolean shouldYieldFocus(JComponent input){
+			boolean valid = verify(input);
+			return true;
+		}
+	}
+	//ModelVerifier
+	private class ModelVerifier extends InputVerifier{
+		@Override
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				modelSetFalse();
+				return false;
+			}else{
+				modelSetTrue();
+				return true;
+			}
+		}
+
+		@Override
+		public boolean shouldYieldFocus(JComponent input){
+			boolean valid = verify(input);
+			return true;
+		}
+	}
+	//TrimVerifier
+	private class TrimVerifier extends InputVerifier{
+		@Override
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				trimSetFalse();
+				return false;
+			}else{
+				trimSetTrue();
+				return true;
+			}
+		}
+		@Override
+		public boolean shouldYieldFocus(JComponent input){
 			boolean valid = verify(input);
 			return true;
 		}
