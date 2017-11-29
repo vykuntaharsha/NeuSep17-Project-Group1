@@ -46,6 +46,10 @@ public class InventoryManagementFrame extends JFrame {
 	private JButton saveButton;
 	private JButton clearButton;
 	private JButton cancelButton;
+	private String[] categories = {"New", "Used", "Certified"};
+	private String[] makes = {"All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti","Buick", "Chrysler", "Citroen", "Dodge", "Ferrari", "Fiat", "Ford", "Geely", "General Motors", "GMC", "Honda"};
+	private String[] types = {"Luxury", " Sedans", "Coupes", "SUVs", "Crossovers", "Wagons/Hatchbacks", "Hybrids", "Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans"};
+
 
 	public InventoryManagementFrame() {
 		super();
@@ -53,6 +57,12 @@ public class InventoryManagementFrame extends JFrame {
 		createPanel();
 		addListeners();
 		makeThisVisible();
+	}
+	
+	private void setupAutoCompletes() {
+	setupAutoComplete(this.categoryTextField, new ArrayList<String>(Arrays.asList(categories)));
+	setupAutoComplete(this.makeTextField, new ArrayList<String>(Arrays.asList(makes)));
+	setupAutoComplete(this.typeTextField, new ArrayList<String>(Arrays.asList(types)));
 	}
 
 	private void createCompoments() {
@@ -65,12 +75,13 @@ public class InventoryManagementFrame extends JFrame {
 		webIdAlertLabel = new JLabel("Split by \"-\".");
 		webIdSetTrue();
 		categoryLabel = new JLabel("Category");
-		ArrayList<String> categoryItems = new ArrayList<String>();
+		/*ArrayList<String> categoryItems = new ArrayList<String>();
 		categoryItems.add("new");
 		categoryItems.add("used");
 		categoryItems.add("certified");
+		*/
 		categoryTextField = new JTextField(15);
-		setupAutoComplete(categoryTextField, categoryItems);
+		//setupAutoComplete(categoryTextField, categoryItems);
 		categoryAlertLabel = new JLabel("New, used or certified.");
 		categorySetTrue();
 		yearLabel = new JLabel("Year");
