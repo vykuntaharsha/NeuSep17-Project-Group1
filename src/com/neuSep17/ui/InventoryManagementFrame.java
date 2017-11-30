@@ -19,36 +19,52 @@ import javax.swing.event.DocumentListener;
 
 @SuppressWarnings("serial")
 public class InventoryManagementFrame extends JFrame {
-	private JLabel idLabel;
-	private JTextField idTextField;
-	private JLabel idAlertLabel;
-	private JLabel webIdLabel;
-	private JTextField webIdTextField;
-	private JLabel webIdAlertLabel;
-	private JLabel categoryLabel;
-	private JTextField categoryTextField;
-	private JLabel categoryAlertLabel;
-	private JLabel yearLabel;
-	private JTextField yearTextField;
-	private JLabel yearAlertLabel;
-	private JLabel makeLabel;
-	private JTextField makeTextField;
-	private JLabel makeAlertLabel;
-	private JLabel modelLabel;
-	private JTextField modelTextField;
-	private JLabel modelAlertLabel;
-	private JLabel trimLabel;
-	private JTextField trimTextField;
-	private JLabel trimAlertLabel;
-	private JLabel typeLabel;
-	private JTextField typeTextField;
-	private JLabel typeAlertLabel;
-	private JLabel priceLabel;
-	private JTextField priceTextField;
-	private JLabel priceAlertLabel;
+	private Component id, webId, category, year, make, model, trim, type, price;
 	private JButton saveButton;
 	private JButton clearButton;
 	private JButton cancelButton;
+
+	private class Component {
+		private JLabel fieldLabel;
+		private JTextField inputTextField;
+		private JLabel alertLabel;
+
+		public Component(String field, int length, String alert) {
+			fieldLabel = new JLabel(field);
+			inputTextField = new JTextField(length);
+			alertLabel = new JLabel(alert);
+			setTrue();
+		}
+
+		public Component(String field, String input, int length, String alert) {
+			fieldLabel = new JLabel(field);
+			inputTextField = new JTextField(input, length);
+			alertLabel = new JLabel(alert);
+			setTrue();
+		}
+
+		public void setTrue() {
+			inputTextField.setBorder(new LineBorder(Color.black));
+			alertLabel.setForeground(Color.black);
+		}
+
+		public void setFalse() {
+			inputTextField.setBorder(new LineBorder(Color.red));
+			alertLabel.setForeground(Color.red);
+		}
+
+		public JLabel getFieldLabel() {
+			return fieldLabel;
+		}
+
+		public JTextField getInputTextField() {
+			return inputTextField;
+		}
+
+		public JLabel getAlertLabel() {
+			return alertLabel;
+		}
+	}
 
 	public InventoryManagementFrame() {
 		super();
@@ -60,42 +76,15 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private void createCompoments() {
-		idLabel = new JLabel("ID");
-		idTextField = new JTextField(10);
-		idAlertLabel = new JLabel("ID's length should be 10, only number.");
-		idSetTrue();
-		webIdLabel = new JLabel("WebID");
-		webIdTextField = new JTextField(20);
-		webIdAlertLabel = new JLabel("Split by \"-\".");
-		webIdSetTrue();
-		categoryLabel = new JLabel("Category");
-		categoryTextField = new JTextField(15);
-		categoryAlertLabel = new JLabel("New, used or certified.");
-		categorySetTrue();
-		yearLabel = new JLabel("Year");
-		yearTextField = new JTextField(10);
-		yearAlertLabel = new JLabel("YEAR.");
-		yearSetTrue();
-		makeLabel = new JLabel("Make");
-		makeTextField = new JTextField(20);
-		makeAlertLabel = new JLabel("MAKE.");
-		makeSetTrue();
-		modelLabel = new JLabel("Model");
-		modelTextField = new JTextField(20);
-		modelAlertLabel = new JLabel("MODEL.");
-		modelSetTrue();
-		trimLabel = new JLabel("Trim");
-		trimTextField = new JTextField(20);
-		trimAlertLabel = new JLabel("TRIM.");
-		trimSetTrue();
-		typeLabel = new JLabel("Type");
-		typeTextField = new JTextField(10);
-		typeAlertLabel = new JLabel("TYPE.");
-		typeSetTrue();
-		priceLabel = new JLabel("Price");
-		priceTextField = new JTextField(10);
-		priceAlertLabel = new JLabel("Price should be integer.");
-		priceSetTrue();
+		id = new Component("ID", 10, "ID's length should be 10, only number.");
+		webId = new Component("WebID", 20, "Split by \"-\".");
+		category = new Component("Category", 15, "New, used or certified.");
+		year = new Component("Year", 10, "YEAR.");
+		make = new Component("Make", 20, "MAKE");
+		model = new Component("Model", 20, "MODEL");
+		trim = new Component("Trim", 10, "TRIM.");
+		type = new Component("Type", 20, "Type.");
+		price = new Component("Price", 20, "Price.");
 		saveButton = new JButton("SAVE");
 		clearButton = new JButton("CLEAR");
 		cancelButton = new JButton("CANCEL");
@@ -104,36 +93,6 @@ public class InventoryManagementFrame extends JFrame {
 	private void createPanel() {
 		JPanel componentsPanel = new JPanel();
 		componentsPanel.setLayout(new GridLayout(0, 3));
-		componentsPanel.add(idLabel);
-		componentsPanel.add(idTextField);
-		componentsPanel.add(idAlertLabel);
-		componentsPanel.add(webIdLabel);
-		componentsPanel.add(webIdTextField);
-		componentsPanel.add(webIdAlertLabel);
-		componentsPanel.add(categoryLabel);
-		componentsPanel.add(categoryTextField);
-		componentsPanel.add(categoryAlertLabel);
-		componentsPanel.add(yearLabel);
-		componentsPanel.add(yearTextField);
-		componentsPanel.add(yearAlertLabel);
-		componentsPanel.add(priceLabel);
-		componentsPanel.add(priceTextField);
-		componentsPanel.add(priceAlertLabel);
-		componentsPanel.add(makeLabel);
-		componentsPanel.add(makeTextField);
-		componentsPanel.add(makeAlertLabel);
-		componentsPanel.add(modelLabel);
-		componentsPanel.add(modelTextField);
-		componentsPanel.add(modelAlertLabel);
-		componentsPanel.add(trimLabel);
-		componentsPanel.add(trimTextField);
-		componentsPanel.add(trimAlertLabel);
-		componentsPanel.add(typeLabel);
-		componentsPanel.add(typeTextField);
-		componentsPanel.add(typeAlertLabel);
-		componentsPanel.add(priceLabel);
-		componentsPanel.add(priceTextField);
-		componentsPanel.add(priceAlertLabel);
 		componentsPanel.add(saveButton);
 		componentsPanel.add(clearButton);
 		componentsPanel.add(cancelButton);
@@ -239,96 +198,6 @@ public class InventoryManagementFrame extends JFrame {
 		});
 		txtInput.setLayout(new BorderLayout());
 		txtInput.add(cbInput, BorderLayout.SOUTH);
-	}
-
-	private void idSetWrong() {
-		idTextField.setBorder(new LineBorder(Color.red));
-		idAlertLabel.setForeground(Color.red);
-	}
-
-	private void idSetTrue() {
-		idTextField.setBorder(new LineBorder(Color.black));
-		idAlertLabel.setForeground(Color.black);
-	}
-
-	private void webidSetWrong() {
-		webIdTextField.setBorder(new LineBorder(Color.red));
-		webIdAlertLabel.setForeground(Color.red);
-	}
-
-	private void webIdSetTrue() {
-		webIdTextField.setBorder(new LineBorder(Color.black));
-		webIdAlertLabel.setForeground(Color.black);
-	}
-
-	private void categorySetWrong() {
-		categoryTextField.setBorder(new LineBorder(Color.red));
-		categoryAlertLabel.setForeground(Color.red);
-	}
-
-	private void categorySetTrue() {
-		categoryTextField.setBorder(new LineBorder(Color.black));
-		categoryAlertLabel.setForeground(Color.black);
-	}
-
-	private void yearSetTrue() {
-		yearTextField.setBorder(new LineBorder(Color.black));
-		yearAlertLabel.setForeground(Color.black);
-	}
-
-	private void yearSetFalse() {
-		yearTextField.setBorder(new LineBorder(Color.red));
-		yearAlertLabel.setForeground(Color.red);
-	}
-
-	private void makeSetTrue() {
-		makeTextField.setBorder(new LineBorder(Color.black));
-		makeAlertLabel.setForeground(Color.black);
-	}
-
-	private void makeSetFalse() {
-		makeTextField.setBorder(new LineBorder(Color.red));
-		makeAlertLabel.setForeground(Color.red);
-	}
-
-	private void modelSetTrue() {
-		modelTextField.setBorder(new LineBorder(Color.black));
-		modelAlertLabel.setForeground(Color.black);
-	}
-
-	private void modelSetFalse() {
-		modelTextField.setBorder(new LineBorder(Color.red));
-		modelAlertLabel.setForeground(Color.red);
-	}
-
-	private void trimSetTrue() {
-		trimTextField.setBorder(new LineBorder(Color.black));
-		trimAlertLabel.setForeground(Color.black);
-	}
-
-	private void trimSetFalse() {
-		trimTextField.setBorder(new LineBorder(Color.red));
-		trimAlertLabel.setForeground(Color.red);
-	}
-
-	private void typeSetTrue() {
-		typeTextField.setBorder(new LineBorder(Color.black));
-		typeAlertLabel.setForeground(Color.black);
-	}
-
-	private void typeSetFalse() {
-		typeTextField.setBorder(new LineBorder(Color.red));
-		typeAlertLabel.setForeground(Color.red);
-	}
-
-	private void priceSetTrue() {
-		priceTextField.setBorder(new LineBorder(Color.black));
-		priceAlertLabel.setForeground(Color.black);
-	}
-
-	private void priceSetFalse() {
-		priceTextField.setBorder(new LineBorder(Color.red));
-		priceAlertLabel.setForeground(Color.red);
 	}
 
 	private void addListeners() {
