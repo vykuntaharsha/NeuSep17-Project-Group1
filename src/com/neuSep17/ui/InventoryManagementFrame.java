@@ -201,136 +201,123 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private void addListeners() {
-		idTextField.addKeyListener(new VIDListener());
-		idTextField.setInputVerifier(new VehicleIDVerifier());
-		priceTextField.addKeyListener(new PriceListener());
-		priceTextField.setInputVerifier(new PriceVerifier());
-		webIdTextField.addKeyListener(new WebIDListener());
-		webIdTextField.setInputVerifier(new WebIDVerifier());
-		categoryTextField.addKeyListener(new CategoryListener());
-		categoryTextField.setInputVerifier(new CategoryVerifier());
-		yearTextField.addKeyListener(new YearListener());
-		yearTextField.setInputVerifier(new YearVerifier());
-		makeTextField.addKeyListener(new MakeListener());
-		makeTextField.setInputVerifier(new MakeVerifier());
-		typeTextField.addKeyListener(new TypeListener());
-		typeTextField.setInputVerifier(new TypeVerifier());
-		modelTextField.setInputVerifier(new ModelVerifier());
-		trimTextField.setInputVerifier(new TrimVerifier());
+		id.getInputTextField().addKeyListener(new VIDListener());
+		id.getInputTextField().setInputVerifier(new VehicleIDVerifier());
+		price.getInputTextField().addKeyListener(new PriceListener());
+		price.getInputTextField().setInputVerifier(new PriceVerifier());
+		webId.getInputTextField().addKeyListener(new WebIDListener());
+		webId.getInputTextField().setInputVerifier(new WebIDVerifier());
+		category.getInputTextField().addKeyListener(new CategoryListener());
+		category.getInputTextField().setInputVerifier(new CategoryVerifier());
+		year.getInputTextField().addKeyListener(new YearListener());
+		year.getInputTextField().setInputVerifier(new YearVerifier());
+		make.getInputTextField().addKeyListener(new MakeListener());
+		make.getInputTextField().setInputVerifier(new MakeVerifier());
+		type.getInputTextField().addKeyListener(new TypeListener());
+		type.getInputTextField().setInputVerifier(new TypeVerifier());
+		model.getInputTextField().setInputVerifier(new ModelVerifier());
+		trim.getInputTextField().setInputVerifier(new TrimVerifier());
 	}
-
-	// VIDListener & VIDVerifier
+	//VIDListener & VIDVerifier
 	private class VIDListener implements KeyListener {
-		@Override
-		public void keyPressed(KeyEvent e) {
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			int keyInput = e.getKeyChar();
-			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)) {
-				idSetWrong();
-				e.consume();// invalid numeric input will be eliminated
+	    @Override
+	    public void keyPressed(KeyEvent e){}
+	    @Override
+	    public void keyReleased(KeyEvent e){}
+	    @Override
+	    public void keyTyped(KeyEvent e){
+	        int keyInput = e.getKeyChar();
+	        if(keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)){
+	            id.setFalse();
+	            e.consume();//invalid numeric input will be eliminated
+	        }
+	        String str = id.getInputTextField().getText();
+	        if(keyInput == KeyEvent.VK_ENTER){//enter
+	        	if(str.length() != 10)
+	        		id.setFalse();
+	        	else
+	        		id.setTrue();
 			}
-			String str = idTextField.getText();
-			if (keyInput == KeyEvent.VK_ENTER) {// enter
-				if (str.length() != 10)
-					idSetWrong();
-				else
-					idSetTrue();
-			}
-			if (keyInput == KeyEvent.VK_BACK_SPACE) {// backspace
-				if (str.length() < 10) {
-					idSetTrue();
+			if(keyInput == KeyEvent.VK_BACK_SPACE){//backspace
+	        	if(str.length() < 10){
+					id.setTrue();
 				}
 			}
-			if (keyInput >= KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9) {// number
-				if (str.length() < 10)
-					idSetTrue();
-				else {
-					idSetWrong();
+			if(keyInput >= KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9){//number
+				if(str.length() < 10)
+					id.setTrue();
+				else{
+					id.setFalse();
 					e.consume();
 				}
 			}
-		}
+	    }
 	}
-
-	// all SuccessOrNot instance variable is a mark for save button function!!!
+	//all SuccessOrNot instance variable is a mark for save button function!!!
 	private boolean VIDSuccessOrNot;
 	private class VehicleIDVerifier extends InputVerifier {
-		public boolean verify(JComponent input) {
-			String vid = ((JTextField) input).getText();
-			if (vid.length() != 10) {
-				idSetWrong();
+		public boolean verify(JComponent input){
+			String vid = ((JTextField)input).getText();
+			if(vid.length() != 10){
+				id.setFalse();
 				return false;
-			} else {
-				idSetTrue();
+			}else{
+				id.setTrue();
 				VIDSuccessOrNot = true;
 				return true;
 			}
 		}
-
 		public boolean shouldYieldFocus(JComponent input) {
 			verify(input);
 			return true;
 		}
-
 	}
 
-	// PriceListener & PriceVerifier
-
+	//PriceListener & PriceVerifier
 	private class PriceListener implements KeyListener {
 		@Override
-		public void keyPressed(KeyEvent e) {
-		}
-
+		public void keyPressed(KeyEvent e){}
 		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-
+		public void keyReleased(KeyEvent e){}
 		@Override
-		public void keyTyped(KeyEvent e) {
+		public void keyTyped(KeyEvent e){
 			int keyInput = e.getKeyChar();
-			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)) {
-				priceSetFalse();
+			if(keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)){
+				price.setFalse();
 				e.consume();
 			}
-			String str = priceTextField.getText();
-			if (keyInput == KeyEvent.VK_ENTER) {
-				if (str.equals(""))
-					priceSetFalse();
+			String str = price.getInputTextField().getText();
+			if(keyInput == KeyEvent.VK_ENTER){
+				if(str.equals(""))
+					price.setFalse();
 				else
-					priceSetTrue();
+					price.setTrue();
 			}
-			if (keyInput == KeyEvent.VK_BACK_SPACE) {
-				priceSetTrue();
+			if(keyInput == KeyEvent.VK_BACK_SPACE){
+					price.setTrue();
 			}
-			if (keyInput >= KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9) {
-				priceSetTrue();
+			if(keyInput >=KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9 ){
+				price.setTrue();
 			}
 		}
 	}
+
 	private boolean PriceSuccessOrNot;
 	private class PriceVerifier extends InputVerifier {
 		@Override
-		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (!str.equals("")) {
-				priceSetTrue();
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(!str.equals("")){
+				price.setTrue();
 				PriceSuccessOrNot = true;
 				return true;
-			} else {
-				priceSetFalse();
+			}else{
+				price.setFalse();
 				return false;
 			}
 		}
-
 		@Override
 		public boolean shouldYieldFocus(JComponent input) {
 			verify(input);
@@ -338,61 +325,59 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
-	// WebIDListener & WebIDVerifier
-	private class WebIDListener implements KeyListener {
+	//WebIDListener & WebIDVerifier
+	private class WebIDListener implements KeyListener{
 		@Override
 		public void keyTyped(KeyEvent e) {
 			int keyInput = e.getKeyChar();
-			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE && keyInput != KeyEvent.VK_MINUS
-					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
-				webidSetWrong();
+			if(keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& keyInput != KeyEvent.VK_MINUS
+					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97)
+					|| keyInput > 122)){
+				webId.setFalse();
 				e.consume();
-			} // invalid input:输入除了回车删除和大小写字母以及横线以外的
-			String str = webIdTextField.getText();
+			}//invalid input:输入除了回车删除和大小写字母以及横线以外的
+			String str = webId.getInputTextField().getText();
 			int lastIndex = str.length() - 1;
-			if (keyInput == KeyEvent.VK_MINUS) {
-				if (str.equals("")) {
-					webidSetWrong();// 首位出现横线
+			if(keyInput == KeyEvent.VK_MINUS){
+				if(str.equals("")){
+					webId.setFalse();//首位出现横线
 				}
 			}
-			if (keyInput == KeyEvent.VK_ENTER) {
-				if (str.contains("-") && str.charAt(lastIndex) != '-')// 不能末尾为-
-					webIdSetTrue();
+			if(keyInput == KeyEvent.VK_ENTER){
+				if(str.contains("-") && str.charAt(lastIndex) != '-')//不能末尾为-
+					webId.setTrue();
 				else
-					webidSetWrong();
+					webId.setFalse();
 			}
-			if (keyInput == KeyEvent.VK_BACK_SPACE) {
-				webIdSetTrue();
+			if(keyInput == KeyEvent.VK_BACK_SPACE){
+				webId.setTrue();
 			}
-			if ((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)) {
-				webIdSetTrue();// valid letter input
+			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
+				webId.setTrue();//valid letter input
 			}
 		}
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-		}
+		public void keyPressed(KeyEvent e) {}
 
 		@Override
-		public void keyReleased(KeyEvent e) {
-		}
+		public void keyReleased(KeyEvent e) {}
 	}
-
 	private boolean WebIDSuccessOrNot;
-	private class WebIDVerifier extends InputVerifier {
+	private class WebIDVerifier extends InputVerifier{
 		@Override
 		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (str.contains("-") && str.charAt(str.length() - 1) != '-') {
-				webIdSetTrue();
+			String str = ((JTextField)input).getText();
+			if(str.contains("-") && str.charAt(str.length() - 1) != '-'){
+				webId.setTrue();
 				WebIDSuccessOrNot = true;
 				return true;
-			} else {
-				webidSetWrong();
+			}else{
+				webId.setFalse();
 				return false;
 			}
 		}
-
 		@Override
 		public boolean shouldYieldFocus(JComponent input) {
 			verify(input);
@@ -400,101 +385,95 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
-	// CategoryListener & CategoryVerifier
-	private class CategoryListener implements KeyListener {
+	//CategoryListener & CategoryVerifier
+	private class CategoryListener implements KeyListener{
 		@Override
 		public void keyTyped(KeyEvent e) {
 			char keyInput = e.getKeyChar();
-			if (keyInput == 'c' || keyInput == 'C' || keyInput == 'u' || keyInput == 'U' || keyInput == 'n'
-					|| keyInput == 'N' || keyInput == KeyEvent.VK_ENTER || keyInput == KeyEvent.VK_BACK_SPACE) {
-				categorySetTrue();
-			} else {
-				categorySetWrong();
+			if(keyInput == 'c' || keyInput == 'C' || keyInput == 'u' || keyInput == 'U'
+					|| keyInput == 'n' || keyInput == 'N' || keyInput == KeyEvent.VK_ENTER
+					|| keyInput == KeyEvent.VK_BACK_SPACE) {
+				category.setTrue();
+			}else{
+				category.setFalse();
 				e.consume();
 			}
 		}
+		@Override
+		public void keyPressed(KeyEvent e) {}
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
+		public void keyReleased(KeyEvent e) {}
 	}
-	
 	private boolean CategorySuccessOrNot;
 	private class CategoryVerifier extends InputVerifier {
 		@Override
 		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (str.equals("new") || str.equals("used") || str.equals("certified")) {
-				categorySetTrue();
+			String str = ((JTextField)input).getText();
+			if (str.equals("new") || str.equals("used") || str.equals("certified")){
+				category.setTrue();
 				CategorySuccessOrNot = true;
 				return true;
-			} else {
-				categorySetWrong();
+			}else {
+				category.setFalse();
 				return false;
 			}
 		}
-
 		@Override
 		public boolean shouldYieldFocus(JComponent input) {
 			verify(input);
 			return true;
 		}
 	}
-
-	// YearListener & YearVerifier
-	private class YearListener implements KeyListener {
+	//YearListener & YearVerifier
+	private class YearListener implements KeyListener{
 		@Override
 		public void keyTyped(KeyEvent e) {
 			int keyInput = e.getKeyChar();
-			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)) {
-				yearSetFalse();
+			if(keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
+					&& (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)){
+				year.setFalse();
 				e.consume();
 			}
-			String str = idTextField.getText();
-			if (keyInput == KeyEvent.VK_ENTER) {// enter
-				if (str.length() != 4)
-					yearSetFalse();
+			String str = year.getInputTextField().getText();
+			if(keyInput == KeyEvent.VK_ENTER){//enter
+				if(str.length() != 4)
+					year.setFalse();
 				else
-					yearSetTrue();
+					year.setTrue();
 			}
-			if (keyInput == KeyEvent.VK_BACK_SPACE) {// backspace
-				if (str.length() < 4) {
-					yearSetTrue();
+			if(keyInput == KeyEvent.VK_BACK_SPACE){//backspace
+				if(str.length() < 4){
+					year.setTrue();
 				}
 			}
-			if (keyInput >= KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9) {// number
-				if (str.length() < 4)
-					yearSetTrue();
-				else {
-					yearSetFalse();
+			if(keyInput >= KeyEvent.VK_0 && keyInput <= KeyEvent.VK_9){//number
+				if(str.length() < 4)
+					year.setTrue();
+				else{
+					year.setFalse();
 					e.consume();
 				}
 			}
 		}
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-		}
+		public void keyPressed(KeyEvent e) {}
 
 		@Override
-		public void keyReleased(KeyEvent e) {
-		}
+		public void keyReleased(KeyEvent e) {}
 	}
+
 	private boolean YearSuccessOrNot;
-	private class YearVerifier extends InputVerifier {
-		public boolean verify(JComponent input) {
-			String year = ((JTextField) input).getText();
-			if (year.length() == 4) {
-				yearSetTrue();
+	private class YearVerifier extends InputVerifier{
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.length() == 4){
+				year.setTrue();
 				YearSuccessOrNot = true;
 				return true;
-			} else {
-				yearSetFalse();
+			}else{
+				year.setFalse();
 				return false;
 			}
 		}
@@ -504,171 +483,162 @@ public class InventoryManagementFrame extends JFrame {
 			return true;
 		}
 	}
-
-	// MakeListener & MakeVerifier
-	private class MakeListener implements KeyListener {
+	//MakeListener & MakeVerifier
+	private class MakeListener implements KeyListener{
 		@Override
 		public void keyTyped(KeyEvent e) {
 			int keyInput = e.getKeyChar();
 			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {// invalid input(only
-																								// letters and special
-																								// case)
-				makeSetFalse();
+					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97)
+					|| keyInput > 122)) {//invalid input(only letters and special case)
+				make.setFalse();
 				e.consume();
 			}
-			String str = makeTextField.getText();
-			if (keyInput == KeyEvent.VK_ENTER) {
-				if (str.equals("") || str.equals(null))
-					makeSetFalse();
+			String str = make.getInputTextField().getText();
+			if(keyInput == KeyEvent.VK_ENTER){
+				if(str.equals("") || str.equals(null))
+					make.setFalse();
 				else
-					makeSetTrue();
+					make.setTrue();
 			}
-			if (keyInput == KeyEvent.VK_BACK_SPACE) {
-				if (str.equals("") || str.equals(null))
-					makeSetFalse();
+			if(keyInput == KeyEvent.VK_BACK_SPACE){
+				if(str.equals("") || str.equals(null))
+					make.setFalse();
 				else
-					makeSetTrue();
+					make.setTrue();
 			}
-			if ((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)) {
-				makeSetTrue();// valid letter input
+			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
+				make.setTrue();//valid letter input
 			}
 		}
-
 		@Override
-		public void keyPressed(KeyEvent e) {
-		}
-
+		public void keyPressed(KeyEvent e) {}
 		@Override
-		public void keyReleased(KeyEvent e) {
-		}
+		public void keyReleased(KeyEvent e) {}
 	}
+
 	private boolean MakeSuccessOrNot;
-	private class MakeVerifier extends InputVerifier {
+	private class MakeVerifier extends InputVerifier{
 		@Override
-		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (str.equals("") || str.equals(null)) {
-				makeSetFalse();
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				make.setFalse();
 				return false;
-			} else {
-				makeSetTrue();
+			}else{
+				make.setTrue();
 				MakeSuccessOrNot = true;
 				return true;
 			}
 		}
 
 		@Override
-		public boolean shouldYieldFocus(JComponent input) {
+		public boolean shouldYieldFocus(JComponent input){
 			verify(input);
 			return true;
 		}
 	}
-
-	// TypeListener & TypeVerifier
-	private class TypeListener implements KeyListener {
+	//TypeListener & TypeVerifier
+	private class TypeListener implements KeyListener{
 		@Override
 		public void keyTyped(KeyEvent e) {
 			int keyInput = e.getKeyChar();
 			if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
-				typeSetFalse();
+					&& (keyInput < 65 || (keyInput > 90 && keyInput < 97)
+					|| keyInput > 122)) {
+				type.setFalse();
 				e.consume();
 			}
-			String str = makeTextField.getText();
-			if (keyInput == KeyEvent.VK_ENTER) {
-				if (str.equals("") || str.equals(null))
-					typeSetFalse();
+			String str = make.getInputTextField().getText();
+			if(keyInput == KeyEvent.VK_ENTER){
+				if(str.equals("") || str.equals(null))
+					type.setFalse();
 				else
-					typeSetTrue();
+					type.setTrue();
 			}
 			//
-			if (keyInput == KeyEvent.VK_BACK_SPACE) {
-				if (str.equals("") || str.equals(null))
-					typeSetFalse();
+			if(keyInput == KeyEvent.VK_BACK_SPACE){
+				if(str.equals("") || str.equals(null))
+					type.setFalse();
 				else
-					typeSetTrue();
+					type.setTrue();
 			}
-			if ((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)) {
-				typeSetTrue();
+			if((keyInput >= 65 && keyInput <= 90) || (keyInput >= 97 && keyInput <= 122)){
+				type.setTrue();
 			}
 		}
+		@Override
+		public void keyPressed(KeyEvent e) {}
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
+		public void keyReleased(KeyEvent e) {}
 	}
+
 	private boolean TypeSuccessOrNot;
-	private class TypeVerifier extends InputVerifier {
+	private class TypeVerifier extends InputVerifier{
 		@Override
-		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (str.equals("") || str.equals(null)) {
-				typeSetFalse();
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				type.setFalse();
 				return false;
-			} else {
-				typeSetTrue();
+			}else{
+				type.setTrue();
 				TypeSuccessOrNot = true;
 				return true;
 			}
 		}
 
 		@Override
-		public boolean shouldYieldFocus(JComponent input) {
+		public boolean shouldYieldFocus(JComponent input){
 			verify(input);
 			return true;
 		}
 	}
-
-	// ModelVerifier
+	//ModelVerifier
 	private boolean ModelSuccessOrNot;
-	private class ModelVerifier extends InputVerifier {@Override
-		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (str.equals("") || str.equals(null)) {
-				modelSetFalse();
+	private class ModelVerifier extends InputVerifier{
+		@Override
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				model.setFalse();
 				return false;
-			} else {
-				modelSetTrue();
+			}else{
+				model.setTrue();
 				ModelSuccessOrNot = true;
 				return true;
 			}
 		}
 
 		@Override
-		public boolean shouldYieldFocus(JComponent input) {
+		public boolean shouldYieldFocus(JComponent input){
 			verify(input);
 			return true;
 		}
 	}
 
-	// TrimVerifier
+	//TrimVerifier
 	private boolean TrimSuccessOrNot;
-	private class TrimVerifier extends InputVerifier {
+	private class TrimVerifier extends InputVerifier{
 		@Override
-		public boolean verify(JComponent input) {
-			String str = ((JTextField) input).getText();
-			if (str.equals("") || str.equals(null)) {
-				trimSetFalse();
+		public boolean verify(JComponent input){
+			String str = ((JTextField)input).getText();
+			if(str.equals("") || str.equals(null)){
+				trim.setFalse();
 				return false;
-			} else {
-				trimSetTrue();
+			}else{
+				trim.setTrue();
 				TrimSuccessOrNot = true;
 				return true;
 			}
 		}
-
 		@Override
-		public boolean shouldYieldFocus(JComponent input) {
+		public boolean shouldYieldFocus(JComponent input){
 			verify(input);
 			return true;
 		}
 	}
-
 	private String[] categories = { "new", "used", "certified" };
 	private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
 			"Chrysler", "Citroen", "Dodge", "Ferrari", "Fiat", "Ford", "Geely", "General Motors", "GMC", "Honda" };
@@ -676,9 +646,9 @@ public class InventoryManagementFrame extends JFrame {
 			"Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
 
 	private void setupAutoCompletes() {
-		setupAutoComplete(this.categoryTextField, new ArrayList<String>(Arrays.asList(categories)));
-		setupAutoComplete(this.makeTextField, new ArrayList<String>(Arrays.asList(makes)));
-		setupAutoComplete(this.typeTextField, new ArrayList<String>(Arrays.asList(types)));
+		setupAutoComplete(this.category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
+		setupAutoComplete(this.make.getInputTextField(), new ArrayList<String>(Arrays.asList(makes)));
+		setupAutoComplete(this.type.getInputTextField(), new ArrayList<String>(Arrays.asList(types)));
 	}
 
 }
