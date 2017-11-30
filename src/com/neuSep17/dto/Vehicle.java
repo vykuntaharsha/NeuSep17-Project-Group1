@@ -13,4 +13,11 @@ public class Vehicle {
         private String bodyType;
         private Float price;
         private URL photoUrl;
+        
+        public URL getPhotoUrl() {
+            return photoUrl;
+        }
+        public void setPhotoUrl(URL photoUrl) {
+            this.photoUrl = photoUrl;
+        }
 }
