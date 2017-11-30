@@ -1,3 +1,5 @@
+package com.neuSep17.ui;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -5,9 +7,9 @@ import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+//import com.jgoodies.forms.layout.FormLayout;
+//import com.jgoodies.forms.layout.ColumnSpec;
+//import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

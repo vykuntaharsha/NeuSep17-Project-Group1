@@ -1,3 +1,5 @@
+package com.neuSep17.ui;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -100,48 +102,49 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private void createPanel() {
-		JPanel componetsPanel = new JPanel();
-		componetsPanel.setLayout(new GridLayout(0, 3));
-		componetsPanel.add(idLabel);
-		componetsPanel.add(idTextField);
-		componetsPanel.add(idAlertLabel);
-		componetsPanel.add(webIdLabel);
-		componetsPanel.add(webIdTextField);
-		componetsPanel.add(webIdAlertLabel);
-		componetsPanel.add(categoryLabel);
-		componetsPanel.add(categoryTextField);
-		componetsPanel.add(categoryAlertLabel);
-		componetsPanel.add(yearLabel);
-		componetsPanel.add(yearTextField);
-		componetsPanel.add(yearAlertLabel);
-		componetsPanel.add(priceLabel);
-		componetsPanel.add(priceTextField);
-		componetsPanel.add(priceAlertLabel);
-		componetsPanel.add(makeLabel);
-		componetsPanel.add(makeTextField);
-		componetsPanel.add(makeAlertLabel);
-		componetsPanel.add(modelLabel);
-		componetsPanel.add(modelTextField);
-		componetsPanel.add(modelAlertLabel);
-		componetsPanel.add(trimLabel);
-		componetsPanel.add(trimTextField);
-		componetsPanel.add(trimAlertLabel);
-		componetsPanel.add(typeLabel);
-		componetsPanel.add(typeTextField);
-		componetsPanel.add(typeAlertLabel);
-		componetsPanel.add(priceLabel);
-		componetsPanel.add(priceTextField);
-		componetsPanel.add(priceAlertLabel);
-		componetsPanel.add(saveButton);
-		componetsPanel.add(clearButton);
-		componetsPanel.add(cancelButton);
-		this.add(componetsPanel);
+		JPanel componentsPanel = new JPanel();
+		componentsPanel.setLayout(new GridLayout(0, 3));
+		componentsPanel.add(idLabel);
+		componentsPanel.add(idTextField);
+		componentsPanel.add(idAlertLabel);
+		componentsPanel.add(webIdLabel);
+		componentsPanel.add(webIdTextField);
+		componentsPanel.add(webIdAlertLabel);
+		componentsPanel.add(categoryLabel);
+		componentsPanel.add(categoryTextField);
+		componentsPanel.add(categoryAlertLabel);
+		componentsPanel.add(yearLabel);
+		componentsPanel.add(yearTextField);
+		componentsPanel.add(yearAlertLabel);
+		componentsPanel.add(priceLabel);
+		componentsPanel.add(priceTextField);
+		componentsPanel.add(priceAlertLabel);
+		componentsPanel.add(makeLabel);
+		componentsPanel.add(makeTextField);
+		componentsPanel.add(makeAlertLabel);
+		componentsPanel.add(modelLabel);
+		componentsPanel.add(modelTextField);
+		componentsPanel.add(modelAlertLabel);
+		componentsPanel.add(trimLabel);
+		componentsPanel.add(trimTextField);
+		componentsPanel.add(trimAlertLabel);
+		componentsPanel.add(typeLabel);
+		componentsPanel.add(typeTextField);
+		componentsPanel.add(typeAlertLabel);
+		componentsPanel.add(priceLabel);
+		componentsPanel.add(priceTextField);
+		componentsPanel.add(priceAlertLabel);
+		componentsPanel.add(saveButton);
+		componentsPanel.add(clearButton);
+		componentsPanel.add(cancelButton);
+		this.add(componentsPanel);
 	}
 
 	private void makeThisVisible() {
 		this.setSize(500, 500);
 		this.setVisible(true);
 		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -389,9 +392,8 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	// all SuccessOrNot instance variable is a mark for save button function!!!
+	private boolean VIDSuccessOrNot;
 	private class VehicleIDVerifier extends InputVerifier {
-		private boolean VIDSuccessOrNot;
-
 		public boolean verify(JComponent input) {
 			String vid = ((JTextField) input).getText();
 			if (vid.length() != 10) {
@@ -445,10 +447,8 @@ public class InventoryManagementFrame extends JFrame {
 			}
 		}
 	}
-
+	private boolean PriceSuccessOrNot;
 	private class PriceVerifier extends InputVerifier {
-		private boolean PriceSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -509,9 +509,8 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
+	private boolean WebIDSuccessOrNot;
 	private class WebIDVerifier extends InputVerifier {
-		private boolean WebIDSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -554,10 +553,9 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	
+	private boolean CategorySuccessOrNot;
 	private class CategoryVerifier extends InputVerifier {
-		private boolean CategorySuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -618,10 +616,8 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	private boolean YearSuccessOrNot;
 	private class YearVerifier extends InputVerifier {
-		private boolean YearSuccessOrNot;
-
 		public boolean verify(JComponent input) {
 			String year = ((JTextField) input).getText();
 			if (year.length() == 4) {
@@ -678,10 +674,8 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	private boolean MakeSuccessOrNot;
 	private class MakeVerifier extends InputVerifier {
-		private boolean MakeSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -739,10 +733,8 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	private boolean TypeSuccessOrNot;
 	private class TypeVerifier extends InputVerifier {
-		private boolean TypeSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -764,10 +756,8 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	// ModelVerifier
-	private class ModelVerifier extends InputVerifier {
-		private boolean ModelSuccessOrNot;
-
-		@Override
+	private boolean ModelSuccessOrNot;
+	private class ModelVerifier extends InputVerifier {@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
 			if (str.equals("") || str.equals(null)) {
@@ -788,9 +778,8 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	// TrimVerifier
+	private boolean TrimSuccessOrNot;
 	private class TrimVerifier extends InputVerifier {
-		private boolean TrimSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -811,7 +800,7 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
-	private String[] categories = { "New", "Used", "Certified" };
+	private String[] categories = { "new", "used", "certified" };
 	private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
 			"Chrysler", "Citroen", "Dodge", "Ferrari", "Fiat", "Ford", "Geely", "General Motors", "GMC", "Honda" };
 	private String[] types = { "Luxury", " Sedans", "Coupes", "SUVs", "Crossovers", "Wagons/Hatchbacks", "Hybrids",
