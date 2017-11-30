@@ -1,3 +1,5 @@
+package com.neuSep17.ui;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -812,7 +814,7 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
-	private String[] categories = { "New", "Used", "Certified" };
+	private String[] categories = { "new", "used", "certified" };
 	private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
 			"Chrysler", "Citroen", "Dodge", "Ferrari", "Fiat", "Ford", "Geely", "General Motors", "GMC", "Honda" };
 	private String[] types = { "Luxury", " Sedans", "Coupes", "SUVs", "Crossovers", "Wagons/Hatchbacks", "Hybrids",
