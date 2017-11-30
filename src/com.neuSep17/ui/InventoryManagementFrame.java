@@ -100,48 +100,49 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	private void createPanel() {
-		JPanel componetsPanel = new JPanel();
-		componetsPanel.setLayout(new GridLayout(0, 3));
-		componetsPanel.add(idLabel);
-		componetsPanel.add(idTextField);
-		componetsPanel.add(idAlertLabel);
-		componetsPanel.add(webIdLabel);
-		componetsPanel.add(webIdTextField);
-		componetsPanel.add(webIdAlertLabel);
-		componetsPanel.add(categoryLabel);
-		componetsPanel.add(categoryTextField);
-		componetsPanel.add(categoryAlertLabel);
-		componetsPanel.add(yearLabel);
-		componetsPanel.add(yearTextField);
-		componetsPanel.add(yearAlertLabel);
-		componetsPanel.add(priceLabel);
-		componetsPanel.add(priceTextField);
-		componetsPanel.add(priceAlertLabel);
-		componetsPanel.add(makeLabel);
-		componetsPanel.add(makeTextField);
-		componetsPanel.add(makeAlertLabel);
-		componetsPanel.add(modelLabel);
-		componetsPanel.add(modelTextField);
-		componetsPanel.add(modelAlertLabel);
-		componetsPanel.add(trimLabel);
-		componetsPanel.add(trimTextField);
-		componetsPanel.add(trimAlertLabel);
-		componetsPanel.add(typeLabel);
-		componetsPanel.add(typeTextField);
-		componetsPanel.add(typeAlertLabel);
-		componetsPanel.add(priceLabel);
-		componetsPanel.add(priceTextField);
-		componetsPanel.add(priceAlertLabel);
-		componetsPanel.add(saveButton);
-		componetsPanel.add(clearButton);
-		componetsPanel.add(cancelButton);
-		this.add(componetsPanel);
+		JPanel componentsPanel = new JPanel();
+		componentsPanel.setLayout(new GridLayout(0, 3));
+		componentsPanel.add(idLabel);
+		componentsPanel.add(idTextField);
+		componentsPanel.add(idAlertLabel);
+		componentsPanel.add(webIdLabel);
+		componentsPanel.add(webIdTextField);
+		componentsPanel.add(webIdAlertLabel);
+		componentsPanel.add(categoryLabel);
+		componentsPanel.add(categoryTextField);
+		componentsPanel.add(categoryAlertLabel);
+		componentsPanel.add(yearLabel);
+		componentsPanel.add(yearTextField);
+		componentsPanel.add(yearAlertLabel);
+		componentsPanel.add(priceLabel);
+		componentsPanel.add(priceTextField);
+		componentsPanel.add(priceAlertLabel);
+		componentsPanel.add(makeLabel);
+		componentsPanel.add(makeTextField);
+		componentsPanel.add(makeAlertLabel);
+		componentsPanel.add(modelLabel);
+		componentsPanel.add(modelTextField);
+		componentsPanel.add(modelAlertLabel);
+		componentsPanel.add(trimLabel);
+		componentsPanel.add(trimTextField);
+		componentsPanel.add(trimAlertLabel);
+		componentsPanel.add(typeLabel);
+		componentsPanel.add(typeTextField);
+		componentsPanel.add(typeAlertLabel);
+		componentsPanel.add(priceLabel);
+		componentsPanel.add(priceTextField);
+		componentsPanel.add(priceAlertLabel);
+		componentsPanel.add(saveButton);
+		componentsPanel.add(clearButton);
+		componentsPanel.add(cancelButton);
+		this.add(componentsPanel);
 	}
 
 	private void makeThisVisible() {
 		this.setSize(500, 500);
 		this.setVisible(true);
 		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@SuppressWarnings("rawtypes")
