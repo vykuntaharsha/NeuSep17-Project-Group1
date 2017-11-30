@@ -392,9 +392,8 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	// all SuccessOrNot instance variable is a mark for save button function!!!
+	private boolean VIDSuccessOrNot;
 	private class VehicleIDVerifier extends InputVerifier {
-		private boolean VIDSuccessOrNot;
-
 		public boolean verify(JComponent input) {
 			String vid = ((JTextField) input).getText();
 			if (vid.length() != 10) {
@@ -448,10 +447,8 @@ public class InventoryManagementFrame extends JFrame {
 			}
 		}
 	}
-
+	private boolean PriceSuccessOrNot;
 	private class PriceVerifier extends InputVerifier {
-		private boolean PriceSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -512,9 +509,8 @@ public class InventoryManagementFrame extends JFrame {
 		}
 	}
 
+	private boolean WebIDSuccessOrNot;
 	private class WebIDVerifier extends InputVerifier {
-		private boolean WebIDSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -557,10 +553,9 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	
+	private boolean CategorySuccessOrNot;
 	private class CategoryVerifier extends InputVerifier {
-		private boolean CategorySuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -621,10 +616,8 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	private boolean YearSuccessOrNot;
 	private class YearVerifier extends InputVerifier {
-		private boolean YearSuccessOrNot;
-
 		public boolean verify(JComponent input) {
 			String year = ((JTextField) input).getText();
 			if (year.length() == 4) {
@@ -681,10 +674,8 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	private boolean MakeSuccessOrNot;
 	private class MakeVerifier extends InputVerifier {
-		private boolean MakeSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -742,10 +733,8 @@ public class InventoryManagementFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-
+	private boolean TypeSuccessOrNot;
 	private class TypeVerifier extends InputVerifier {
-		private boolean TypeSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
@@ -767,10 +756,8 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	// ModelVerifier
-	private class ModelVerifier extends InputVerifier {
-		private boolean ModelSuccessOrNot;
-
-		@Override
+	private boolean ModelSuccessOrNot;
+	private class ModelVerifier extends InputVerifier {@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
 			if (str.equals("") || str.equals(null)) {
@@ -791,9 +778,8 @@ public class InventoryManagementFrame extends JFrame {
 	}
 
 	// TrimVerifier
+	private boolean TrimSuccessOrNot;
 	private class TrimVerifier extends InputVerifier {
-		private boolean TrimSuccessOrNot;
-
 		@Override
 		public boolean verify(JComponent input) {
 			String str = ((JTextField) input).getText();
