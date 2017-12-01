@@ -90,12 +90,19 @@ public class InventoryManagementFrame extends JFrame {
 		price = new Component("Price", 20, "Price.");
 		saveButton = new JButton("SAVE");
 		clearButton = new JButton("CLEAR");
+		clearButton.addActionListener(new ClearAllAction());
 		cancelButton = new JButton("CANCEL");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 	}
 
 	private void createPanel() {
 		JPanel componentsPanel = new JPanel();
 		componentsPanel.setLayout(new GridLayout(0, 3));
+		componentsPanel.add(id.getInputTextField());
 		componentsPanel.add(saveButton);
 		componentsPanel.add(clearButton);
 		componentsPanel.add(cancelButton);
@@ -106,7 +113,31 @@ public class InventoryManagementFrame extends JFrame {
 		this.setSize(500, 500);
 		this.setVisible(true);
 		this.setResizable(false);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	}
+
+	private class ClearAllAction implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			id.getInputTextField().setText("");
+			id.setTrue();
+			webId.getInputTextField().setText("");
+			webId.setTrue();
+			category.getInputTextField().setText("");
+			category.setTrue();
+			year.getInputTextField().setText("");
+			year.setTrue();
+			make.getInputTextField().setText("");
+			make.setTrue();
+			model.getInputTextField().setText("");
+			model.setTrue();
+			trim.getInputTextField().setText("");
+			trim.setTrue();
+			type.getInputTextField().setText("");
+			type.setTrue();
+			price.getInputTextField().setText("");
+			price.setTrue();
+		}
+
 	}
 
 	@SuppressWarnings("rawtypes")
