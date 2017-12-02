@@ -74,6 +74,7 @@ public class InventoryManagementFrame extends JFrame {
 		createCompoments();
 		createPanel();
 		addListeners();
+		loadVehicle(webId, id);
 		setupAutoCompletes();
 		makeThisVisible();
 	}
@@ -681,7 +682,7 @@ public class InventoryManagementFrame extends JFrame {
 			"Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
 	
 	private VehicleImpleService service = new VehicleImpleService();
-	Vehicle vehicle = service.getAVehicle();
+	Vehicle vehicle;
 	
 	private void setupAutoCompletes() {
 		setupAutoComplete(category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
@@ -689,7 +690,8 @@ public class InventoryManagementFrame extends JFrame {
 		setupAutoComplete(type.getInputTextField(), new ArrayList<String>(Arrays.asList(types)));
 	}	
 	
-	private void editVehicle(String dealerID, String vehicleID) {	    	    
+	private void loadVehicle(String webId, String id) {	
+	    vehicle = service.getAVehicle(webId, id);
 	    this.id.getInputTextField().setText(String.valueOf(vehicle.id));
         this.webId.getInputTextField().setText(String.valueOf(vehicle.webId));
 	    this.category.getInputTextField().setText(String.valueOf(vehicle.category));
@@ -706,11 +708,11 @@ public class InventoryManagementFrame extends JFrame {
 	            YearSuccessOrNot && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && 
 	            TrimSuccessOrNot) {
 	        
+	        Vehicle v = new Vehicle();
         	    if(this.id.getInputTextField().getText() != vehicle.id || 
-        	            webId.getInputTextField().getText() != vehicle.webId) {
-        	        
+        	            webId.getInputTextField().getText() != vehicle.webId) {    
         	        service.deleteVehicle(vehicle.webId, vehicle.id);	        
-        	        Vehicle v = new Vehicle();
+        	        
         	        v.id = this.id.getInputTextField().getText();
         	        v.webId = this.webId.getInputTextField().getText();
         	        v.category = Category.valueOf(this.category.getInputTextField().getText());
@@ -723,8 +725,10 @@ public class InventoryManagementFrame extends JFrame {
         	        
         	        service.addVehicle(this.webId, v);
         	    }        
-        	        return service.updateVehicle();
+        	    
+        	    return service.updateVehicle(this.webId, v.id, v);
 	    }
-            return false;
+
+	    return false;
 	}
 }
