@@ -6,19 +6,18 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.lang.reflect.Field;
 
-
 public class Vehicle implements Comparable<Vehicle> {
-
-        private String id;
-        String webId;
-        private Category category;
-        private int year;
-        private String make;
-        private String model;
-        private String trim;       
-        private String bodyType;
-        private double price;
-        private URL photoUrl;
+  
+    private String id;
+    private String webId;
+    private Category category;
+    private int year;
+    private String make;
+    private String model;
+    private String trim;       
+    private String bodyType;
+    private double price;
+    private URL photoUrl;
 
     private String vin;
     private String entertainment;
