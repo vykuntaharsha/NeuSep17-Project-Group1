@@ -17,6 +17,9 @@ import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.neuSep17.dto.Category;
+import com.neuSep17.dto.Vehicle;
+
 @SuppressWarnings("serial")
 public class InventoryManagementFrame extends JFrame {
 	private Component id, webId, category, year, make, model, trim, type, price;
@@ -71,6 +74,7 @@ public class InventoryManagementFrame extends JFrame {
 		createCompoments();
 		createPanel();
 		addListeners();
+		loadVehicle(webId, id);
 		setupAutoCompletes();
 		makeThisVisible();
 	}
@@ -670,16 +674,64 @@ public class InventoryManagementFrame extends JFrame {
 			return true;
 		}
 	}
+  
 	private String[] categories = { "new", "used", "certified" };
 	private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
 			"Chrysler", "Citroen", "Dodge", "Ferrari", "Fiat", "Ford", "Geely", "General Motors", "GMC", "Honda" };
 	private String[] types = { "Luxury", " Sedans", "Coupes", "SUVs", "Crossovers", "Wagons/Hatchbacks", "Hybrids",
 			"Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
-
+	
+	private VehicleImpleService service = new VehicleImpleService();
+	Vehicle vehicle;
+	
 	private void setupAutoCompletes() {
+		setupAutoComplete(category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
+		setupAutoComplete(make.getInputTextField(), new ArrayList<String>(Arrays.asList(makes)));
+		setupAutoComplete(type.getInputTextField(), new ArrayList<String>(Arrays.asList(types)));
+	}	
+	
+	private void loadVehicle(String webId, String id) {	
+	    vehicle = service.getAVehicle(webId, id);
+	    this.id.getInputTextField().setText(String.valueOf(vehicle.id));
+        this.webId.getInputTextField().setText(String.valueOf(vehicle.webId));
+	    this.category.getInputTextField().setText(String.valueOf(vehicle.category));
+	    this.year.getInputTextField().setText(String.valueOf(vehicle.year));
+        this.make.getInputTextField().setText(String.valueOf(vehicle.make));
+        this.model.getInputTextField().setText(String.valueOf(vehicle.model));
+        this.trim.getInputTextField().setText(String.valueOf(vehicle.trim));
+        this.type.getInputTextField().setText(String.valueOf(vehicle.type));
+        this.price.getInputTextField().setText(String.valueOf(vehicle.price));
+	}
+	
+	public boolean saveVehicle() {
+	    if(VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && 
+	            YearSuccessOrNot && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && 
+	            TrimSuccessOrNot) {
+	        
+	        Vehicle v = new Vehicle();
+        	    if(this.id.getInputTextField().getText() != vehicle.id || 
+        	            webId.getInputTextField().getText() != vehicle.webId) {    
+        	        service.deleteVehicle(vehicle.webId, vehicle.id);	        
+        	        
+        	        v.id = this.id.getInputTextField().getText();
+        	        v.webId = this.webId.getInputTextField().getText();
+        	        v.category = Category.valueOf(this.category.getInputTextField().getText());
+        	        v.year = Integer.valueOf(this.year.getInputTextField().getText());
+        	        v.make = this.make.getInputTextField().getText();
+        	        v.model = this.model.getInputTextField().getText();
+        	        v.trim = this.trim.getInputTextField().getText();
+        	        v.type = this.type.getInputTextField().getText();
+        	        v.price = Float.parseFloat(this.price.getInputTextField().getText());
+        	        
+        	        service.addVehicle(this.webId, v);
+        	    }        
+        	    
+        	    return service.updateVehicle(this.webId, v.id, v);
+	    }
+
+	    return false;
 		setupAutoComplete(this.category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
 		setupAutoComplete(this.make.getInputTextField(), new ArrayList<String>(Arrays.asList(makes)));
 		setupAutoComplete(this.type.getInputTextField(), new ArrayList<String>(Arrays.asList(types)));
 	}
-
 }
