@@ -674,7 +674,7 @@ public class InventoryManagementFrame extends JFrame {
 			return true;
 		}
 	}
-	
+  
 	private String[] categories = { "new", "used", "certified" };
 	private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
 			"Chrysler", "Citroen", "Dodge", "Ferrari", "Fiat", "Ford", "Geely", "General Motors", "GMC", "Honda" };
@@ -730,5 +730,8 @@ public class InventoryManagementFrame extends JFrame {
 	    }
 
 	    return false;
+		setupAutoComplete(this.category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
+		setupAutoComplete(this.make.getInputTextField(), new ArrayList<String>(Arrays.asList(makes)));
+		setupAutoComplete(this.type.getInputTextField(), new ArrayList<String>(Arrays.asList(types)));
 	}
 }
