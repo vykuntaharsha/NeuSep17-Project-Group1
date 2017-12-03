@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,8 +32,8 @@ public class InventoryEditUI extends JFrame {
     private JButton saveButton;
     private JButton clearButton;
     private JButton cancelButton;
-    
-//    for testing purpose. will delete when delivery
+
+    // for testing purpose. will delete when delivery
     public static void main(String[] args) {
         InventoryEditUI imf = new InventoryEditUI();
     }
@@ -83,8 +85,8 @@ public class InventoryEditUI extends JFrame {
         createCompoments();
         createPanel();
         addListeners();
-//        String wid="8938273", vid="234";
-//        loadVehicle(wid, vid);
+        // String wid="8938273", vid="234";
+        // loadVehicle(wid, vid);
         setupAutoCompletes();
         makeThisVisible();
     }
@@ -100,28 +102,37 @@ public class InventoryEditUI extends JFrame {
         type = new Component("Type", 20, "Type.");
         price = new Component("Price", 20, "Price.");
         id.getInputTextField().setToolTipText("123");
-        saveButton = new JButton("SAVE");
-        clearButton = new JButton("CLEAR");
-        clearButton.addActionListener(new ClearAllAction());
-        cancelButton = new JButton("CANCEL");
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        saveButton = new JButton("Save");
+        clearButton = new JButton("Clear");
+        cancelButton = new JButton("Cancel");
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showConfirmDialog(null, "Confirm ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (JOptionPane.showConfirmDialog(null, "Confirm?") == JOptionPane.OK_OPTION)
+                    ;// save method;
             }
         });
         clearButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showConfirmDialog(null, "Clear all ?", "Clear", JOptionPane.YES_NO_OPTION);
+                if (JOptionPane.showConfirmDialog(null, "Clear all?", "Clear",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    ClearAllAction clearAllAction = new ClearAllAction();
+                    clearAllAction.actionPerformed(e);
+                }
             }
         });
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showConfirmDialog(null, "Confirm ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (JOptionPane.showConfirmDialog(null, "Cancel?", "Cancel",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    dispose();
+                }
+            }
+        });
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(null, "Cancel?", "Cancel",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                    dispose();
             }
         });
     }
@@ -285,7 +296,8 @@ public class InventoryEditUI extends JFrame {
         this.setSize(500, 520);
         this.setVisible(true);
         this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     private class ClearAllAction implements ActionListener {
@@ -556,16 +568,16 @@ public class InventoryEditUI extends JFrame {
                     && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
                 webId.setFalse();
                 e.consume();
-            } // invalid input:输入除了回车删除和大小写字母以及横线以外的
+            } // invalid input:杈撳叆闄や簡鍥炶溅鍒犻櫎鍜屽ぇ灏忓啓瀛楁瘝浠ュ強妯嚎浠ュ鐨�
             String str = webId.getInputTextField().getText();
             int lastIndex = str.length() - 1;
             if (keyInput == KeyEvent.VK_MINUS) {
                 if (str.equals("")) {
-                    webId.setFalse();// 首位出现横线
+                    webId.setFalse();// 棣栦綅鍑虹幇妯嚎
                 }
             }
             if (keyInput == KeyEvent.VK_ENTER) {
-                if (str.contains("-") && str.charAt(lastIndex) != '-')// 不能末尾为-
+                if (str.contains("-") && str.charAt(lastIndex) != '-')// 涓嶈兘鏈熬涓�-
                     webId.setTrue();
                 else
                     webId.setFalse();
@@ -728,8 +740,8 @@ public class InventoryEditUI extends JFrame {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
                     && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {// invalid input(only
-                                                                                                // letters and special
-                                                                                                // case)
+                                                                                               // letters and special
+                                                                                               // case)
                 make.setFalse();
                 e.consume();
             }
@@ -924,32 +936,34 @@ public class InventoryEditUI extends JFrame {
         this.price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
     }
 
-//    public boolean saveVehicle(String oldVID) {
-//        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
-//                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
-//
-//            Vehicle v = new Vehicle();
-//            if (this.id.getInputTextField().getText() != vehicle.id
-//                    || webId.getInputTextField().getText() != vehicle.webId) {
-//                service.deleteVehicle(vehicle.webId, vehicle.id);
-//
-//                v.setID(this.id.getInputTextField().getText());
-//                v.setWebID(this.webId.getInputTextField().getText());
-//                v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
-//                v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-//                v.setMake(this.make.getInputTextField().getText());
-//                v.setModle(this.model.getInputTextField().getText());
-//                v.setTrim(this.trim.getInputTextField().getText());
-//                v.setBodyType(this.type.getInputTextField().getText());
-//                v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-//
-//                service.addVehicle(this.webId, v);
-//            }
-//
-//            return service.updateVehicle(this.webId, v.id, v);
-//        }
-//
-//        return false;
-//    }
-    
+    // public boolean saveVehicle(String oldVID) {
+    // if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot &&
+    // CategorySuccessOrNot && YearSuccessOrNot
+    // && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot &&
+    // TrimSuccessOrNot) {
+    //
+    // Vehicle v = new Vehicle();
+    // if (this.id.getInputTextField().getText() != vehicle.id
+    // || webId.getInputTextField().getText() != vehicle.webId) {
+    // service.deleteVehicle(vehicle.webId, vehicle.id);
+    //
+    // v.setID(this.id.getInputTextField().getText());
+    // v.setWebID(this.webId.getInputTextField().getText());
+    // v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
+    // v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+    // v.setMake(this.make.getInputTextField().getText());
+    // v.setModle(this.model.getInputTextField().getText());
+    // v.setTrim(this.trim.getInputTextField().getText());
+    // v.setBodyType(this.type.getInputTextField().getText());
+    // v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+    //
+    // service.addVehicle(this.webId, v);
+    // }
+    //
+    // return service.updateVehicle(this.webId, v.id, v);
+    // }
+    //
+    // return false;
+    // }
+
 }
