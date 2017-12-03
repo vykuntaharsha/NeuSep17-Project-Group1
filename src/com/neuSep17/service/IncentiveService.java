@@ -239,6 +239,48 @@ public class IncentiveService {
         return resultIncents;
     }
 
+    //update an incentive
+    public static void updateAnIncentive(Incentive incent){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the update method
+        incentiveDAO.updateAIncentive(incent);
+    }
+
+    //delete an incentive
+    public static void deleteAnIncentive(String incentID){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the delete method
+        incentiveDAO.deleteAIncentive(incentID);
+    }
+
+    //get incentives from a specific dealer
+    public static ArrayList<Incentive> dealerIncentives(String dealerID){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the get method
+        return incentiveDAO.getIncentivesForDealer(dealerID);
+    }
+
+    //add an incentive to the data file
+    public static void addAnIncentive(Incentive incentive){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the add method
+        incentiveDAO.addAIncentive(incentive);
+    }
+
+    //get an specific incentive by ID
+    public static Incentive getAnIncentive(String incentID){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the get method
+        return incentiveDAO.getAIncentive(incentID);
+    }
+
+
+
 
     //service unit test function starts here
     public static void main(String[] args){
