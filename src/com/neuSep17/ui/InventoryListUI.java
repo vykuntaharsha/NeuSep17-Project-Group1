@@ -1,4 +1,4 @@
-package com.Tianyu.dealerListDisplay;
+package com.neuSep17.ui;
 
 import java.awt.EventQueue;
 import java.awt.Point;
@@ -19,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,6 +27,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+
+import com.neuSep17.dto.Vehicle;
+import com.neuSep17.service.InventoryListService;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTable;
@@ -40,7 +43,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.JRadioButton;
 
-public class View extends JFrame {
+public class InventoryListUI extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel panelTop;
@@ -105,9 +108,9 @@ public class View extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					String f = View.class.getResource("asset/test.txt").getPath();
+					String f = InventoryListUI.class.getResource("asset/InventoryListUItest.txt").getPath();
 					File file = new File(f);
-					View frame = new View(file);
+					InventoryListUI frame = new InventoryListUI(file);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -119,8 +122,8 @@ public class View extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public View(File file) {
-		list = Service.readAndGetVehicles(file);
+	public InventoryListUI(File file) {
+		list = InventoryListService.readAndGetVehicles(file);
 		filter = new ArrayList<>();
 		isAscending = true;
 		contentPane = new JPanel();
@@ -174,7 +177,7 @@ public class View extends JFrame {
 
 		labelBG = new JLabel("");
 		labelBG.setDisplayedMnemonic('0');
-		labelBG.setIcon(new ImageIcon(View.class.getResource("/com/Tianyu/dealerListDisplay/asset/2.jpg")));
+		labelBG.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIBG2.jpg")));
 		labelBG.setBounds(0, 0, 350, 800);
 		leftPanel.add(labelBG);
 
@@ -212,7 +215,7 @@ public class View extends JFrame {
 				if (txtFilter.getText().isEmpty()) {
 					txtFilter.setForeground(Color.GRAY);
 					txtFilter.setText(placeholder);
-					Service.fillTable(list,table);
+					InventoryListService.fillTable(list,table);
 				}
 			}
 		});
@@ -235,8 +238,8 @@ public class View extends JFrame {
 			}
 
 			public void warn() {
-				filter = Service.filter(filter, list, txtFilter);
-				Service.fillTable(filter,table);
+				filter = InventoryListService.filter(filter, list, txtFilter);
+				InventoryListService.fillTable(filter,table);
 			}
 		});
 	}
@@ -267,7 +270,7 @@ public class View extends JFrame {
 				if (txtSearch.getText().isEmpty()) {
 					txtSearch.setForeground(Color.GRAY);
 					txtSearch.setText(placeholder);
-					Service.fillTable(list,table);
+					InventoryListService.fillTable(list,table);
 				}
 			}
 		});
@@ -291,8 +294,8 @@ public class View extends JFrame {
 			}
 
 			public void warn() {
-				filter = Service.search(filter, list, txtSearch);
-				Service.fillTable(filter,table);
+				filter = InventoryListService.search(filter, list, txtSearch);
+				InventoryListService.fillTable(filter,table);
 			}
 		});
 	}
@@ -500,7 +503,7 @@ public class View extends JFrame {
 			}
 		});
 		
-		Service.fillTable(list,table);
+		InventoryListService.fillTable(list,table);
 		JTableHeader tableHeader = table.getTableHeader();
 		tableHeader.setReorderingAllowed(false);
 		tableHeader.setBackground(tableHeaderColor);
@@ -538,7 +541,7 @@ public class View extends JFrame {
 	//Title and Icon
 	private void registerTitle() {
 		labelTitleIcon = new JLabel("");
-		labelTitleIcon.setIcon(new ImageIcon(View.class.getResource("/com/Tianyu/dealerListDisplay/asset/home.png")));
+		labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
 		labelTitleIcon.setBounds(43, 11, 130, 129);
 		panelTop.add(labelTitleIcon);
 		labelTitle = new JLabel("Inventory List Management");
@@ -570,7 +573,7 @@ public class View extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				for (Vehicle v : list) {
-					if (v.id.equals(getSelectedId())) {
+					if (v.getID().equals(getSelectedId())) {
 
 					}
 				}
@@ -584,17 +587,10 @@ public class View extends JFrame {
 
 		btnEdit = new JButton("Edit");
 		btnEdit.setBorderPainted(false);
-		JFrame that = this;
 		btnEdit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-			    // Gets selected vehicle.
-			    for (Vehicle v : list) {
-                    if (v.id.equals(getSelectedId())) {                      
-                        InventoryEditUI imf = new InventoryEditUI(v);
-                        that.dispose();
-                    }
-                }
+
 			}
 		});
 		btnEdit.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
@@ -613,7 +609,7 @@ public class View extends JFrame {
 		});
 		close.setBorderPainted(false);
 		close.setBackground(topBG);
-		close.setIcon(new ImageIcon(View.class.getResource("/com/Tianyu/dealerListDisplay/asset/close.png")));
+		close.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIclose.png")));
 		close.setBounds(905, 12, 32, 38);
 		panelTop.add(close);
 
@@ -624,7 +620,7 @@ public class View extends JFrame {
 				minimize();
 			}
 		});
-		min.setIcon(new ImageIcon(View.class.getResource("/com/Tianyu/dealerListDisplay/asset/min.png")));
+		min.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUImin.png")));
 		min.setBorderPainted(false);
 		min.setBackground(topBG);
 		min.setBounds(860, 12, 32, 38);
@@ -640,9 +636,9 @@ public class View extends JFrame {
 					isAscending = false;
 					ArrayList<Vehicle> sortList = filter.size() == 0? tmp : filter;
 					if(sortByCheckState(sortList)) {
-						Service.fillTable(sortList, table);
+						InventoryListService.fillTable(sortList, table);
 					}else {
-						Service.fillTable(list,table);
+						InventoryListService.fillTable(list,table);
 					}
 				}
 			}
@@ -659,9 +655,9 @@ public class View extends JFrame {
 				isAscending = true;
 				ArrayList<Vehicle> sortList = filter.size() == 0? tmp : filter;
 				if(sortByCheckState(sortList)) {
-					Service.fillTable(sortList, table);
+					InventoryListService.fillTable(sortList, table);
 				}else {
-					Service.fillTable(list,table);
+					InventoryListService.fillTable(list,table);
 				}
 			}
 		});
@@ -717,44 +713,44 @@ public class View extends JFrame {
 	private void fillTableAfterSorting(ArrayList<Vehicle> tmp) {
 		ArrayList<Vehicle> sortList = filter.size() == 0? tmp : filter;
 		if(sortByCheckState(sortList)) {
-			Service.fillTable(sortList,table);
+			InventoryListService.fillTable(sortList,table);
 		}else {
-			Service.fillTable(list,table);
+			InventoryListService.fillTable(list,table);
 		}
 	}
 	
 	//check State
 	private boolean sortByCheckState(ArrayList<Vehicle> sortList) {
 		if (chckbxWebId.isSelected()) {
-			Service.sortByWebId(sortList,isAscending);
+			InventoryListService.sortByWebId(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxCategory.isSelected()) {
-			Service.sortByCategory(sortList,isAscending);
+			InventoryListService.sortByCategory(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxId.isSelected()) {
-			Service.sortById(sortList,isAscending);
+			InventoryListService.sortById(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxMake.isSelected()) {
-			Service.sortByMake(sortList,isAscending);
+			InventoryListService.sortByMake(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxModel.isSelected()) {
-			Service.sortByModel(sortList,isAscending);
+			InventoryListService.sortByModel(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxPrice.isSelected()) {
-			Service.sortByPrice(sortList,isAscending);
+			InventoryListService.sortByPrice(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxType.isSelected()) {
-			Service.sortByType(sortList,isAscending);
+			InventoryListService.sortByType(sortList,isAscending);
 			return true;
 			
 		} else if (chckbxYear.isSelected()) {
-			Service.sortByYear(sortList,isAscending);
+			InventoryListService.sortByYear(sortList,isAscending);
 			return true;
 			
 		}
