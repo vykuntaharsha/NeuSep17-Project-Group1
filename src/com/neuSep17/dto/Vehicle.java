@@ -27,7 +27,7 @@ public class Vehicle implements Comparable<Vehicle> {
     private String engine;
     private String transmission;
     private String battery;
-    private ArrayList<String> optionalFeatures;
+    private String optionalFeatures;
 
 
 
@@ -52,6 +52,15 @@ public class Vehicle implements Comparable<Vehicle> {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
+            this.vin = arr[10];
+            this.entertainment = arr[11];
+            this.interiorColor = arr[12];
+            this.exteriorColor = arr[13];
+            this.fuelType = arr[14];
+            this.engine = arr[15];
+            this.transmission = arr[16];
+            this.battery = arr[17];
+            this.setOptionalFeatures(arr[18]);
         }
         public void setID(String id) {
         	this.id=id;
@@ -142,8 +151,6 @@ public class Vehicle implements Comparable<Vehicle> {
     public String getBattery() {
         return battery;
     }
-
-
     public void setVin(String vin) {
         this.vin = vin;
     }
@@ -169,6 +176,12 @@ public class Vehicle implements Comparable<Vehicle> {
         this.battery = battery;
     }
         
+        public String getOptionalFeatures() {
+        return optionalFeatures;
+    }
+    public void setOptionalFeatures(String optionalFeatures) {
+        this.optionalFeatures = optionalFeatures;
+    }
         ////override this method from the Comparable interface --Nhat T.
         @Override
         public int compareTo(Vehicle v) { 
