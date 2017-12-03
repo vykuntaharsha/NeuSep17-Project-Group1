@@ -12,11 +12,14 @@ import com.neuSep17.dto.Vehicle;
  * Design document: /doc/design/display-picture.md
  * 
  * @author team 2 - bin
- * @version 0.1: 2017-11-30 Initialize.
+ * @version
+ * 0.1: 2017-11-30 Initialize.
+ * 0.2: 2017-12-01 
+ * 
  */
 public class PictureManagement {
 
-    private static final String PICTURE_DIR = "/Users/bin/Documents/Workspace/GitHub/inventory-management/picture";
+    private static final String PICTURE_DIR = "../../../picture";
 
     public static Image getVehicleImage(Vehicle v) {
         return getVehicleImage(v.getPhotoURL());
@@ -87,6 +90,11 @@ public class PictureManagement {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    public static void main(String[] args){
+//        URL url=new URL("");
+//        PictureManagement.getVehicleImage(url)
     }
     
 }
