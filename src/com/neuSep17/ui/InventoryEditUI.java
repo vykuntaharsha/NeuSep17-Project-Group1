@@ -1,5 +1,11 @@
 package com.neuSep17.ui;
 
+/**
+ * Use case: Dealer add/edit/delete vehicle from the inventory. 
+ * @author LI Yuxin; Yang Chun; Niu Lu; Jin YuanYuan; Bin Shi
+ * Contact: Bin Shi (shi.b@husky.neu.edu)
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -963,8 +969,7 @@ public class InventoryEditUI extends JFrame {
                  v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));               
                  service.addVehicle(v.getWebID(), v);
              }
-             // service needs to change api to accept vehicle object;
-             return service.updateVehicle(v.getWebID(), v.getID(), v);
+             return service.updateVehicle(v.getWebID(), v);
          }      
          return false;
      }
