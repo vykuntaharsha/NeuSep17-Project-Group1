@@ -103,11 +103,18 @@ public class InventoryEditUI extends JFrame {
         price = new Component("Price", 20, "Price.");
         id.getInputTextField().setToolTipText("123");
         saveButton = new JButton("Save");
+        saveButton.setBackground(Color.gray);
+        saveButton.setForeground(Color.black);
         clearButton = new JButton("Clear");
+        clearButton.setBackground(Color.gray);
+        clearButton.setForeground(Color.black);
         cancelButton = new JButton("Cancel");
+        cancelButton.setBackground(Color.gray);
+        cancelButton.setForeground(Color.black);
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "Confirm?") == JOptionPane.OK_OPTION)
+                if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
                     ;// save method;
             }
         });
@@ -141,7 +148,7 @@ public class InventoryEditUI extends JFrame {
         JPanel componetsPanel = new JPanel();
         componetsPanel.setBounds(100, 100, 450, 300);
         componetsPanel.setLayout(null);
-        componetsPanel.setBackground(Color.WHITE);
+        componetsPanel.setBackground(Color.lightGray);
 
         JTextField photoTextField = new JTextField("photo");
         JLabel lineLabel = new JLabel("   Vehicle Details");
@@ -172,123 +179,121 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.add(lineGraph);
 
         // 1.id
-        id.getInputTextField().setBounds(90, 50, 110, 20);
-        id.getInputTextField().setBackground(null);
+        id.getInputTextField().setBounds(90, 60, 110, 20);
         componetsPanel.add(id.getInputTextField());
         id.getInputTextField().setColumns(10);
 
         id.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        id.getFieldLabel().setBounds(20, 50, 70, 20);
+        id.getFieldLabel().setBounds(20, 60, 70, 20);
         componetsPanel.add(id.getFieldLabel());
 
         id.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        id.getAlertLabel().setBounds(90, 70, 200, 20);
+        id.getAlertLabel().setBounds(90, 40, 200, 20);
         componetsPanel.add(id.getAlertLabel());
 
         // 2.webId
         webId.getInputTextField().setColumns(10);
-        webId.getInputTextField().setBounds(90, 110, 110, 20);
+        webId.getInputTextField().setBounds(90, 120, 110, 20);
         componetsPanel.add(webId.getInputTextField());
 
         webId.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        webId.getFieldLabel().setBounds(20, 110, 70, 20);
+        webId.getFieldLabel().setBounds(20, 120, 70, 20);
         componetsPanel.add(webId.getFieldLabel());
 
         webId.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        webId.getAlertLabel().setBounds(90, 130, 200, 20);
+        webId.getAlertLabel().setBounds(90, 100, 200, 20);
         componetsPanel.add(webId.getAlertLabel());
 
         // 3.category
         category.getInputTextField().setColumns(10);
-        category.getInputTextField().setBounds(90, 170, 110, 20);
+        category.getInputTextField().setBounds(90, 180, 110, 20);
         componetsPanel.add(category.getInputTextField());
 
         category.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        category.getFieldLabel().setBounds(20, 170, 70, 20);
+        category.getFieldLabel().setBounds(20, 180, 70, 20);
         componetsPanel.add(category.getFieldLabel());
 
         category.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        category.getAlertLabel().setBounds(90, 190, 200, 20);
+        category.getAlertLabel().setBounds(90, 160, 200, 20);
         componetsPanel.add(category.getAlertLabel());
 
         // 4.year
         year.getInputTextField().setColumns(10);
-        year.getInputTextField().setBounds(90, 250, 110, 20);
+        year.getInputTextField().setBounds(90, 260, 110, 20);
         componetsPanel.add(year.getInputTextField());
 
         year.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        year.getFieldLabel().setBounds(20, 250, 70, 20);
+        year.getFieldLabel().setBounds(20, 260, 70, 20);
         componetsPanel.add(year.getFieldLabel());
 
         year.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        year.getAlertLabel().setBounds(90, 270, 200, 20);
+        year.getAlertLabel().setBounds(90, 240, 200, 20);
         componetsPanel.add(year.getAlertLabel());
 
         // 5.make
         make.getInputTextField().setColumns(10);
-        make.getInputTextField().setBounds(90, 310, 110, 20);
+        make.getInputTextField().setBounds(90, 320, 110, 20);
         componetsPanel.add(make.getInputTextField());
 
         make.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        make.getFieldLabel().setBounds(20, 310, 70, 20);
+        make.getFieldLabel().setBounds(20, 320, 70, 20);
         componetsPanel.add(make.getFieldLabel());
 
         make.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        make.getAlertLabel().setBounds(90, 330, 200, 20);
+        make.getAlertLabel().setBounds(90, 300, 200, 20);
         componetsPanel.add(make.getAlertLabel());
 
         // 6.model
         model.getInputTextField().setColumns(10);
-        model.getInputTextField().setBounds(90, 370, 110, 20);
+        model.getInputTextField().setBounds(90, 380, 110, 20);
         componetsPanel.add(model.getInputTextField());
 
         model.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        model.getFieldLabel().setBounds(20, 370, 70, 20);
+        model.getFieldLabel().setBounds(20, 380, 70, 20);
         componetsPanel.add(model.getFieldLabel());
 
         model.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        model.getAlertLabel().setBounds(90, 400, 200, 20);
+        model.getAlertLabel().setBounds(90, 360, 200, 20);
         componetsPanel.add(model.getAlertLabel());
 
-        // 7.make
+        // 7.trim
         trim.getInputTextField().setColumns(10);
-        trim.getInputTextField().setBounds(315, 250, 110, 20);
+        trim.getInputTextField().setBounds(315, 260, 110, 20);
         componetsPanel.add(trim.getInputTextField());
 
         trim.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        trim.getFieldLabel().setBounds(250, 250, 70, 20);
+        trim.getFieldLabel().setBounds(250, 260, 70, 20);
         componetsPanel.add(trim.getFieldLabel());
 
         trim.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        trim.getAlertLabel().setBounds(315, 270, 200, 20);
+        trim.getAlertLabel().setBounds(315, 240, 200, 20);
         componetsPanel.add(trim.getAlertLabel());
 
         // 8.type
         type.getInputTextField().setColumns(10);
-        type.getInputTextField().setBounds(315, 310, 110, 20);
+        type.getInputTextField().setBounds(315, 320, 110, 20);
         componetsPanel.add(type.getInputTextField());
 
         type.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        type.getFieldLabel().setBounds(250, 310, 70, 20);
+        type.getFieldLabel().setBounds(250, 320, 70, 20);
         componetsPanel.add(type.getFieldLabel());
 
         type.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        type.getAlertLabel().setBounds(315, 330, 200, 20);
+        type.getAlertLabel().setBounds(315, 300, 200, 20);
         componetsPanel.add(type.getAlertLabel());
 
         // 9.price
         price.getInputTextField().setColumns(10);
-        price.getInputTextField().setBounds(315, 370, 110, 20);
+        price.getInputTextField().setBounds(315, 380, 110, 20);
         componetsPanel.add(price.getInputTextField());
 
         price.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        price.getFieldLabel().setBounds(250, 370, 70, 20);
+        price.getFieldLabel().setBounds(250, 380, 70, 20);
         componetsPanel.add(price.getFieldLabel());
 
         price.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        price.getAlertLabel().setBounds(315, 400, 200, 20);
+        price.getAlertLabel().setBounds(315, 360, 200, 20);
         componetsPanel.add(price.getAlertLabel());
-
         this.add(componetsPanel);
     }
 
