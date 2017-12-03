@@ -6,31 +6,16 @@ package com.neuSep17.ui;
  * Contact: Bin Shi (shi.b@husky.neu.edu)
  */
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Category;
 import com.neuSep17.dto.Vehicle;
 
-//import com.neuSep17.ui.InventoryManagementFrame.ClearAllAction;
-//import com.neuSep17.ui.InventoryManagementFrame.Component;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
 @SuppressWarnings("serial")
 public class InventoryEditUI extends JFrame {
