@@ -51,6 +51,7 @@ public class EditVehicle {
 	 * Create the application.
 	 */
 	public EditVehicle() {
+	    
 		initialize();
 	}
 

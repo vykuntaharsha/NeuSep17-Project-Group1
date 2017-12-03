@@ -584,10 +584,17 @@ public class View extends JFrame {
 
 		btnEdit = new JButton("Edit");
 		btnEdit.setBorderPainted(false);
+		JFrame that = this;
 		btnEdit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+			    // Gets selected vehicle.
+			    for (Vehicle v : list) {
+                    if (v.id.equals(getSelectedId())) {                      
+                        InventoryEditUI imf = new InventoryEditUI(v);
+                        that.dispose();
+                    }
+                }
 			}
 		});
 		btnEdit.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
