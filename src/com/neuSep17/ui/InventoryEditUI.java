@@ -1,5 +1,11 @@
 package com.neuSep17.ui;
 
+/**
+ * This function is for dealers to add/edit/delete vehicle information.
+ * @author YuXin Li, Yang Chun, Niu Lu, Yuanyuan Jin, Bin Shi
+ * Contact: Bin Shi (shi.b@husky.neu.edu)
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -965,7 +971,6 @@ public class InventoryEditUI extends JFrame {
                 v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
                 service.addVehicle(v.getWebID(), v);
             }
-            // service needs to change api to accept vehicle object;
             return service.updateVehicle(v.getWebID(), v);
         }
         return false;
