@@ -35,7 +35,7 @@ public class InventoryEditUI extends JFrame {
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
-        Vehicle lx = new Vehicle(); 
+        Vehicle lx = new Vehicle();
         InventoryEditUI imf = new InventoryEditUI(lx);
     }
 
@@ -47,13 +47,6 @@ public class InventoryEditUI extends JFrame {
         public Component(String field, int length, String alert) {
             fieldLabel = new JLabel(field);
             inputTextField = new JTextField(length);
-            alertLabel = new JLabel(alert);
-            setTrue();
-        }
-
-        public Component(String field, String input, int length, String alert) {
-            fieldLabel = new JLabel(field);
-            inputTextField = new JTextField(input, length);
             alertLabel = new JLabel(alert);
             setTrue();
         }
@@ -79,6 +72,15 @@ public class InventoryEditUI extends JFrame {
         public JLabel getAlertLabel() {
             return alertLabel;
         }
+    }
+
+    public InventoryEditUI() {
+        super();
+        createCompoments();
+        createPanel();
+        addListeners();
+        setupAutoCompletes();
+        makeThisVisible();
     }
 
     public InventoryEditUI(Vehicle v) {
@@ -920,7 +922,7 @@ public class InventoryEditUI extends JFrame {
             "Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
 
     private VehicleImple service = new VehicleImple();
-    
+
     private Vehicle vehicle;
 
     private void setupAutoCompletes() {
@@ -931,41 +933,41 @@ public class InventoryEditUI extends JFrame {
 
     private void loadVehicle(Vehicle v) {
         vehicle = v;
-        this.id.getInputTextField().setText(String.valueOf(vehicle.getID()));
-        this.webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
-        this.category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
-        this.year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
-        this.make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
-        this.model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
-        this.trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
-        this.type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
-        this.price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
+        id.getInputTextField().setText(String.valueOf(vehicle.getID()));
+        webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
+        category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
+        year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
+        make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
+        model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
+        trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
+        type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
+        price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
     }
 
-     public boolean saveVehicle(String prevWebID, String prevVID) {
-         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
-                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
-    
-             Vehicle v = new Vehicle();
-             
-             if (this.id.getInputTextField().getText() != prevVID
-             || this.webId.getInputTextField().getText() != prevWebID) {
-                 
-                 service.deleteVehicle(prevWebID, prevVID);             
-                 v.setID(this.id.getInputTextField().getText());
-                 v.setWebID(this.webId.getInputTextField().getText());
-                 v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
-                 v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-                 v.setMake(this.make.getInputTextField().getText());
-                 v.setModle(this.model.getInputTextField().getText());
-                 v.setTrim(this.trim.getInputTextField().getText());
-                 v.setBodyType(this.type.getInputTextField().getText());
-                 v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));               
-                 service.addVehicle(v.getWebID(), v);
-             }
-             // service needs to change api to accept vehicle object;
-             return service.updateVehicle(v.getWebID(), v.getID(), v);
-         }      
-         return false;
-     }
+    public boolean saveVehicle(String prevWebID, String prevVID) {
+        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
+                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
+
+            Vehicle v = new Vehicle();
+
+            if (this.id.getInputTextField().getText() != prevVID
+                    || this.webId.getInputTextField().getText() != prevWebID) {
+
+                service.deleteVehicle(prevWebID, prevVID);
+                v.setID(this.id.getInputTextField().getText());
+                v.setWebID(this.webId.getInputTextField().getText());
+                v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
+                v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+                v.setMake(this.make.getInputTextField().getText());
+                v.setModle(this.model.getInputTextField().getText());
+                v.setTrim(this.trim.getInputTextField().getText());
+                v.setBodyType(this.type.getInputTextField().getText());
+                v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+                service.addVehicle(v.getWebID(), v);
+            }
+            // service needs to change api to accept vehicle object;
+            return service.updateVehicle(v.getWebID(), v.getID(), v);
+        }
+        return false;
+    }
 }
