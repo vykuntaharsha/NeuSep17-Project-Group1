@@ -3,7 +3,6 @@ package com.neuSep17.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -94,15 +93,15 @@ public class InventoryEditUI extends JFrame {
     }
 
     private void createCompoments() {
-        id = new Component("ID", 10, "ID's length should be 10, only number.");
-        webId = new Component("WebID", 20, "Split by \"-\".");
+        id = new Component("ID", 10, "Numeric value of size 10.");
+        webId = new Component("WebID", 20, "Valid letter input split by \"-\".");
         category = new Component("Category", 15, "New, used or certified.");
-        year = new Component("Year", 10, "YEAR.");
-        make = new Component("Make", 20, "MAKE");
-        model = new Component("Model", 20, "MODEL");
-        trim = new Component("Trim", 10, "TRIM.");
-        type = new Component("Type", 20, "Type.");
-        price = new Component("Price", 20, "Price.");
+        year = new Component("Year", 10, "Numeric value of size 4.");
+        make = new Component("Make", 20, "Vehicle Brand");
+        model = new Component("Model", 20, "Vehicle Model");
+        trim = new Component("Trim", 10, "Vehicle Trim.");
+        type = new Component("Type", 20, "Vehicle Type.");
+        price = new Component("Price", 20, "Integer Only.");
         id.getInputTextField().setToolTipText("123");
         saveButton = new JButton("Save");
         saveButton.setBackground(Color.gray);
@@ -116,8 +115,10 @@ public class InventoryEditUI extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     saveVehicle(vehicle.getWebID(), vehicle.getID());// save method;
+                    dispose();
+                }
             }
         });
         clearButton.addActionListener(new ActionListener() {
@@ -965,8 +966,7 @@ public class InventoryEditUI extends JFrame {
                 v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
                 service.addVehicle(v.getWebID(), v);
             }
-            // service needs to change api to accept vehicle object;
-            return service.updateVehicle(v.getWebID(), v.getID(), v);
+            return service.updateVehicle(v.getWebID(), v);
         }
         return false;
     }
