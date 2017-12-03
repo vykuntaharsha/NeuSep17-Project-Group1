@@ -1,3 +1,7 @@
+//Team 6 Group 1
+//Team Leader: Tianyu Hou
+//Team Member: Zihan Ding, Jingyi Lin, Yujia Chen, Sihan Zhao;
+
 package com.neuSep17.ui;
 
 import java.awt.EventQueue;
