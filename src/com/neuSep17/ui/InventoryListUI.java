@@ -37,6 +37,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
@@ -123,6 +124,11 @@ public class InventoryListUI extends JFrame {
 	 * Create the frame.
 	 */
 	public InventoryListUI(File file) {
+	    try{
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 		list = InventoryListService.readAndGetVehicles(file);
 		filter = new ArrayList<>();
 		isAscending = true;
