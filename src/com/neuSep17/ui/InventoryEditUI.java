@@ -474,6 +474,7 @@ public class InventoryEditUI extends JFrame {
             String vid = ((JTextField) input).getText();
             if (vid.length() != 10) {
                 id.setFalse();
+                VIDSuccessOrNot = false;
                 return false;
             } else {
                 id.setTrue();
@@ -597,6 +598,7 @@ public class InventoryEditUI extends JFrame {
                 return true;
             } else {
                 webId.setFalse();
+                WebIDSuccessOrNot = false;
                 return false;
             }
         }
@@ -643,6 +645,7 @@ public class InventoryEditUI extends JFrame {
                 return true;
             } else {
                 category.setFalse();
+                CategorySuccessOrNot = false;
                 return false;
             }
         }
@@ -706,6 +709,7 @@ public class InventoryEditUI extends JFrame {
                 return true;
             } else {
                 year.setFalse();
+                YearSuccessOrNot = false;
                 return false;
             }
         }
@@ -763,6 +767,7 @@ public class InventoryEditUI extends JFrame {
             String str = ((JTextField) input).getText();
             if (str.equals("") || str.equals(null)) {
                 make.setFalse();
+                MakeSuccessOrNot = false;
                 return false;
             } else {
                 make.setTrue();
@@ -824,6 +829,7 @@ public class InventoryEditUI extends JFrame {
             String str = ((JTextField) input).getText();
             if (str.equals("") || str.equals(null)) {
                 type.setFalse();
+                TypeSuccessOrNot = false;
                 return false;
             } else {
                 type.setTrue();
@@ -872,6 +878,7 @@ public class InventoryEditUI extends JFrame {
             String str = ((JTextField) input).getText();
             if (str.equals("") || str.equals(null)) {
                 trim.setFalse();
+                 TrimSuccessOrNot = false;
                 return false;
             } else {
                 trim.setTrue();
