@@ -535,6 +535,7 @@ public class InventoryEditUI extends JFrame {
                 return true;
             } else {
                 price.setFalse();
+                PriceSuccessOrNot = false;
                 return false;
             }
         }
@@ -854,6 +855,7 @@ public class InventoryEditUI extends JFrame {
             String str = ((JTextField) input).getText();
             if (str.equals("") || str.equals(null)) {
                 model.setFalse();
+                ModelSuccessOrNot = false;
                 return false;
             } else {
                 model.setTrue();
@@ -878,7 +880,7 @@ public class InventoryEditUI extends JFrame {
             String str = ((JTextField) input).getText();
             if (str.equals("") || str.equals(null)) {
                 trim.setFalse();
-                 TrimSuccessOrNot = false;
+                TrimSuccessOrNot = false;
                 return false;
             } else {
                 trim.setTrue();
