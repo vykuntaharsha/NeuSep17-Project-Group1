@@ -1,5 +1,7 @@
 package com.neuSep17.ui;
 
+import com.neuSep17.dao.PictureManager;
+
 /**
  * This function is for dealers to add/edit/delete vehicle information.
  * @author YuXin Li, Yang Chun, Niu Lu, Yuanyuan Jin, Bin Shi
@@ -20,6 +22,7 @@ import javax.swing.event.*;
 @SuppressWarnings("serial")
 public class InventoryEditUI extends JFrame {
     private Component id, webId, category, year, make, model, trim, type, price;
+    private Component photo;
     private JButton saveButton;
     private JButton clearButton;
     private JButton cancelButton;
@@ -62,6 +65,10 @@ public class InventoryEditUI extends JFrame {
 
         public JLabel getAlertLabel() {
             return alertLabel;
+        }
+        
+        public JLabel getPhoto(){
+            return fieldLabel;
         }
     }
 
@@ -145,15 +152,15 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.setLayout(null);
         componetsPanel.setBackground(Color.lightGray);
 
-        JTextField photoTextField = new JTextField("photo");
+        JLabel photoLabel = new JLabel("photo");
         JLabel lineLabel = new JLabel("   Vehicle Details");
         JTextField lineGraph = new JTextField();
 
         // photo
-        photoTextField.setBounds(315, 50, 100, 100);
-        photoTextField.setHorizontalAlignment(SwingConstants.CENTER);
-        photoTextField.setBackground(Color.lightGray);
-        componetsPanel.add(photoTextField);
+        photoLabel.setBounds(315, 50, 100, 100);
+        photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        photoLabel.setBackground(Color.lightGray);
+        componetsPanel.add(photoLabel);
 
         // save,cancel,clear
 
@@ -936,6 +943,9 @@ public class InventoryEditUI extends JFrame {
         trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
+        
+        //load the photo by Bin
+        if(vehicle.getPhotoURL()!=null) photo.getFieldLabel().setIcon(new ImageIcon(PictureManager.getVehicleImage(vehicle.getPhotoURL())));
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
