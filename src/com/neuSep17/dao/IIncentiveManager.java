@@ -14,8 +14,14 @@ public interface IIncentiveManager {
     Incentive getAIncentive(String incentiveID);
     //add a specific incentive
     boolean addAIncentive(Incentive incentive);
+    //add a batch of incentives
+    boolean addIncentives(ArrayList<Incentive> incentives);
     //update a specific incentive
     boolean updateAIncentive(Incentive incentive);
+    //update a batch of incentives
+    boolean updateIncentives(ArrayList<Incentive> incentive);
     //delete a specific incentive
     boolean deleteAIncentive(String incentiveID);
+    //delete a batch of incentives
+    boolean deleteIncentives(ArrayList<Incentive> incentive);
 }
