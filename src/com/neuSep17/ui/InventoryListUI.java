@@ -1,3 +1,7 @@
+//Team 6 Group 1
+//Team Leader: Tianyu Hou
+//Team Member: Zihan Ding, Jingyi Lin, Yujia Chen, Sihan Zhao;
+
 package com.neuSep17.ui;
 
 import java.awt.EventQueue;
@@ -504,7 +508,7 @@ public class InventoryListUI extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = table.getSelectedRow();
                 selectedId = (String) model.getValueAt(selectedRow, 0);
-                System.out.println(selectedId);
+//                System.out.println(selectedId);
             }
         });
 
@@ -778,5 +782,14 @@ public class InventoryListUI extends JFrame {
 
     public ArrayList<Vehicle> getList() {
         return list;
+    }
+    
+    public Vehicle getSelectedVehicle() {
+        for(Vehicle v : list) {
+            if(v.getID().equals(selectedId)) {
+                return v;
+            }
+        }
+        return null;
     }
 }

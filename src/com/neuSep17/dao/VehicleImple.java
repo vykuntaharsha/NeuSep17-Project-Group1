@@ -106,6 +106,30 @@ public class VehicleImple implements IVehicleManager {
 			if (vehicle.getPrice() != 0 && v.getPrice() > vehicle.getPrice())
 				continue;
 
+			if (vehicle.getVin() != null && !v.getVin().equals(vehicle.getVin()))
+				continue;
+
+			if (vehicle.getEntertainment() != null && !v.getEntertainment().equals(vehicle.getEntertainment()))
+				continue;
+
+			if (vehicle.getInteriorColor() != null && !v.getInteriorColor().equals(vehicle.getInteriorColor()))
+				continue;
+
+			if (vehicle.getExteriorColor() != null && !v.getExteriorColor().equals(vehicle.getExteriorColor()))
+				continue;
+
+			if (vehicle.getFuelType() != null && !v.getFuelType().equals(vehicle.getFuelType()))
+				continue;
+
+			if (vehicle.getEngine() != null && !v.getEngine().equals(vehicle.getEngine()))
+				continue;
+
+			if (vehicle.getTransmission() != null && !v.getTransmission().equals(vehicle.getTransmission()))
+				continue;
+
+			if (vehicle.getBattery() != null && !v.getBattery().equals(vehicle.getBattery()))
+				continue;
+
 			results.add(v);
 		}
 		return new Inventory(dealerID, results);
@@ -137,7 +161,15 @@ public class VehicleImple implements IVehicleManager {
 					sb.append(v.getTrim()).append("~");
 					sb.append(v.getBodyType()).append("~");
 					sb.append(v.getPrice()).append("~");
-					sb.append(v.getPhotoURL());
+					sb.append(v.getPhotoURL()).append("~");
+					sb.append(v.getVin()).append("~");
+					sb.append(v.getEntertainment()).append("~");
+					sb.append(v.getInteriorColor()).append("~");
+					sb.append(v.getExteriorColor()).append("~");
+					sb.append(v.getFuelType()).append("~");
+					sb.append(v.getEngine()).append("~");
+					sb.append(v.getTransmission()).append("~");
+					sb.append(v.getBattery());
 
 					bw.write(sb.toString() + "\n");
 
@@ -198,7 +230,7 @@ public class VehicleImple implements IVehicleManager {
 
 	private void writeToFiles(Map<DealerVehiclePair, String> tmpMap) throws IOException {
 		BufferedWriter bw = fileWriting.getBufferedWriter();
-		StringBuilder sb = new StringBuilder("id~webId~category~year~make~model~trim~type~price~photo");
+		StringBuilder sb = new StringBuilder("id~webId~category~year~make~model~trim~type~price~photo~vin~entertainment~interiorColor~exteriorColor~fuelType~engine~transmission~battery");
 		sb.append("\n");
 		for (String s : tmpMap.values()) {
 			sb.append(s).append("\n");
