@@ -1,5 +1,7 @@
 package com.neuSep17.ui;
 
+import com.neuSep17.dao.PictureManager;
+
 /**
  * This function is for dealers to add/edit/delete vehicle information.
  * @author YuXin Li, Yang Chun, Niu Lu, Yuanyuan Jin, Bin Shi
@@ -20,6 +22,7 @@ import javax.swing.event.*;
 @SuppressWarnings("serial")
 public class InventoryEditUI extends JFrame {
     private Component id, webId, category, year, make, model, trim, type, price;
+    private Component photo;
     private JButton saveButton;
     private JButton clearButton;
     private JButton cancelButton;
@@ -46,6 +49,7 @@ public class InventoryEditUI extends JFrame {
         public void setTrue() {
             inputTextField.setBorder(new LineBorder(Color.black));
             alertLabel.setVisible(false);
+
         }
 
         public void setFalse() {
@@ -63,6 +67,10 @@ public class InventoryEditUI extends JFrame {
 
         public JLabel getAlertLabel() {
             return alertLabel;
+        }
+
+        public JLabel getPhoto() {
+            return fieldLabel;
         }
     }
 
@@ -86,15 +94,15 @@ public class InventoryEditUI extends JFrame {
     }
 
     private void createCompoments() {
-        id = new Component("ID", 10, "ID's length should be 10, only number.");
-        webId = new Component("WebID", 20, "Split by \"-\".");
+        id = new Component("ID", 10, "Numeric value of size 10.");
+        webId = new Component("WebID", 20, "Valid letter input split by \"-\".");
         category = new Component("Category", 15, "New, used or certified.");
-        year = new Component("Year", 10, "YEAR.");
-        make = new Component("Make", 20, "MAKE");
-        model = new Component("Model", 20, "MODEL");
-        trim = new Component("Trim", 10, "TRIM.");
-        type = new Component("Type", 20, "Type.");
-        price = new Component("Price", 20, "Price.");
+        year = new Component("Year", 10, "Numeric value of size 4.");
+        make = new Component("Make", 20, "Vehicle Brand");
+        model = new Component("Model", 20, "Vehicle Model");
+        trim = new Component("Trim", 10, "Vehicle Trim.");
+        type = new Component("Type", 20, "Vehicle Type.");
+        price = new Component("Price", 20, "Integer Only.");
         id.getInputTextField().setToolTipText("123");
         saveButton = new JButton("Save");
         saveButton.setBackground(Color.gray);
@@ -108,8 +116,10 @@ public class InventoryEditUI extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     saveVehicle(vehicle.getWebID(), vehicle.getID());// save method;
+                    dispose();
+                }
             }
         });
         clearButton.addActionListener(new ActionListener() {
@@ -144,14 +154,14 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.setLayout(null);
         componetsPanel.setBackground(Color.lightGray);
 
-        JTextField photoTextField = new JTextField("photo");
+        JLabel photoLabel = new JLabel("photo");
         JTextField lineGraph = new JTextField();
 
         // photo
-        photoTextField.setBounds(315, 50, 100, 100);
-        photoTextField.setHorizontalAlignment(SwingConstants.CENTER);
-        photoTextField.setBackground(Color.lightGray);
-        componetsPanel.add(photoTextField);
+        photoLabel.setBounds(315, 50, 100, 100);
+        photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        photoLabel.setBackground(Color.lightGray);
+        componetsPanel.add(photoLabel);
 
         // save,cancel,clear
 
@@ -295,6 +305,7 @@ public class InventoryEditUI extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
+
     private class ClearAllAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             id.getInputTextField().setText("");
@@ -647,8 +658,8 @@ public class InventoryEditUI extends JFrame {
         @Override
         public boolean verify(JComponent input) {
             String str = ((JTextField) input).getText();
-            if (str.equals("new") || str.equals("used") || str.equals("certified")
-                    ||str.equals("NEW") || str.equals("USED") || str.equals("CERTIFIED")) {
+            if (str.equals("new") || str.equals("used") || str.equals("certified") || str.equals("NEW")
+                    || str.equals("USED") || str.equals("CERTIFIED")) {
                 category.setTrue();
                 CategorySuccessOrNot = true;
                 return true;
@@ -931,9 +942,10 @@ public class InventoryEditUI extends JFrame {
         trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
-        
-        //load the photo by Bin
-        if(vehicle.getPhotoURL()!=null) photo.getFieldLabel().setIcon(new ImageIcon(PictureManager.getVehicleImage(vehicle.getPhotoURL())));
+
+        // load the photo by Bin
+        if (vehicle.getPhotoURL() != null)
+            photo.getFieldLabel().setIcon(new ImageIcon(PictureManager.getVehicleImage(vehicle.getPhotoURL())));
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
