@@ -84,7 +84,7 @@ public class VehicleDataGen {
             featureList = getData();
             if(line.startsWith("id"))
             {
-                  line = line.concat("~").concat("vin").concat("~").concat("entertainment").concat("~").concat("interiorcolour")
+                  line = line.concat("~").concat("vin").concat("~").concat("entertainment").concat("~").concat("interiorcolor")
                           .concat("~").concat("exteriorcolor").concat("~").concat("fuel").concat("~").concat("engine").concat("~").concat("transmission").concat("~").concat("battery").concat("~").concat("optionalfeatures");
                   buffwrite.write(line);
             }
