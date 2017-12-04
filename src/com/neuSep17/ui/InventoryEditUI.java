@@ -26,8 +26,7 @@ public class InventoryEditUI extends JFrame {
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
-        Vehicle lx = new Vehicle();
-        InventoryEditUI imf = new InventoryEditUI(lx);
+        InventoryEditUI imf = new InventoryEditUI();
     }
 
     private class Component {
@@ -74,7 +73,7 @@ public class InventoryEditUI extends JFrame {
         makeThisVisible();
     }
 
-    public InventoryEditUI(Vehicle v) {
+    public InventoryEditUI(Vehicle v, InventoryListUI listUI) {
         super();
         createCompoments();
         createPanel();
@@ -82,6 +81,7 @@ public class InventoryEditUI extends JFrame {
         loadVehicle(v);
         setupAutoCompletes();
         makeThisVisible();
+        this.listUI = listUI;
     }
 
     private void createCompoments() {
@@ -108,7 +108,8 @@ public class InventoryEditUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                    saveVehicle(vehicle.getWebID(), vehicle.getID());// save method;
+                    saveVehicle(vehicle == null ? null : vehicle.getWebID(), 
+                            vehicle == null ? null : vehicle.getID());// save method;
                     dispose();
                 }
             }
@@ -918,6 +919,7 @@ public class InventoryEditUI extends JFrame {
     private VehicleImple service = new VehicleImple();
 
     private Vehicle vehicle;
+    private InventoryListUI listUI;
 
     private void setupAutoCompletes() {
         setupAutoComplete(category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
@@ -943,24 +945,36 @@ public class InventoryEditUI extends JFrame {
                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
 
             Vehicle v = new Vehicle();
-
-            if (this.id.getInputTextField().getText() != prevVID
+            boolean creatingNewVehicle = false;
+            if (prevWebID == null 
+                    || prevVID == null)  {
+                creatingNewVehicle = true;
+            } else if (this.id.getInputTextField().getText() != prevVID
                     || this.webId.getInputTextField().getText() != prevWebID) {
 
                 service.deleteVehicle(prevWebID, prevVID);
-                v.setID(this.id.getInputTextField().getText());
-                v.setWebID(this.webId.getInputTextField().getText());
-                v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
-                v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-                v.setMake(this.make.getInputTextField().getText());
-                v.setModle(this.model.getInputTextField().getText());
-                v.setTrim(this.trim.getInputTextField().getText());
-                v.setBodyType(this.type.getInputTextField().getText());
-                v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-                service.addVehicle(v.getWebID(), v);
+                creatingNewVehicle = true;
             }
-            return service.updateVehicle(v.getWebID(), v);
+            
+            v.setID(this.id.getInputTextField().getText());
+            v.setWebID(this.webId.getInputTextField().getText());
+            v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
+            v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+            v.setMake(this.make.getInputTextField().getText());
+            v.setModle(this.model.getInputTextField().getText());
+            v.setTrim(this.trim.getInputTextField().getText());
+            v.setBodyType(this.type.getInputTextField().getText());
+            v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+            
+            boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v) 
+                    : service.updateVehicle(v.getWebID(), v);
+            if (listUI != null) {
+                listUI.refreshTable();
+            }
+            
+            return result;         
         }
+        
         return false;
     }
 }
