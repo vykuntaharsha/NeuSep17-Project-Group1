@@ -103,7 +103,7 @@ public class InventoryListService {
 		tableModel.setRowCount(0);
 
 		for (Vehicle vehicle : list) {
-			String[] arr = new String[10];
+			String[] arr = new String[19];
 			arr[0] = vehicle.getID();
 			arr[1] = vehicle.getWebID();
 			arr[2] = vehicle.getCategory().toString();
