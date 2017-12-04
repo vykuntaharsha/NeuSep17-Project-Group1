@@ -660,7 +660,8 @@ public class InventoryEditUI extends JFrame {
         @Override
         public boolean verify(JComponent input) {
             String str = ((JTextField) input).getText();
-            if (str.equals("new") || str.equals("used") || str.equals("certified")) {
+            if (str.equals("new") || str.equals("used") || str.equals("certified")
+                    ||str.equals("NEW") || str.equals("USED") || str.equals("CERTIFIED")) {
                 category.setTrue();
                 CategorySuccessOrNot = true;
                 return true;
