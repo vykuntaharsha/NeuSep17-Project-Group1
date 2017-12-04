@@ -1,30 +1,21 @@
 package com.neuSep17.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+/**
+ * This function is for dealers to add/edit/delete vehicle information.
+ * @author YuXin Li, Yang Chun, Niu Lu, Yuanyuan Jin, Bin Shi
+ * Contact: Bin Shi (shi.b@husky.neu.edu)
+ */
 
 import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Category;
 import com.neuSep17.dto.Vehicle;
 
-//import com.neuSep17.ui.InventoryManagementFrame.ClearAllAction;
-//import com.neuSep17.ui.InventoryManagementFrame.Component;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
 @SuppressWarnings("serial")
 public class InventoryEditUI extends JFrame {
@@ -35,7 +26,7 @@ public class InventoryEditUI extends JFrame {
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
-        Vehicle lx = new Vehicle(); 
+        Vehicle lx = new Vehicle();
         InventoryEditUI imf = new InventoryEditUI(lx);
     }
 
@@ -47,13 +38,6 @@ public class InventoryEditUI extends JFrame {
         public Component(String field, int length, String alert) {
             fieldLabel = new JLabel(field);
             inputTextField = new JTextField(length);
-            alertLabel = new JLabel(alert);
-            setTrue();
-        }
-
-        public Component(String field, String input, int length, String alert) {
-            fieldLabel = new JLabel(field);
-            inputTextField = new JTextField(input, length);
             alertLabel = new JLabel(alert);
             setTrue();
         }
@@ -81,6 +65,15 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
+    public InventoryEditUI() {
+        super();
+        createCompoments();
+        createPanel();
+        addListeners();
+        setupAutoCompletes();
+        makeThisVisible();
+    }
+
     public InventoryEditUI(Vehicle v) {
         super();
         createCompoments();
@@ -92,15 +85,15 @@ public class InventoryEditUI extends JFrame {
     }
 
     private void createCompoments() {
-        id = new Component("ID", 10, "ID's length should be 10, only number.");
-        webId = new Component("WebID", 20, "Split by \"-\".");
+        id = new Component("ID", 10, "Numeric value of size 10.");
+        webId = new Component("WebID", 20, "Valid letter input split by \"-\".");
         category = new Component("Category", 15, "New, used or certified.");
-        year = new Component("Year", 10, "YEAR.");
-        make = new Component("Make", 20, "MAKE");
-        model = new Component("Model", 20, "MODEL");
-        trim = new Component("Trim", 10, "TRIM.");
-        type = new Component("Type", 20, "Type.");
-        price = new Component("Price", 20, "Price.");
+        year = new Component("Year", 10, "Numeric value of size 4.");
+        make = new Component("Make", 20, "Vehicle Brand");
+        model = new Component("Model", 20, "Vehicle Model");
+        trim = new Component("Trim", 10, "Vehicle Trim.");
+        type = new Component("Type", 20, "Vehicle Type.");
+        price = new Component("Price", 20, "Integer Only.");
         id.getInputTextField().setToolTipText("123");
         saveButton = new JButton("Save");
         saveButton.setBackground(Color.gray);
@@ -114,8 +107,10 @@ public class InventoryEditUI extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     saveVehicle(vehicle.getWebID(), vehicle.getID());// save method;
+                    dispose();
+                }
             }
         });
         clearButton.addActionListener(new ActionListener() {
@@ -657,7 +652,8 @@ public class InventoryEditUI extends JFrame {
         @Override
         public boolean verify(JComponent input) {
             String str = ((JTextField) input).getText();
-            if (str.equals("new") || str.equals("used") || str.equals("certified")) {
+            if (str.equals("new") || str.equals("used") || str.equals("certified")
+                    ||str.equals("NEW") || str.equals("USED") || str.equals("CERTIFIED")) {
                 category.setTrue();
                 CategorySuccessOrNot = true;
                 return true;
@@ -920,7 +916,7 @@ public class InventoryEditUI extends JFrame {
             "Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
 
     private VehicleImple service = new VehicleImple();
-    
+
     private Vehicle vehicle;
 
     private void setupAutoCompletes() {
@@ -931,41 +927,40 @@ public class InventoryEditUI extends JFrame {
 
     private void loadVehicle(Vehicle v) {
         vehicle = v;
-        this.id.getInputTextField().setText(String.valueOf(vehicle.getID()));
-        this.webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
-        this.category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
-        this.year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
-        this.make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
-        this.model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
-        this.trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
-        this.type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
-        this.price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
+        id.getInputTextField().setText(String.valueOf(vehicle.getID()));
+        webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
+        category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
+        year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
+        make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
+        model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
+        trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
+        type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
+        price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
     }
 
-     public boolean saveVehicle(String prevWebID, String prevVID) {
-         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
-                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
-    
-             Vehicle v = new Vehicle();
-             
-             if (this.id.getInputTextField().getText() != prevVID
-             || this.webId.getInputTextField().getText() != prevWebID) {
-                 
-                 service.deleteVehicle(prevWebID, prevVID);             
-                 v.setID(this.id.getInputTextField().getText());
-                 v.setWebID(this.webId.getInputTextField().getText());
-                 v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
-                 v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-                 v.setMake(this.make.getInputTextField().getText());
-                 v.setModle(this.model.getInputTextField().getText());
-                 v.setTrim(this.trim.getInputTextField().getText());
-                 v.setBodyType(this.type.getInputTextField().getText());
-                 v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));               
-                 service.addVehicle(v.getWebID(), v);
-             }
-             // service needs to change api to accept vehicle object;
-             return service.updateVehicle(v.getWebID(), v.getID(), v);
-         }      
-         return false;
-     }
+    public boolean saveVehicle(String prevWebID, String prevVID) {
+        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
+                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
+
+            Vehicle v = new Vehicle();
+
+            if (this.id.getInputTextField().getText() != prevVID
+                    || this.webId.getInputTextField().getText() != prevWebID) {
+
+                service.deleteVehicle(prevWebID, prevVID);
+                v.setID(this.id.getInputTextField().getText());
+                v.setWebID(this.webId.getInputTextField().getText());
+                v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
+                v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+                v.setMake(this.make.getInputTextField().getText());
+                v.setModle(this.model.getInputTextField().getText());
+                v.setTrim(this.trim.getInputTextField().getText());
+                v.setBodyType(this.type.getInputTextField().getText());
+                v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+                service.addVehicle(v.getWebID(), v);
+            }
+            return service.updateVehicle(v.getWebID(), v);
+        }
+        return false;
+    }
 }
