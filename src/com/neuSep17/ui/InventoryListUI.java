@@ -113,9 +113,8 @@ public class InventoryListUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    String f = InventoryListUI.class.getResource("asset/InventoryListUItest.txt").getPath();
-                    File file = new File(f);
-                    InventoryListUI frame = new InventoryListUI(file);
+                    String dealerName = "gmps-covert-country";
+                    InventoryListUI frame = new InventoryListUI(dealerName);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -127,12 +126,14 @@ public class InventoryListUI extends JFrame {
     /**
      * Create the frame.
      */
-    public InventoryListUI(File file) {
+    public InventoryListUI(String dealerName) {
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String f = "data/"+dealerName;
+        File file = new File(f);
         list = InventoryListService.readAndGetVehicles(file);
         filter = new ArrayList<>();
         isAscending = true;
@@ -477,8 +478,8 @@ public class InventoryListUI extends JFrame {
                 continue;
             //webId
             case 1:
-                column.setMinWidth(100);
-                column.setMaxWidth(100);
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
                 continue;
             //Category
             case 2:
@@ -497,8 +498,8 @@ public class InventoryListUI extends JFrame {
                 continue;
             //Model
             case 5:
-                column.setMinWidth(200);
-                column.setMaxWidth(200);
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
                 continue;
             //Trim
             case 6:
@@ -527,18 +528,18 @@ public class InventoryListUI extends JFrame {
                 continue;
             //Entertainment
             case 11:
-                column.setMinWidth(150);
-                column.setMaxWidth(150);
+                column.setMinWidth(400);
+                column.setMaxWidth(400);
                 continue;
             //InteriorColor
             case 12:
-                column.setMinWidth(100);
-                column.setMaxWidth(100);
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
                 continue;
             //ExteriorColor
             case 13:
-                column.setMinWidth(100);
-                column.setMaxWidth(100);
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
                 continue;
             //Fueltype
             case 14:
@@ -547,13 +548,13 @@ public class InventoryListUI extends JFrame {
                 continue;
             //Engine
             case 15:
-                column.setMinWidth(150);
-                column.setMaxWidth(150);
+                column.setMinWidth(250);
+                column.setMaxWidth(250);
                 continue;
             //Transmission
             case 16:
-                column.setMinWidth(100);
-                column.setMaxWidth(100);
+                column.setMinWidth(250);
+                column.setMaxWidth(250);
                 continue;
             //Battery
             case 17:
@@ -562,8 +563,8 @@ public class InventoryListUI extends JFrame {
                 continue;
             //OptionalFeatures
             case 18:
-                column.setMinWidth(150);
-                column.setMaxWidth(150);
+                column.setMinWidth(350);
+                column.setMaxWidth(350);
                 continue;
             }
         }
