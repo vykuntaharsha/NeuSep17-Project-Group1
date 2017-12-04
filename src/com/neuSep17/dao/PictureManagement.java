@@ -11,15 +11,17 @@ import com.neuSep17.dto.Vehicle;
 /**
  * Design document: /doc/design/display-picture.md
  * 
- * @author team 2 - bin
- * @version
+ * @author Team 2 - Bin Shi
+ * 
+ * Updates:
  * 0.1: 2017-11-30 Initialize.
- * 0.2: 2017-12-01 
+ * 0.2: 2017-12-01 Use the relative path as the root of pictures
  * 
  */
 public class PictureManagement {
 
-    private static final String PICTURE_DIR = "../../../picture";
+    //root direction of the picture files
+    private static final String PICTURE_DIR = "picture";
 
     public static Image getVehicleImage(Vehicle v) {
         return getVehicleImage(v.getPhotoURL());
@@ -27,7 +29,7 @@ public class PictureManagement {
 
     public static Image getVehicleImage(URL url) {
         String imageURL = url.toString();
-        File file = new File(getFileAbsolutePath(imageURL));
+        File file = new File(PICTURE_DIR, getFileFullName(imageURL));
         if (file.exists()) {
             return loadImageFromDisk(imageURL);
         } else {
@@ -51,11 +53,8 @@ public class PictureManagement {
         return getFileHashName(imageURL) +"."+ getFileExt(imageURL);
     }
 
-    private static String getFileAbsolutePath(String imageURL) {
-        return PICTURE_DIR + getFileFullName(imageURL);
-    }
-
     public static Image loadImageFromDisk(String imageURL) {
+        System.out.println("loaded from disk");
         BufferedImage image = null;
         try {
             File file = new File(PICTURE_DIR, getFileFullName(imageURL));
@@ -67,6 +66,7 @@ public class PictureManagement {
     }
 
     public static BufferedImage laodImageFromURL(URL url) {
+        System.out.println("loaded from internet");
         BufferedImage image = null;
 
         try {
@@ -82,19 +82,25 @@ public class PictureManagement {
     }
 
     private static void cacheImage(BufferedImage image, String fileFullName, String fileExt) {
-        File file = new File(PICTURE_DIR, fileFullName);
-        try {
-            if(!file.exists()) file.createNewFile();
-            ImageIO.write(image, fileExt, file);
+        System.out.println("image cached");
+        try { 
+            File imageFile = new File(PICTURE_DIR, fileFullName);
+            if(!imageFile.exists()) imageFile.createNewFile();
+            
+            ImageIO.write(image, fileExt, imageFile);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
     
     public static void main(String[] args){
-//        URL url=new URL("");
-//        PictureManagement.getVehicleImage(url)
+        URL url=null;
+        try {
+            url = new URL("http://inventory-dmg.assets-cdk.com/RTT/Chevrolet/2016/2875373/default/ext_GBA_deg01x90.jpg");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(PictureManagement.getVehicleImage(url));
     }
     
 }
