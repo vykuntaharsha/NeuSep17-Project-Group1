@@ -508,7 +508,7 @@ public class InventoryListUI extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int selectedRow = table.getSelectedRow();
                 selectedId = (String) model.getValueAt(selectedRow, 0);
-                System.out.println(selectedId);
+//                System.out.println(selectedId);
             }
         });
 
@@ -782,5 +782,14 @@ public class InventoryListUI extends JFrame {
 
     public ArrayList<Vehicle> getList() {
         return list;
+    }
+    
+    public Vehicle getSelectedVehicle() {
+        for(Vehicle v : list) {
+            if(v.getID().equals(selectedId)) {
+                return v;
+            }
+        }
+        return null;
     }
 }
