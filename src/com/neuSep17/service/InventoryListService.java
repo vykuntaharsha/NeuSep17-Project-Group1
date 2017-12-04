@@ -58,6 +58,15 @@ public class InventoryListService {
 			dic.add(item.getTrim().toUpperCase());
 			dic.add(item.getBodyType().toUpperCase());
 			dic.add(String.valueOf(item.getYear()).toUpperCase());
+			dic.add(item.getBattery().toUpperCase());
+			dic.add(item.getEngine().toUpperCase());
+			dic.add(item.getExteriorColor().toUpperCase());
+			dic.add(item.getInteriorColor().toUpperCase());
+			dic.add(item.getFuelType().toUpperCase());
+			dic.add(item.getOptionalFeatures().toUpperCase());
+			dic.add(item.getTransmission().toUpperCase());
+			dic.add(item.getVin().toUpperCase());
+			dic.add(item.getEntertainment().toUpperCase());
 			boolean[] dp = new boolean[str.length() + 1];
 			dp[0] = true;
 			for (int i = 1; i <= str.length(); i++) {
@@ -80,7 +89,8 @@ public class InventoryListService {
 		str = str.toUpperCase();
 		for (Vehicle item : list) {
 			String pattern = item.getID() + item.getWebID() + item.getCategory().toString() + item.getYear() + item.getMake() + item.getModel()
-					+ item.getTrim() + item.getBodyType() + item.getPrice();
+					+ item.getTrim() + item.getBodyType() + item.getPrice() + item.getVin() + item.getEntertainment() + item.getInteriorColor()
+					+ item.getExteriorColor() + item.getFuelType() + item.getEngine() + item.getTransmission() + item.getBattery() + item.getOptionalFeatures();
 			if (pattern.toUpperCase().contains(str)) {
 				filter.add(item);
 			}
@@ -104,6 +114,15 @@ public class InventoryListService {
 			arr[7] = vehicle.getBodyType();
 			arr[8] = String.valueOf(vehicle.getPrice());
 			arr[9] = vehicle.getPhotoURL().toString();
+			arr[10] = vehicle.getVin();
+			arr[11] = vehicle.getEntertainment();
+			arr[12] = vehicle.getInteriorColor();
+			arr[13] = vehicle.getExteriorColor();
+			arr[14] = vehicle.getFuelType();
+			arr[15] = vehicle.getEngine();
+			arr[16] = vehicle.getTransmission();
+			arr[17] = vehicle.getBattery();
+			arr[18] = vehicle.getOptionalFeatures();
 
 			tableModel.addRow(arr);
 		}
