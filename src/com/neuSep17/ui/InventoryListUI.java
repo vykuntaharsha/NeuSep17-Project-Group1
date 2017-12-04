@@ -447,7 +447,17 @@ public class InventoryListUI extends JFrame {
 
     // ADD Table
     private void registerTable() {
-        String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Type", "Price", "Photo" };
+        /*this.vin = arr[10];
+        this.entertainment = arr[11];
+        this.interiorColor = arr[12];
+        this.exteriorColor = arr[13];
+        this.fuelType = arr[14];
+        this.engine = arr[15];
+        this.transmission = arr[16];
+        this.battery = arr[17];
+        this.setOptionalFeatures(arr[18]);*/
+        String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price", "Photo","Vin","Entertainment"
+                ,"InteriorColor","ExteriorColor","Fueltype","Engine","Transmission","Battery","OptionalFeatures"};
         Object[][] cellData = null;
 
         DefaultTableModel model = new DefaultTableModel(cellData, headers) {
@@ -462,45 +472,100 @@ public class InventoryListUI extends JFrame {
         for (int i = 0; i < headers.length; i++) {
             column = table.getColumnModel().getColumn(i);
             switch (i) {
+            //Id
             case 0:
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
+            //webId
             case 1:
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
+            //Category
             case 2:
                 column.setMinWidth(80);
                 column.setMaxWidth(80);
                 continue;
+            //Year
             case 3:
                 column.setMinWidth(50);
                 column.setMaxWidth(50);
                 continue;
+            //Make
             case 4:
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
+            //Model
             case 5:
                 column.setMinWidth(200);
                 column.setMaxWidth(200);
                 continue;
+            //Trim
             case 6:
                 column.setMinWidth(300);
                 column.setMaxWidth(300);
                 continue;
+            //Bodytype
             case 7:
                 column.setMinWidth(150);
                 column.setMaxWidth(150);
                 continue;
+            //Price
             case 8:
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
+            //Photo
             case 9:
                 column.setMinWidth(550);
                 column.setMaxWidth(550);
+                continue;
+            //Vin
+            case 10:
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
+                continue;
+            //Entertainment
+            case 11:
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
+                continue;
+            //InteriorColor
+            case 12:
+                column.setMinWidth(100);
+                column.setMaxWidth(100);
+                continue;
+            //ExteriorColor
+            case 13:
+                column.setMinWidth(100);
+                column.setMaxWidth(100);
+                continue;
+            //Fueltype
+            case 14:
+                column.setMinWidth(100);
+                column.setMaxWidth(100);
+                continue;
+            //Engine
+            case 15:
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
+                continue;
+            //Transmission
+            case 16:
+                column.setMinWidth(100);
+                column.setMaxWidth(100);
+                continue;
+            //Battery
+            case 17:
+                column.setMinWidth(100);
+                column.setMaxWidth(100);
+                continue;
+            //OptionalFeatures
+            case 18:
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
                 continue;
             }
         }

@@ -18,23 +18,27 @@ import com.neuSep17.dto.Vehicle;
  * 0.2: 2017-12-01 Use the relative path as the root of pictures
  * 
  */
-public class PictureManagement {
+public class PictureManager {
 
     //root direction of the picture files
     private static final String PICTURE_DIR = "picture";
 
-    public static Image getVehicleImage(Vehicle v) {
-        return getVehicleImage(v.getPhotoURL());
+    /**
+     * Get the image of a vehicle using the photoURL property.
+     * @param vehicle
+     * @return The image of the vehicle or null if there is no valid image.
+     */
+    public static Image getVehicleImage(Vehicle vehicle) {
+        return getVehicleImage(vehicle.getPhotoURL());
     }
 
-    public static Image getVehicleImage(URL url) {
-        String imageURL = url.toString();
-        File file = new File(PICTURE_DIR, getFileFullName(imageURL));
+    public static BufferedImage getVehicleImage(URL photoURL) {
+        File file = new File(PICTURE_DIR, getFileFullName(photoURL.toString()));
         if (file.exists()) {
-            return loadImageFromDisk(imageURL);
+            return loadImageFromDisk(photoURL.toString());
         } else {
-            BufferedImage image = laodImageFromURL(url);
-            cacheImage(image, imageURL);
+            BufferedImage image = laodImageFromURL(photoURL);
+            cacheImage(image, photoURL.toString());
             return image;
         }
     }
@@ -49,12 +53,16 @@ public class PictureManagement {
         return fileExt;
     }
 
+    /**
+     * Get the full file name (hashed) from the image URL.
+     * @param imageURL
+     * @return the full file name in the format of hashcode.ext
+     */
     private static String getFileFullName(String imageURL) {
         return getFileHashName(imageURL) +"."+ getFileExt(imageURL);
     }
 
-    public static Image loadImageFromDisk(String imageURL) {
-        System.out.println("loaded from disk");
+    public static BufferedImage loadImageFromDisk(String imageURL) {
         BufferedImage image = null;
         try {
             File file = new File(PICTURE_DIR, getFileFullName(imageURL));
@@ -66,7 +74,6 @@ public class PictureManagement {
     }
 
     public static BufferedImage laodImageFromURL(URL url) {
-        System.out.println("loaded from internet");
         BufferedImage image = null;
 
         try {
@@ -82,7 +89,6 @@ public class PictureManagement {
     }
 
     private static void cacheImage(BufferedImage image, String fileFullName, String fileExt) {
-        System.out.println("image cached");
         try { 
             File imageFile = new File(PICTURE_DIR, fileFullName);
             if(!imageFile.exists()) imageFile.createNewFile();
@@ -100,7 +106,7 @@ public class PictureManagement {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        System.out.println(PictureManagement.getVehicleImage(url));
+        System.out.println(PictureManager.getVehicleImage(url));
     }
     
 }
