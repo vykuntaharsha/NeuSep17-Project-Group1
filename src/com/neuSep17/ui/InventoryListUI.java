@@ -132,8 +132,10 @@ public class InventoryListUI extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         String f = "data/"+dealerName;
         File file = new File(f);
+        this.file = file; // team 2: Lu Niu
         list = InventoryListService.readAndGetVehicles(file);
         filter = new ArrayList<>();
         isAscending = true;
@@ -590,7 +592,7 @@ public class InventoryListUI extends JFrame {
         scrollPane = new JScrollPane(table);
         scrollPane.setBounds(350, 220, 950, 580);
         table.setPreferredScrollableViewportSize(new Dimension(1950, 580));
-        // set ceter alignment;
+        // set center alignment;
         DefaultTableCellRenderer tablecell = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -628,6 +630,7 @@ public class InventoryListUI extends JFrame {
     private void registerAEDBtn() {
         btnAdd = new JButton("Add");
         btnAdd.setBorderPainted(false);
+        InventoryListUI that = this; // team 2: Lu Niu
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -636,7 +639,7 @@ public class InventoryListUI extends JFrame {
                 } else {
                     for (Vehicle v : list) {
                         if (v.getID().equals(getSelectedId())) {
-                            InventoryEditUI inventoryEditUI = new InventoryEditUI(v);
+                            InventoryEditUI inventoryEditUI = new InventoryEditUI(v, that);
                         }
                     }
                 }
@@ -654,11 +657,8 @@ public class InventoryListUI extends JFrame {
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                for (Vehicle v : list) {
-                    if (v.getID().equals(getSelectedId())) {
-
-                    }
-                }
+                // team 2: Lu Niu
+                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
             }
         });
         btnDelete.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
@@ -672,11 +672,8 @@ public class InventoryListUI extends JFrame {
         btnEdit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                for (Vehicle v : list) {
-                    if (v.getID().equals(getSelectedId())) {
-                        InventoryEditUI imf = new InventoryEditUI(v);
-                    }
-                }
+                // team 2: Lu Niu
+                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
             }
         });
         btnEdit.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
@@ -857,5 +854,11 @@ public class InventoryListUI extends JFrame {
             }
         }
         return null;
+    }
+    // team 2: Lu Niu
+    private File file;
+    public void refreshTable() {
+        list = InventoryListService.readAndGetVehicles(file);
+        InventoryListService.fillTable(list, table);
     }
 }
