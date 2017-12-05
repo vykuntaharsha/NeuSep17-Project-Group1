@@ -11,200 +11,214 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class IncentiveService {
-    //sort the incentives by criteria input by the user
-    public static ArrayList<Incentive> getSortedIncentives(ArrayList<Incentive> incentives, String criteria, boolean isAsc){
-        // UpperCase the Criteria
-        String sortCriteria = criteria.toUpperCase();
-        // sort the incentives by sorting criteria
-        switch (sortCriteria){
-            case "ID":
-                if (isAsc == true)
-                    //sort in ascending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            return Integer.parseInt(o1.getID()) < Integer.parseInt(o2.getID()) ? -1 : o1.getID() == o2.getID() ? 0 : 1 ;
-                        }
-                    });
-                else //sort in descending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            return Integer.parseInt(o1.getID()) < Integer.parseInt(o2.getID()) ? 1 : o1.getID() == o2.getID() ? 0 : -1 ;
-                        }
-                    });
-                break;
-            case "DEALERID":
-                if (isAsc == true) //sort in ascending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            int compareInt = o1.getDealerID().compareTo(o2.getDealerID());
-                            if(compareInt < 0) return -1;
-                            else if (compareInt > 0) return 1;
-                            else return 0; //if they are equal
-                        }
-                    });
-                else
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            int compareInt = o1.getDealerID().compareTo(o2.getDealerID());
-                            if(compareInt < 0) return 1;
-                            else if (compareInt > 0) return -1;
-                            else return 0; //if they are equal
-                        }
-                    });
-                break;
-            case "TITLE":
-                if (isAsc == true) //sort in ascending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            int compareInt = o1.getTitle().compareTo(o2.getTitle());
-                            if(compareInt < 0) return -1;
-                            else if (compareInt > 0) return 1;
-                            else return 0; //if they are equal
-                        }
-                    });
-                else
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            int compareInt = o1.getTitle().compareTo(o2.getTitle());
-                            if(compareInt < 0) return 1;
-                            else if (compareInt > 0) return -1;
-                            else return 0; //if they are equal
-                        }
-                    });
-                break;
-            case "STARTDATE":
-                if(isAsc == true) //sort in ascending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                Date date1 = sdf.parse(o1.getStartDate());
-                                Date date2 = sdf.parse(o2.getStartDate());
+    //sort the incentives by incentiveID
+    public static ArrayList<Incentive> sortIncentivesByIncentID(ArrayList<Incentive> incentives, boolean isAsc){
+        if (isAsc == true)
+            //sort in ascending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    return Integer.parseInt(o1.getID()) < Integer.parseInt(o2.getID()) ? -1 : o1.getID() == o2.getID() ? 0 : 1 ;
+                }
+            });
+        else //sort in descending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    return Integer.parseInt(o1.getID()) < Integer.parseInt(o2.getID()) ? 1 : o1.getID() == o2.getID() ? 0 : -1 ;
+                }
+            });
 
-                                int compareDate = date1.compareTo(date2);
-                                if (compareDate == 0) return 0;
-                                else if (compareDate < 0) return -1;
-                                else return 1;
-                            } catch (ParseException p){
-                                System.out.println("Incorrect date-format record found");
-                            }
-                            return 0;
-                        }
-                    });
-                else
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                Date date1 = sdf.parse(o1.getStartDate());
-                                Date date2 = sdf.parse(o2.getStartDate());
-
-                                int compareDate = date1.compareTo(date2);
-                                if (compareDate == 0) return 0;
-                                else if (compareDate < 0) return 1;
-                                else return -1;
-                            } catch (ParseException p){
-                                System.out.println("Incorrect date-format record found");
-                            }
-                            return 0;
-                        }
-                    });
-                break;
-            case "ENDDATE":
-                if(isAsc == true) //sort in ascending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                Date date1 = sdf.parse(o1.getEndDate());
-                                Date date2 = sdf.parse(o2.getEndDate());
-                                System.out.println(date1.toString() + date2.toString());
-                                int compareDate = date1.compareTo(date2);
-                                if (compareDate == 0) return 0;
-                                else if (compareDate < 0) return -1;
-                                else return 1;
-                            } catch (ParseException p){
-                                System.out.println("Incorrect date-format record found");
-                            }
-                            return 0;
-                        }
-                    });
-                else
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                                Date date1 = sdf.parse(o1.getEndDate());
-                                Date date2 = sdf.parse(o2.getEndDate());
-
-                                int compareDate = date1.compareTo(date2);
-                                if (compareDate == 0) return 0;
-                                else if (compareDate < 0) return 1;
-                                else return -1;
-                            } catch (ParseException p){
-                                System.out.println("Incorrect date-format record found");
-                            }
-                            return 0;
-                        }
-                    });
-                break;
-            case "DESCRIPTION":
-                if(isAsc == true)
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            int compareInt = o1.getDescription().compareTo(o2.getDescription());
-                            if(compareInt < 0) return -1;
-                            else if (compareInt > 0) return 1;
-                            else return 0; //if they are equal
-                        }
-                    });
-                else //descending sort order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            int compareInt = o1.getDescription().compareTo(o2.getDescription());
-                            if(compareInt < 0) return 1;
-                            else if (compareInt > 0) return -1;
-                            else return 0; //if they are equal
-                        }
-                    });
-                break;
-            case "CASHVALUE":
-                if (isAsc == true)
-                    //sort in ascending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            return o1.getCashValue() < o2.getCashValue() ? -1 : o1.getCashValue() == o2.getCashValue() ? 0 : 1 ;
-                        }
-                    });
-                else //sort in descending order
-                    Collections.sort(incentives, new Comparator<Incentive>() {
-                        @Override
-                        public int compare(Incentive o1, Incentive o2) {
-                            return o1.getCashValue() < o2.getCashValue() ? 1 : o1.getCashValue() == o2.getCashValue() ? 0 : -1 ;
-                        }
-                    });
-                break;
-            case "DISCOUNTCRITERIA": //not working now
-                break;
-            default:
-                System.out.println("this sorting criteria does not exist......");
-        }
-
-        return  incentives;
+        return incentives;
     }
+
+    //sort the incentives by dealerID
+    public static ArrayList<Incentive> sortIncentivesByDealerID(ArrayList<Incentive> incentives, boolean isAsc){
+        if (isAsc == true) //sort in ascending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    int compareInt = o1.getDealerID().compareTo(o2.getDealerID());
+                    if(compareInt < 0) return -1;
+                    else if (compareInt > 0) return 1;
+                    else return 0; //if they are equal
+                }
+            });
+        else
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    int compareInt = o1.getDealerID().compareTo(o2.getDealerID());
+                    if(compareInt < 0) return 1;
+                    else if (compareInt > 0) return -1;
+                    else return 0; //if they are equal
+                }
+            });
+        return incentives;
+    }
+
+    //sort the incentives by incentiveID
+    public static ArrayList<Incentive> sortIncentivesByTitle(ArrayList<Incentive> incentives, boolean isAsc){
+        if (isAsc == true) //sort in ascending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    int compareInt = o1.getTitle().compareTo(o2.getTitle());
+                    if(compareInt < 0) return -1;
+                    else if (compareInt > 0) return 1;
+                    else return 0; //if they are equal
+                }
+            });
+        else
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    int compareInt = o1.getTitle().compareTo(o2.getTitle());
+                    if(compareInt < 0) return 1;
+                    else if (compareInt > 0) return -1;
+                    else return 0; //if they are equal
+                }
+            });
+
+        return incentives;
+    }
+
+    //sort the incentives by StartDate
+    public static ArrayList<Incentive> sortIncentivesByStartDate(ArrayList<Incentive> incentives, boolean isAsc){
+        if(isAsc == true) //sort in ascending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date1 = sdf.parse(o1.getStartDate());
+                        Date date2 = sdf.parse(o2.getStartDate());
+
+                        int compareDate = date1.compareTo(date2);
+                        if (compareDate == 0) return 0;
+                        else if (compareDate < 0) return -1;
+                        else return 1;
+                    } catch (ParseException p){
+                        System.out.println("Incorrect date-format record found");
+                    }
+                    return 0;
+                }
+            });
+        else
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date1 = sdf.parse(o1.getStartDate());
+                        Date date2 = sdf.parse(o2.getStartDate());
+
+                        int compareDate = date1.compareTo(date2);
+                        if (compareDate == 0) return 0;
+                        else if (compareDate < 0) return 1;
+                        else return -1;
+                    } catch (ParseException p){
+                        System.out.println("Incorrect date-format record found");
+                    }
+                    return 0;
+                }
+            });
+
+        return incentives;
+    }
+
+    //sort the incentives by EndDate
+    public static ArrayList<Incentive> sortIncentivesByEndDate(ArrayList<Incentive> incentives, boolean isAsc){
+        if(isAsc == true) //sort in ascending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date1 = sdf.parse(o1.getEndDate());
+                        Date date2 = sdf.parse(o2.getEndDate());
+                        System.out.println(date1.toString() + date2.toString());
+                        int compareDate = date1.compareTo(date2);
+                        if (compareDate == 0) return 0;
+                        else if (compareDate < 0) return -1;
+                        else return 1;
+                    } catch (ParseException p){
+                        System.out.println("Incorrect date-format record found");
+                    }
+                    return 0;
+                }
+            });
+        else
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date1 = sdf.parse(o1.getEndDate());
+                        Date date2 = sdf.parse(o2.getEndDate());
+
+                        int compareDate = date1.compareTo(date2);
+                        if (compareDate == 0) return 0;
+                        else if (compareDate < 0) return 1;
+                        else return -1;
+                    } catch (ParseException p){
+                        System.out.println("Incorrect date-format record found");
+                    }
+                    return 0;
+                }
+            });
+
+        return incentives;
+    }
+
+    //sort the incentives by Description
+    public static ArrayList<Incentive> sortIncentivesByDescription(ArrayList<Incentive> incentives, boolean isAsc){
+        if(isAsc == true)
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    int compareInt = o1.getDescription().compareTo(o2.getDescription());
+                    if(compareInt < 0) return -1;
+                    else if (compareInt > 0) return 1;
+                    else return 0; //if they are equal
+                }
+            });
+        else //descending sort order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    int compareInt = o1.getDescription().compareTo(o2.getDescription());
+                    if(compareInt < 0) return 1;
+                    else if (compareInt > 0) return -1;
+                    else return 0; //if they are equal
+                }
+            });
+
+        return incentives;
+    }
+
+    //sort the incentives by cashValue
+    public static ArrayList<Incentive> sortIncentivesByCashValue(ArrayList<Incentive> incentives, boolean isAsc){
+        if (isAsc == true)
+            //sort in ascending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    return o1.getCashValue() < o2.getCashValue() ? -1 : o1.getCashValue() == o2.getCashValue() ? 0 : 1 ;
+                }
+            });
+        else //sort in descending order
+            Collections.sort(incentives, new Comparator<Incentive>() {
+                @Override
+                public int compare(Incentive o1, Incentive o2) {
+                    return o1.getCashValue() < o2.getCashValue() ? 1 : o1.getCashValue() == o2.getCashValue() ? 0 : -1 ;
+                }
+            });
+
+        return incentives;
+
+    }
+
 
     //search incentives by ID, DealerID, Title, Description, discountCriteria
     public static ArrayList<Incentive> searchIncentives(String criteria, String criteriaValue){

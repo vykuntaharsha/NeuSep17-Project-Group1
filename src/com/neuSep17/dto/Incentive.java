@@ -13,8 +13,8 @@ public class Incentive implements Comparable<Incentive> {
 	private String ID;
 	private String dealerID;
 	private String title;
-	private String startDate; //format should be "MM-DD-YYYY"
-	private String endDate;//format should be "MM-DD-YYYY"
+	private String startDate; //format should be "YYYY-MM-DD"
+	private String endDate;//format should be "YYYY-MM-DD"
 	private String description;
 	private double cashValue;
 	

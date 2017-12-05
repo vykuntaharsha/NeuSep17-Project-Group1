@@ -161,7 +161,7 @@ public class IncentiveImple implements IIncentiveManager {
 
         //testing update fuction
         ArrayList<String> dCriteria = new ArrayList<>(Arrays.asList("Toyota", "Corolla", "2015"));
-        Incentive incentive1 = new Incentive("002","gmps-bresee","Thanksgiving","07/01/2016","08/02/2019","big deal for toyota", 4000, dCriteria);
+        Incentive incentive1 = new Incentive("002","gmps-bresee","Thanksgiving","2016-07-01","2019-08-02","big deal for toyota", 4000, dCriteria);
         test.updateAIncentive(incentive1);
         //update testing ends here
 
@@ -170,7 +170,7 @@ public class IncentiveImple implements IIncentiveManager {
         //delete update ends here
 
         //testing add function
-        Incentive incentive2 = new Incentive("006","gmps-bresee","Labor Day","07/01/2016","08/02/2019","big deal for Audi", 1100, dCriteria);
+        Incentive incentive2 = new Incentive("006","gmps-bresee","Labor Day","2016-03-01","2019-02-31","big deal for Audi", 1100, dCriteria);
         test.addAIncentive(incentive2);
         //add testing ends here
     } //testing main function ends here
