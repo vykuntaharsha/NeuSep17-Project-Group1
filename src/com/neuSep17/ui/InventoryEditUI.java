@@ -41,17 +41,19 @@ public class InventoryEditUI extends JFrame {
             fieldLabel = new JLabel(field);
             inputTextField = new JTextField(length);
             alertLabel = new JLabel(alert);
+            alertLabel.setForeground(Color.red);
             setTrue();
         }
 
         public void setTrue() {
             inputTextField.setBorder(new LineBorder(Color.black));
-            alertLabel.setForeground(Color.black);
+            alertLabel.setVisible(false);
+
         }
 
         public void setFalse() {
             inputTextField.setBorder(new LineBorder(Color.red));
-            alertLabel.setForeground(Color.red);
+            alertLabel.setVisible(true);
         }
 
         public JLabel getFieldLabel() {
@@ -65,8 +67,8 @@ public class InventoryEditUI extends JFrame {
         public JLabel getAlertLabel() {
             return alertLabel;
         }
-        
-        public JLabel getPhoto(){
+
+        public JLabel getPhoto() {
             return fieldLabel;
         }
     }
@@ -154,7 +156,6 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.setBackground(Color.lightGray);
 
         JLabel photoLabel = new JLabel("photo");
-        JLabel lineLabel = new JLabel("   Vehicle Details");
         JTextField lineGraph = new JTextField();
 
         // photo
@@ -173,51 +174,48 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.add(saveButton);
 
         // line
-        lineLabel.setBounds(0, 5, 500, 20);
-        lineLabel.setOpaque(true);
-        lineLabel.setBackground(Color.lightGray);
-        componetsPanel.add(lineLabel);
         lineGraph.setBounds(0, 225, 500, 5);
         lineGraph.setBackground(Color.lightGray);
+        lineGraph.setEditable(false);
         componetsPanel.add(lineGraph);
 
         // 1.id
-        id.getInputTextField().setBounds(90, 60, 110, 20);
+        id.getInputTextField().setBounds(90, 40, 110, 20);
         componetsPanel.add(id.getInputTextField());
         id.getInputTextField().setColumns(10);
 
         id.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        id.getFieldLabel().setBounds(20, 60, 70, 20);
+        id.getFieldLabel().setBounds(20, 40, 70, 20);
         componetsPanel.add(id.getFieldLabel());
 
         id.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        id.getAlertLabel().setBounds(90, 40, 200, 20);
+        id.getAlertLabel().setBounds(90, 20, 200, 20);
         componetsPanel.add(id.getAlertLabel());
 
         // 2.webId
         webId.getInputTextField().setColumns(10);
-        webId.getInputTextField().setBounds(90, 120, 110, 20);
+        webId.getInputTextField().setBounds(90, 100, 110, 20);
         componetsPanel.add(webId.getInputTextField());
 
         webId.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        webId.getFieldLabel().setBounds(20, 120, 70, 20);
+        webId.getFieldLabel().setBounds(20, 100, 70, 20);
         componetsPanel.add(webId.getFieldLabel());
 
         webId.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        webId.getAlertLabel().setBounds(90, 100, 200, 20);
+        webId.getAlertLabel().setBounds(90, 80, 200, 20);
         componetsPanel.add(webId.getAlertLabel());
 
         // 3.category
         category.getInputTextField().setColumns(10);
-        category.getInputTextField().setBounds(90, 180, 110, 20);
+        category.getInputTextField().setBounds(90, 160, 110, 20);
         componetsPanel.add(category.getInputTextField());
 
         category.getFieldLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        category.getFieldLabel().setBounds(20, 180, 70, 20);
+        category.getFieldLabel().setBounds(20, 160, 70, 20);
         componetsPanel.add(category.getFieldLabel());
 
         category.getAlertLabel().setHorizontalAlignment(SwingConstants.LEFT);
-        category.getAlertLabel().setBounds(90, 160, 200, 20);
+        category.getAlertLabel().setBounds(90, 140, 200, 20);
         componetsPanel.add(category.getAlertLabel());
 
         // 4.year
@@ -302,6 +300,7 @@ public class InventoryEditUI extends JFrame {
 
     private void makeThisVisible() {
         this.setSize(500, 520);
+        this.setTitle("Vehicle details");
         this.setVisible(true);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -660,8 +659,8 @@ public class InventoryEditUI extends JFrame {
         @Override
         public boolean verify(JComponent input) {
             String str = ((JTextField) input).getText();
-            if (str.equals("new") || str.equals("used") || str.equals("certified")
-                    ||str.equals("NEW") || str.equals("USED") || str.equals("CERTIFIED")) {
+            if (str.equals("new") || str.equals("used") || str.equals("certified") || str.equals("NEW")
+                    || str.equals("USED") || str.equals("CERTIFIED")) {
                 category.setTrue();
                 CategorySuccessOrNot = true;
                 return true;
@@ -945,9 +944,10 @@ public class InventoryEditUI extends JFrame {
         trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
-        
-        //load the photo by Bin
-        if(vehicle.getPhotoURL()!=null) photo.getFieldLabel().setIcon(new ImageIcon(PictureManager.getVehicleImage(vehicle.getPhotoURL())));
+
+        // load the photo by Bin
+        if (vehicle.getPhotoURL() != null)
+            photo.getFieldLabel().setIcon(new ImageIcon(PictureManager.getVehicleImage(vehicle.getPhotoURL())));
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {

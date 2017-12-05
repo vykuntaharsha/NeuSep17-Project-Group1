@@ -247,12 +247,28 @@ public class IncentiveService {
         incentiveDAO.updateAIncentive(incent);
     }
 
+    //update a batch of incentives
+    public static void updateIncentives(ArrayList<Incentive> incentives){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the batch update method
+        incentiveDAO.updateIncentives(incentives);
+    }
+
     //delete an incentive
     public static void deleteAnIncentive(String incentID){
         //call data access object
         IncentiveImple incentiveDAO = new IncentiveImple();
         //call the delete method
         incentiveDAO.deleteAIncentive(incentID);
+    }
+
+    //delete incentives
+    public static void deleteIncentives(ArrayList<Incentive> incentives){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the batch delete method
+        incentiveDAO.deleteIncentives(incentives);
     }
 
     //get incentives from a specific dealer
@@ -269,6 +285,14 @@ public class IncentiveService {
         IncentiveImple incentiveDAO = new IncentiveImple();
         //call the add method
         incentiveDAO.addAIncentive(incentive);
+    }
+
+    //add a batch of incentives to the data file
+    public static void addIncentives(ArrayList<Incentive> incentives){
+        //call data access object
+        IncentiveImple incentiveDAO = new IncentiveImple();
+        //call the add method
+        incentiveDAO.addIncentives(incentives);
     }
 
     //get an specific incentive by ID

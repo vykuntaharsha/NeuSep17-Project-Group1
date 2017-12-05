@@ -50,6 +50,28 @@ public class IncentiveImple implements IIncentiveManager {
         //return status to see if updating succeed
         return isSuccess;
     }
+    @Override
+    public boolean updateIncentives(ArrayList<Incentive> incentives){
+        //initialize the update status
+        boolean isSuccess = false;
+
+        //for loop to get that an incentive to update
+        for(Incentive ni : incentives ) {
+            for (Incentive i : allIncentives) {
+                if (i.getID().equals(ni.getID())) {
+                    //System.out.println("Found one matched!!!");
+                    i.updateIncentive(ni);
+                    isSuccess = true;
+                }
+            }
+        }
+        //overwrite the list of incentives
+//        for(Incentive i : allIncentives)
+//            System.out.println(i.toString());
+        FileWriting.writeIncentiveToFile(allIncentives);
+        //return status to see if updating succeed
+        return isSuccess;
+    }
 
     @Override
     public boolean addAIncentive(Incentive incentive) {
@@ -63,19 +85,54 @@ public class IncentiveImple implements IIncentiveManager {
     }
 
     @Override
+    public boolean addIncentives(ArrayList<Incentive> incentives){
+        //check if the incentives list is null
+        if(incentives == null){
+            return false;
+        }
+        //add incentives to data file
+        for(Incentive i : incentives){
+            FileWriting.writeAIncentiveToFile(i);
+        }
+        return true;
+    }
+
+    @Override
     public boolean deleteAIncentive(String incentiveID) {
         //initialize the delete status
         boolean isSuccess = false;
         //initialize an array list to store the filtered incentives
         ArrayList<Incentive> newIncentives = new ArrayList<>();
         //for loop to get that specific incentive to delete
-        for (Incentive i : allIncentives){
-            if(i.getID().equals(incentiveID))
+        for (int i = 0; i < allIncentives.size(); ++i){
+            if(allIncentives.get(i).getID().equals(incentiveID))
                 allIncentives.remove(i);
         }
+        isSuccess = true;
         FileWriting.writeIncentiveToFile(allIncentives);
 
         //return status to see if delete succeed
+        return isSuccess;
+    }
+
+    @Override
+    public boolean deleteIncentives(ArrayList<Incentive> incentives){
+        //initialize the delete status
+        boolean isSuccess = false;
+        if(incentives == null){
+            return isSuccess;
+        }
+
+        for(Incentive ni : incentives){
+            for(int i = 0; i < allIncentives.size(); ++i){
+                if(allIncentives.get(i).getID().equals(ni.getID()))
+                    allIncentives.remove(i);
+            }
+        }
+        isSuccess = true;
+        //write the new list of incentives to the data file
+        FileWriting.writeIncentiveToFile(allIncentives);
+
         return isSuccess;
     }
 
