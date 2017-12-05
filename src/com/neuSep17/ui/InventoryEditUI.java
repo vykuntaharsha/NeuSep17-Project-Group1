@@ -22,7 +22,7 @@ import javax.swing.event.*;
 @SuppressWarnings("serial")
 public class InventoryEditUI extends JFrame {
     private Component id, webId, category, year, make, model, trim, type, price;
-    private Component photo;
+    private JLabel photo;
     private JButton saveButton;
     private JButton clearButton;
     private JButton cancelButton;
@@ -103,7 +103,7 @@ public class InventoryEditUI extends JFrame {
         trim = new Component("Trim", 10, "Vehicle Trim.");
         type = new Component("Type", 20, "Vehicle Type.");
         price = new Component("Price", 20, "Integer Only.");
-        id.getInputTextField().setToolTipText("123");
+        id.getInputTextField().setToolTipText("123");        
         saveButton = new JButton("Save");
         saveButton.setBackground(Color.gray);
         saveButton.setForeground(Color.black);
@@ -113,6 +113,7 @@ public class InventoryEditUI extends JFrame {
         cancelButton = new JButton("Cancel");
         cancelButton.setBackground(Color.gray);
         cancelButton.setForeground(Color.black);
+        photo = new JLabel("Photo");//photo
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
@@ -154,14 +155,14 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.setLayout(null);
         componetsPanel.setBackground(Color.lightGray);
 
-        JLabel photoLabel = new JLabel("photo");
+        //JLabel photo = new JLabel("Photo"); //by Bin Shi
         JTextField lineGraph = new JTextField();
 
         // photo
-        photoLabel.setBounds(315, 50, 100, 100);
-        photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        photoLabel.setBackground(Color.lightGray);
-        componetsPanel.add(photoLabel);
+        photo.setBounds(315, 50, 100, 100);
+        photo.setHorizontalAlignment(SwingConstants.CENTER);
+        photo.setBackground(Color.lightGray);
+        componetsPanel.add(photo);
 
         // save,cancel,clear
 
@@ -943,9 +944,17 @@ public class InventoryEditUI extends JFrame {
         type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
         price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
 
-        // load the photo by Bin
-        if (vehicle.getPhotoURL() != null)
-            photo.getFieldLabel().setIcon(new ImageIcon(PictureManager.getVehicleImage(vehicle.getPhotoURL())));
+        // load the photo by Bin Shi
+        photo.setText("No Photo");
+        if (vehicle.getPhotoURL() != null) {
+            SwingUtilities.invokeLater(() -> {//avoid to stop the loading
+                Image image = PictureManager.getVehiclePhoto(vehicle);
+                if (image != null) {
+                    ImageIcon icon = new ImageIcon(image);
+                    if (icon != null) photo.setIcon(icon);
+                }
+            });
+        }
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
