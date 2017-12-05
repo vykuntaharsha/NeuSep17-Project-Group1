@@ -14,6 +14,7 @@ import com.neuSep17.dto.Vehicle;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -443,6 +444,37 @@ public class InventoryEditUI extends JFrame {
         type.getInputTextField().setInputVerifier(new TypeVerifier());
         model.getInputTextField().setInputVerifier(new ModelVerifier());
         trim.getInputTextField().setInputVerifier(new TrimVerifier());
+        
+        //photo listeners and actions by Bin Shi
+        photo.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String input = JOptionPane.showInputDialog(photo, "Enter the URL of the photo:", null);
+                if (input != null && !input.isEmpty()) {
+                    try {
+                        URL url = new URL(input.trim());
+                        vehicle.setPhotoURL(url);
+                        loadVehicle(vehicle);
+                    } catch (MalformedURLException e1) {
+                        System.out.println("Entered URL is not valid.");
+                        // e1.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
     }
 
     // VIDListener & VIDVerifier
