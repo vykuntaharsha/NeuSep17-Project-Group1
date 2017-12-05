@@ -20,7 +20,7 @@ public class FileWriting {
     // This function is used for write data to incentive data file -- Zezhu
     public static void writeIncentiveToFile(ArrayList<Incentive> incentives){
         try{
-            File dfile = new File("datax");
+            File dfile = new File("data");
             System.out.println(dfile.exists()? "yes" : "no");
             FileWriter fw = new FileWriter(new File("data/incentives"));
             //write the first line

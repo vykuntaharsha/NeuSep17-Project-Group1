@@ -104,8 +104,8 @@ public class IncentiveImple implements IIncentiveManager {
         //initialize an array list to store the filtered incentives
         ArrayList<Incentive> newIncentives = new ArrayList<>();
         //for loop to get that specific incentive to delete
-        for (Incentive i : allIncentives){
-            if(i.getID().equals(incentiveID))
+        for (int i = 0; i < allIncentives.size(); ++i){
+            if(allIncentives.get(i).getID().equals(incentiveID))
                 allIncentives.remove(i);
         }
         isSuccess = true;
@@ -122,11 +122,10 @@ public class IncentiveImple implements IIncentiveManager {
         if(incentives == null){
             return isSuccess;
         }
-        //intialize an array list to store the filtered incentives
-        ArrayList<Incentive> newIncentives = new ArrayList<>();
+
         for(Incentive ni : incentives){
-            for(Incentive i : allIncentives){
-                if(i.getID().equals(ni.getID()))
+            for(int i = 0; i < allIncentives.size(); ++i){
+                if(allIncentives.get(i).getID().equals(ni.getID()))
                     allIncentives.remove(i);
             }
         }
