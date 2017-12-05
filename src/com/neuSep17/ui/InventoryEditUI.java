@@ -300,7 +300,7 @@ public class InventoryEditUI extends JFrame {
 
     private void makeThisVisible() {
         this.setSize(500, 520);
-        this.setTitle("Vehicle details");
+        this.setTitle("Vehicle Details");
         this.setVisible(true);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
