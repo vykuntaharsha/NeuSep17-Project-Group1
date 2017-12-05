@@ -17,7 +17,7 @@ import com.neuSep17.dto.Vehicle;
  * Updates:
  * 0.1: 2017-11-30 Initialize.
  * 0.2: 2017-12-01 Use the relative path as the root of pictures
- * 
+ * 1.0: 2017-12-05 Fixed some bugs and now it is release.
  */
 public class PictureManager {
     //root direction of the picture files
@@ -42,7 +42,7 @@ public class PictureManager {
                 image = loadImageFromDisk(file);
         } else {
             image = loadImageFromURL(photoURL);
-            cacheImage(image, getFullName(photoURL.getFile()));
+            if(image!=null) cacheImage(image, getFullName(photoURL.getFile()));
         }
         return image;
     }
