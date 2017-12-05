@@ -77,6 +77,7 @@ public class FileReading {
 			String line = in.readLine(); // skip the first line
 			while((line = in.readLine()) != null){
 				String[] x = pattern.split(line);
+				//adding elements to criteria list
                 String[] criterias = x[7].split("\\+"); // create a string array to hold the discount criterias
                 ArrayList<String> dCriteria = new ArrayList<>(); //discount criteria arrayList
                 for(int i = 0; i < criterias.length; i++)
