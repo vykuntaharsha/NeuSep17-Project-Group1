@@ -435,36 +435,6 @@ public class InventoryEditUI extends JFrame {
         clearButton.setToolTipText("Alt + C");
         saveButton.setMnemonic(KeyEvent.VK_S);
         saveButton.setToolTipText("Alt + S");
-
-        // ID HotKey
-        id.getInputTextField().registerKeyboardAction(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                id.getInputTextField().grabFocus();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        id.getInputTextField().setToolTipText("Ctrl + I");
-
-        // webID HotKey
-        webId.getInputTextField().registerKeyboardAction(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                webId.getInputTextField().grabFocus();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        webId.getInputTextField().setToolTipText("Ctrl + W");
-
-        // price HotKey
-        price.getInputTextField().registerKeyboardAction(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                price.getInputTextField().grabFocus();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        price.getInputTextField().setToolTipText("Ctrl + P");
     }
 
     private void addListeners() {
