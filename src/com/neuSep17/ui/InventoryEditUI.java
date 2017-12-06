@@ -429,6 +429,8 @@ public class InventoryEditUI extends JFrame {
     }
 
     private void addHotKeyListeners() {
+        cancelButton.setMnemonic(KeyEvent.VK_A);
+        cancelButton.setToolTipText("Alt + A");
         clearButton.setMnemonic(KeyEvent.VK_C);
         clearButton.setToolTipText("Alt + C");
         saveButton.setMnemonic(KeyEvent.VK_S);
