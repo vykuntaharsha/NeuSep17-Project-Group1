@@ -79,6 +79,7 @@ public class InventoryEditUI extends JFrame {
         createCompoments();
         createPanel();
         addListeners();
+        addHotKeyListeners();
         setupAutoCompletes();
         makeThisVisible();
     }
@@ -88,6 +89,7 @@ public class InventoryEditUI extends JFrame {
         createCompoments();
         createPanel();
         addListeners();
+        addHotKeyListeners();
         loadVehicle(v);
         setupAutoCompletes();
         makeThisVisible();
@@ -104,7 +106,6 @@ public class InventoryEditUI extends JFrame {
         trim = new Component("Trim", 10, "Vehicle Trim.");
         type = new Component("Type", 20, "Vehicle Type.");
         price = new Component("Price", 20, "Integer Only.");
-        id.getInputTextField().setToolTipText("123");
         saveButton = new JButton("Save");
         saveButton.setBackground(Color.gray);
         saveButton.setForeground(Color.black);
@@ -425,6 +426,13 @@ public class InventoryEditUI extends JFrame {
         });
         txtInput.setLayout(new BorderLayout());
         txtInput.add(cbInput, BorderLayout.SOUTH);
+    }
+
+    private void addHotKeyListeners() {
+        clearButton.setMnemonic(KeyEvent.VK_C);
+        clearButton.setToolTipText("Alt + C");
+        saveButton.setMnemonic(KeyEvent.VK_S);
+        saveButton.setToolTipText("Alt + S");
     }
 
     private void addListeners() {
