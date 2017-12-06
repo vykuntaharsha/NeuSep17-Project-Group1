@@ -4,7 +4,7 @@ import com.neuSep17.dao.PictureManager;
 
 /**
  * This function is for dealers to add/edit/delete vehicle information.
- * @author YuXin Li, Yang Chun, Niu Lu, Yuanyuan Jin, Bin Shi
+ * @author YuXin Li, Chun Yang, Lu Niu, Yuanyuan Jin, Bin Shi
  * Contact: Bin Shi (shi.b@husky.neu.edu)
  */
 
@@ -997,6 +997,18 @@ public class InventoryEditUI extends JFrame {
     private String[] types = { "Luxury", " Sedans", "Coupes", "SUVs", "Crossovers", "Wagons/Hatchbacks", "Hybrids",
             "Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
 
+    private void validateTextFields() {
+        webId.getInputTextField().requestFocusInWindow();
+        year.getInputTextField().requestFocusInWindow();
+        make.getInputTextField().requestFocusInWindow();
+        model.getInputTextField().requestFocusInWindow();
+        trim.getInputTextField().requestFocusInWindow();
+        type.getInputTextField().requestFocusInWindow();
+        price.getInputTextField().requestFocusInWindow();
+        category.getInputTextField().requestFocusInWindow();
+        id.getInputTextField().requestFocusInWindow();
+    }
+
     private VehicleImple service = new VehicleImple();
 
     private Vehicle vehicle;
@@ -1014,6 +1026,7 @@ public class InventoryEditUI extends JFrame {
         webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
         webId.getInputTextField().setCaretPosition(0);
         category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
+        category.getInputTextField().requestFocusInWindow();
         year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
         make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
         model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
@@ -1038,6 +1051,7 @@ public class InventoryEditUI extends JFrame {
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
+        this.validateTextFields();
         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
 
@@ -1045,8 +1059,8 @@ public class InventoryEditUI extends JFrame {
             boolean creatingNewVehicle = false;
             if (prevWebID == null || prevVID == null) {
                 creatingNewVehicle = true;
-            } else if (this.id.getInputTextField().getText() != prevVID
-                    || this.webId.getInputTextField().getText() != prevWebID) {
+            } else if (!this.id.getInputTextField().getText().equalsIgnoreCase(prevVID)
+                    || !this.webId.getInputTextField().getText().equalsIgnoreCase(prevWebID)) {
 
                 service.deleteVehicle(prevWebID, prevVID);
                 creatingNewVehicle = true;
@@ -1064,6 +1078,7 @@ public class InventoryEditUI extends JFrame {
 
             boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v)
                     : service.updateVehicle(v.getWebID(), v);
+
             if (listUI != null) {
                 listUI.refreshTable();
             }
