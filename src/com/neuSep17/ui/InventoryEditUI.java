@@ -4,7 +4,7 @@ import com.neuSep17.dao.PictureManager;
 
 /**
  * This function is for dealers to add/edit/delete vehicle information.
- * @author YuXin Li, Yang Chun, Niu Lu, Yuanyuan Jin, Bin Shi
+ * @author YuXin Li, Chun Yang, Lu Niu, Yuanyuan Jin, Bin Shi
  * Contact: Bin Shi (shi.b@husky.neu.edu)
  */
 
@@ -429,6 +429,8 @@ public class InventoryEditUI extends JFrame {
     }
 
     private void addHotKeyListeners() {
+        cancelButton.setMnemonic(KeyEvent.VK_A);
+        cancelButton.setToolTipText("Alt + A");
         clearButton.setMnemonic(KeyEvent.VK_C);
         clearButton.setToolTipText("Alt + C");
         saveButton.setMnemonic(KeyEvent.VK_S);
@@ -650,16 +652,16 @@ public class InventoryEditUI extends JFrame {
                     && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
                 webId.setFalse();
                 e.consume();
-            } // invalid input:杈撳叆闄や簡鍥炶溅鍒犻櫎鍜屽ぇ灏忓啓瀛楁瘝浠ュ強妯嚎浠ュ鐨�
+            } //invalid input are those which exclude enter, backspace,letters and -
             String str = webId.getInputTextField().getText();
             int lastIndex = str.length() - 1;
             if (keyInput == KeyEvent.VK_MINUS) {
                 if (str.equals("")) {
-                    webId.setFalse();// 棣栦綅鍑虹幇妯嚎
+                    webId.setFalse();//- appears at the first position
                 }
             }
             if (keyInput == KeyEvent.VK_ENTER) {
-                if (str.contains("-") && str.charAt(lastIndex) != '-')// 涓嶈兘鏈熬涓�-
+                if (str.contains("-") && str.charAt(lastIndex) != '-')//cannot end by -
                     webId.setTrue();
                 else
                     webId.setFalse();
@@ -997,6 +999,18 @@ public class InventoryEditUI extends JFrame {
     private String[] types = { "Luxury", " Sedans", "Coupes", "SUVs", "Crossovers", "Wagons/Hatchbacks", "Hybrids",
             "Convertibles", "Sports Cars", "Pickup Trucks", "Minivans/Vans" };
 
+    private void validateTextFields() {
+        webId.getInputTextField().requestFocusInWindow();
+        year.getInputTextField().requestFocusInWindow();
+        make.getInputTextField().requestFocusInWindow();
+        model.getInputTextField().requestFocusInWindow();
+        trim.getInputTextField().requestFocusInWindow();
+        type.getInputTextField().requestFocusInWindow();
+        price.getInputTextField().requestFocusInWindow();
+        category.getInputTextField().requestFocusInWindow();
+        id.getInputTextField().requestFocusInWindow();
+    }
+
     private VehicleImple service = new VehicleImple();
 
     private Vehicle vehicle;
@@ -1014,6 +1028,7 @@ public class InventoryEditUI extends JFrame {
         webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
         webId.getInputTextField().setCaretPosition(0);
         category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
+        category.getInputTextField().requestFocusInWindow();
         year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
         make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
         model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
@@ -1038,6 +1053,7 @@ public class InventoryEditUI extends JFrame {
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
+        this.validateTextFields();
         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
 
@@ -1045,8 +1061,8 @@ public class InventoryEditUI extends JFrame {
             boolean creatingNewVehicle = false;
             if (prevWebID == null || prevVID == null) {
                 creatingNewVehicle = true;
-            } else if (this.id.getInputTextField().getText() != prevVID
-                    || this.webId.getInputTextField().getText() != prevWebID) {
+            } else if (!this.id.getInputTextField().getText().equalsIgnoreCase(prevVID)
+                    || !this.webId.getInputTextField().getText().equalsIgnoreCase(prevWebID)) {
 
                 service.deleteVehicle(prevWebID, prevVID);
                 creatingNewVehicle = true;
@@ -1064,6 +1080,7 @@ public class InventoryEditUI extends JFrame {
 
             boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v)
                     : service.updateVehicle(v.getWebID(), v);
+
             if (listUI != null) {
                 listUI.refreshTable();
             }
