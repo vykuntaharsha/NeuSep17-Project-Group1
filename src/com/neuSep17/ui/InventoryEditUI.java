@@ -1027,7 +1027,7 @@ public class InventoryEditUI extends JFrame {
         photo.setText("No Photo");
         if (vehicle.getPhotoURL() != null) {
             SwingUtilities.invokeLater(() -> {// avoid to stop the loading
-                Image image = PictureManager.getVehiclePhoto(vehicle);
+                Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
                 if (image != null) {
                     ImageIcon icon = new ImageIcon(image);
                     if (icon != null)
