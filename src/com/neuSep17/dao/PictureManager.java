@@ -24,17 +24,19 @@ public class PictureManager {
     private static final String PICTURE_DIR = "picture";
     private static final boolean DEBUG = false;
 
-    /**
-     * Get the image of a vehicle using its photoURL.
-     * @param v
-     * @return The image of the vehicle or null if there is no valid image.
-     */
+    @Deprecated
     public static Image getVehiclePhoto(Vehicle v) {
         if(v==null || v.getPhotoURL() == null || v.getPhotoURL().getFile().isEmpty() ) return null;
-        else return getVehicleImage(v.getPhotoURL());
+        else return getVehiclePhoto(v.getPhotoURL());
     }
 
-    private static BufferedImage getVehicleImage(URL photoURL) {
+    /**
+     * Get the image of a vehicle using its photoURL.
+     * @param photoURL: URL to a photo file
+     * @return The image of the vehicle or null if there is no valid image.
+     */
+    public static BufferedImage getVehiclePhoto(URL photoURL) {
+        if(photoURL==null || photoURL.getFile().length()==0) return null;
         BufferedImage image = null;
         File file = new File(PICTURE_DIR, getFullName(photoURL.getFile()));
         if (file.exists()) {
@@ -112,7 +114,7 @@ public class PictureManager {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        PictureManager.getVehicleImage(url);
+        PictureManager.getVehiclePhoto(url);
     }
     
 }
