@@ -6,6 +6,7 @@ package com.neuSep17.ui;
 
 import java.awt.EventQueue;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -14,8 +15,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -23,14 +27,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.InventoryListService;
@@ -46,6 +54,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.MouseInputListener;
 import javax.swing.JRadioButton;
 
 public class InventoryListUI extends JFrame {
@@ -70,13 +79,15 @@ public class InventoryListUI extends JFrame {
     private JButton btnDelete;
 
     private JCheckBox chckbxYear;
-    private JCheckBox chckbxWebId;
+    private JCheckBox chckbxExteriorColor;
     private JCheckBox chckbxId;
     private JCheckBox chckbxPrice;
-    private JCheckBox chckbxType;
+    private JCheckBox chckbxInteriorColor;
     private JCheckBox chckbxMake;
     private JCheckBox chckbxModel;
     private JCheckBox chckbxCategory;
+    private JCheckBox chckbxEngine;
+    private JCheckBox chckbxBodytype;
     private List<JCheckBox> checkBoxGroup;
     private JLabel labelBG;
     private JLabel labelTitle;
@@ -86,6 +97,8 @@ public class InventoryListUI extends JFrame {
     private JButton min;
 
     private String selectedId;
+    
+    private DefaultTableModel model;
 
     private final Color topBG = new Color(33, 33, 33);
     private final Color topFG = new Color(255, 255, 255);
@@ -94,11 +107,12 @@ public class InventoryListUI extends JFrame {
     private final Color tableEvenRow = new Color(224, 224, 224);
     private final Color tableHeaderColor = new Color(117, 117, 117);
 
-    private final Font checkbxFont = new Font("Segoe UI Historic", Font.ITALIC, 21);
+    private final Font checkbxFont = new Font("Segoe UI Historic", Font.ITALIC, 19);
     private final Font radioFont = new Font("Segoe UI Historic", Font.ITALIC, 20);
     private final Font txtFont = new Font("Segoe UI Historic", Font.PLAIN, 22);
     private final Font tableHeaderFont = new Font("Segoe UI Historic", Font.PLAIN, 15);
     private final Font titleFont = new Font("Malgun Gothic", Font.BOLD, 30);
+    private final Font tabletxtFont = new Font("Segoe UI Historic", Font.PLAIN, 11);
 
     private ButtonGroup sortGroup;
     private JRadioButton rdbtnHighToLow;
@@ -132,10 +146,8 @@ public class InventoryListUI extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         String f = "data/"+dealerName;
         File file = new File(f);
-        this.file = file; // team 2: Lu Niu
         list = InventoryListService.readAndGetVehicles(file);
         filter = new ArrayList<>();
         isAscending = true;
@@ -317,19 +329,19 @@ public class InventoryListUI extends JFrame {
 
         ArrayList<Vehicle> tmp = new ArrayList<>(list);
         checkBoxGroup = new ArrayList<JCheckBox>();
-        chckbxWebId = new JCheckBox("WebId");
-        chckbxWebId.addActionListener(new ActionListener() {
+        chckbxEngine = new JCheckBox("Engine");
+        chckbxEngine.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxWebId);
+                setSelectedCheckBox(chckbxEngine);
                 fillTableAfterSorting(tmp);
             }
         });
-        chckbxWebId.setFont(checkbxFont);
-        chckbxWebId.setBackground(topBG);
-        chckbxWebId.setForeground(topFG);
-        chckbxWebId.setBounds(433, 75, 134, 29);
-        panelTop.add(chckbxWebId);
+        chckbxEngine.setFont(checkbxFont);
+        chckbxEngine.setBackground(topBG);
+        chckbxEngine.setForeground(topFG);
+        chckbxEngine.setBounds(591, 75, 97, 29);
+        panelTop.add(chckbxEngine);
 
         chckbxYear = new JCheckBox("Year");
         chckbxYear.addActionListener(new ActionListener() {
@@ -343,7 +355,7 @@ public class InventoryListUI extends JFrame {
         chckbxYear.setFont(checkbxFont);
         chckbxYear.setBackground(topBG);
         chckbxYear.setForeground(topFG);
-        chckbxYear.setBounds(585, 75, 113, 29);
+        chckbxYear.setBounds(695, 75, 83, 29);
         panelTop.add(chckbxYear);
 
         chckbxId = new JCheckBox("Id");
@@ -358,8 +370,38 @@ public class InventoryListUI extends JFrame {
         chckbxId.setFont(checkbxFont);
         chckbxId.setBackground(topBG);
         chckbxId.setForeground(topFG);
-        chckbxId.setBounds(712, 75, 93, 29);
+        chckbxId.setBounds(385, 75, 112, 29);
         panelTop.add(chckbxId);
+        
+        chckbxExteriorColor = new JCheckBox("ExteriorColor");
+        chckbxExteriorColor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedCheckBox(chckbxExteriorColor);
+                fillTableAfterSorting(tmp);
+            }
+        });
+        chckbxExteriorColor.setFont(checkbxFont);
+        chckbxExteriorColor.setBackground(topBG);
+        chckbxExteriorColor.setForeground(topFG);
+        chckbxExteriorColor.setBounds(785, 111, 165, 29);
+        panelTop.add(chckbxExteriorColor);
+        
+        chckbxInteriorColor = new JCheckBox("InteriorColor");
+        chckbxInteriorColor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setSelectedCheckBox(chckbxInteriorColor);
+                fillTableAfterSorting(tmp);
+            }
+        });
+        chckbxInteriorColor.setFont(checkbxFont);
+        chckbxInteriorColor.setBackground(topBG);
+        chckbxInteriorColor.setForeground(topFG);
+        chckbxInteriorColor.setBounds(785, 75, 165, 29);
+        panelTop.add(chckbxInteriorColor);
 
         chckbxPrice = new JCheckBox("Price");
         chckbxPrice.addActionListener(new ActionListener() {
@@ -373,7 +415,7 @@ public class InventoryListUI extends JFrame {
         chckbxPrice.setFont(checkbxFont);
         chckbxPrice.setBackground(topBG);
         chckbxPrice.setForeground(topFG);
-        chckbxPrice.setBounds(822, 75, 97, 29);
+        chckbxPrice.setBounds(695, 111, 97, 29);
         panelTop.add(chckbxPrice);
 
         chckbxMake = new JCheckBox("Make");
@@ -388,7 +430,7 @@ public class InventoryListUI extends JFrame {
         chckbxMake.setFont(checkbxFont);
         chckbxMake.setBackground(topBG);
         chckbxMake.setForeground(topFG);
-        chckbxMake.setBounds(822, 111, 105, 29);
+        chckbxMake.setBounds(501, 75, 83, 29);
         panelTop.add(chckbxMake);
 
         chckbxCategory = new JCheckBox("Category");
@@ -403,7 +445,7 @@ public class InventoryListUI extends JFrame {
         chckbxCategory.setFont(checkbxFont);
         chckbxCategory.setBackground(topBG);
         chckbxCategory.setForeground(topFG);
-        chckbxCategory.setBounds(433, 111, 134, 29);
+        chckbxCategory.setBounds(385, 111, 112, 29);
         panelTop.add(chckbxCategory);
 
         chckbxModel = new JCheckBox("Model");
@@ -418,50 +460,43 @@ public class InventoryListUI extends JFrame {
         chckbxModel.setFont(checkbxFont);
         chckbxModel.setBackground(topBG);
         chckbxModel.setForeground(topFG);
-        chckbxModel.setBounds(585, 111, 113, 29);
+        chckbxModel.setBounds(501, 111, 87, 29);
         panelTop.add(chckbxModel);
 
-        chckbxType = new JCheckBox("Type");
-        chckbxType.addActionListener(new ActionListener() {
+        chckbxBodytype = new JCheckBox("Type");
+        chckbxBodytype.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxType);
+                setSelectedCheckBox(chckbxBodytype);
                 fillTableAfterSorting(tmp);
             }
         });
-        chckbxType.setFont(checkbxFont);
-        chckbxType.setBackground(topBG);
-        chckbxType.setForeground(topFG);
-        chckbxType.setBounds(712, 111, 93, 29);
-        panelTop.add(chckbxType);
+        chckbxBodytype.setFont(checkbxFont);
+        chckbxBodytype.setBackground(topBG);
+        chckbxBodytype.setForeground(topFG);
+        chckbxBodytype.setBounds(591, 111, 83, 29);
+        panelTop.add(chckbxBodytype);
 
         checkBoxGroup.add(chckbxCategory);
         checkBoxGroup.add(chckbxId);
         checkBoxGroup.add(chckbxMake);
         checkBoxGroup.add(chckbxModel);
         checkBoxGroup.add(chckbxPrice);
-        checkBoxGroup.add(chckbxType);
-        checkBoxGroup.add(chckbxWebId);
+        checkBoxGroup.add(chckbxBodytype);
+        checkBoxGroup.add(chckbxEngine);
         checkBoxGroup.add(chckbxYear);
+        checkBoxGroup.add(chckbxExteriorColor);
+        checkBoxGroup.add(chckbxInteriorColor);
     }
 
     // ADD Table
     private void registerTable() {
-        /*this.vin = arr[10];
-        this.entertainment = arr[11];
-        this.interiorColor = arr[12];
-        this.exteriorColor = arr[13];
-        this.fuelType = arr[14];
-        this.engine = arr[15];
-        this.transmission = arr[16];
-        this.battery = arr[17];
-        this.setOptionalFeatures(arr[18]);*/
         String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price", "Photo","Vin","Entertainment"
                 ,"InteriorColor","ExteriorColor","Fueltype","Engine","Transmission","Battery","OptionalFeatures"};
         Object[][] cellData = null;
 
-        DefaultTableModel model = new DefaultTableModel(cellData, headers) {
+        model = new DefaultTableModel(cellData, headers) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -572,14 +607,6 @@ public class InventoryListUI extends JFrame {
         }
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        table.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int selectedRow = table.getSelectedRow();
-                selectedId = (String) model.getValueAt(selectedRow, 0);
-//                System.out.println(selectedId);
-            }
-        });
-
         InventoryListService.fillTable(list, table);
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setReorderingAllowed(false);
@@ -592,20 +619,16 @@ public class InventoryListUI extends JFrame {
         scrollPane = new JScrollPane(table);
         scrollPane.setBounds(350, 220, 950, 580);
         table.setPreferredScrollableViewportSize(new Dimension(1950, 580));
-        // set center alignment;
-        DefaultTableCellRenderer tablecell = new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
-                if (row % 2 == 0)
-                    setBackground(tableEvenRow);
-                else if (row % 2 == 1)
-                    setBackground(tableOddRow);
-                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            }
-        };
-        tablecell.setHorizontalAlignment(JLabel.CENTER);
-        table.setDefaultRenderer(Object.class, tablecell);
+
+        LinkCellRenderer renderer = new LinkCellRenderer();
+
+        table.setDefaultRenderer(Object.class, renderer);
+
+        table.addMouseListener(renderer);
+        table.addMouseMotionListener(renderer);
+        
+        
+        renderer.setHorizontalAlignment(JLabel.CENTER);
         // set horizon scroll;
         scrollPane.setAutoscrolls(true);
         contentPane.add(scrollPane);
@@ -617,12 +640,12 @@ public class InventoryListUI extends JFrame {
     private void registerTitle() {
         labelTitleIcon = new JLabel("");
         labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
-        labelTitleIcon.setBounds(43, 11, 130, 129);
+        labelTitleIcon.setBounds(27, 26, 112, 129);
         panelTop.add(labelTitleIcon);
         labelTitle = new JLabel("Inventory List Management");
         labelTitle.setFont(titleFont);
         labelTitle.setForeground(topFG);
-        labelTitle.setBounds(199, 12, 481, 61);
+        labelTitle.setBounds(140, 12, 481, 61);
         panelTop.add(labelTitle);
     }
 
@@ -630,7 +653,6 @@ public class InventoryListUI extends JFrame {
     private void registerAEDBtn() {
         btnAdd = new JButton("Add");
         btnAdd.setBorderPainted(false);
-        InventoryListUI that = this; // team 2: Lu Niu
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -639,7 +661,7 @@ public class InventoryListUI extends JFrame {
                 } else {
                     for (Vehicle v : list) {
                         if (v.getID().equals(getSelectedId())) {
-                            InventoryEditUI inventoryEditUI = new InventoryEditUI(v, that);
+                            InventoryEditUI inventoryEditUI = new InventoryEditUI(v);
                         }
                     }
                 }
@@ -649,7 +671,7 @@ public class InventoryListUI extends JFrame {
         btnAdd.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnAdd.setForeground(new Color(255, 255, 255));
         btnAdd.setBackground(btnColor);
-        btnAdd.setBounds(545, 165, 110, 40);
+        btnAdd.setBounds(540, 165, 120, 40);
         panelTop.add(btnAdd);
 
         btnDelete = new JButton("Delete");
@@ -657,14 +679,17 @@ public class InventoryListUI extends JFrame {
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // team 2: Lu Niu
-                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                for (Vehicle v : list) {
+                    if (v.getID().equals(getSelectedId())) {
+
+                    }
+                }
             }
         });
         btnDelete.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnDelete.setForeground(new Color(255, 255, 255));
         btnDelete.setBackground(btnColor);
-        btnDelete.setBounds(805, 165, 110, 40);
+        btnDelete.setBounds(810, 165, 120, 40);
         panelTop.add(btnDelete);
 
         btnEdit = new JButton("Edit");
@@ -672,14 +697,17 @@ public class InventoryListUI extends JFrame {
         btnEdit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // team 2: Lu Niu
-                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                for (Vehicle v : list) {
+                    if (v.getID().equals(getSelectedId())) {
+                        InventoryEditUI imf = new InventoryEditUI(v);
+                    }
+                }
             }
         });
         btnEdit.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnEdit.setForeground(new Color(255, 255, 255));
         btnEdit.setBackground(btnColor);
-        btnEdit.setBounds(675, 165, 110, 40);
+        btnEdit.setBounds(675, 165, 120, 40);
         panelTop.add(btnEdit);
     }
 
@@ -727,7 +755,7 @@ public class InventoryListUI extends JFrame {
             }
         });
         rdbtnHighToLow.setFont(radioFont);
-        rdbtnHighToLow.setBounds(198, 75, 178, 29);
+        rdbtnHighToLow.setBounds(158, 75, 220, 29);
         rdbtnHighToLow.setBackground(topBG);
         rdbtnHighToLow.setForeground(topFG);
 
@@ -744,7 +772,7 @@ public class InventoryListUI extends JFrame {
             }
         });
         rdbtnLowToHigh.setFont(radioFont);
-        rdbtnLowToHigh.setBounds(198, 111, 178, 29);
+        rdbtnLowToHigh.setBounds(158, 111, 220, 29);
         rdbtnLowToHigh.setBackground(topBG);
         rdbtnLowToHigh.setForeground(topFG);
 
@@ -803,8 +831,8 @@ public class InventoryListUI extends JFrame {
 
     // check State
     private boolean sortByCheckState(ArrayList<Vehicle> sortList) {
-        if (chckbxWebId.isSelected()) {
-            InventoryListService.sortByWebId(sortList, isAscending);
+        if (chckbxEngine.isSelected()) {
+            InventoryListService.sortByEngine(sortList, isAscending);
             return true;
 
         } else if (chckbxCategory.isSelected()) {
@@ -827,15 +855,20 @@ public class InventoryListUI extends JFrame {
             InventoryListService.sortByPrice(sortList, isAscending);
             return true;
 
-        } else if (chckbxType.isSelected()) {
+        } else if (chckbxBodytype.isSelected()) {
             InventoryListService.sortByType(sortList, isAscending);
             return true;
 
         } else if (chckbxYear.isSelected()) {
             InventoryListService.sortByYear(sortList, isAscending);
             return true;
-
-        }
+        } else if (chckbxExteriorColor.isSelected()) {
+            InventoryListService.sortByExteriorColor(sortList, isAscending);
+            return true;
+        } else if (chckbxInteriorColor.isSelected()) {
+            InventoryListService.sortByInteriorColor(sortList, isAscending);
+            return true;
+        } 
         return false;
     }
 
@@ -855,10 +888,99 @@ public class InventoryListUI extends JFrame {
         }
         return null;
     }
-    // team 2: Lu Niu
-    private File file;
-    public void refreshTable() {
-        list = InventoryListService.readAndGetVehicles(file);
-        InventoryListService.fillTable(list, table);
+    
+    public class LinkCellRenderer extends DefaultTableCellRenderer implements MouseInputListener {
+        
+        //Mouse point row;
+        private int row = -1;
+        //Mouse point col;
+        private int col = -1;
+        //Table Listener;
+        private JTable table = null;
+        
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            //default style
+            this.table = table;
+            this.setForeground(Color.BLACK);
+            table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            this.setText(value.toString());
+            if (row % 2 == 0)
+                setBackground(tableEvenRow);
+            if (row % 2 == 1)
+                setBackground(tableOddRow);
+            //link style
+            if (row == this.row && column == this.col && column == 9) {
+                    this.setForeground(Color.blue);
+                    table.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    this.setText("<html><u>" + value.toString() + "</u></html>");
+                    return this;
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
+
+        public void mouseExited(MouseEvent e) {
+            if (table != null) {
+                int oldRow = row;
+                int oldCol = col;
+                row = -1;
+                col = -1;
+                if (oldRow != -1 && oldCol != -1) {
+                    Rectangle rect = table.getCellRect(oldRow, oldCol, false);
+                    table.repaint(rect);
+                }
+            }
+        }
+
+        public void mouseDragged(MouseEvent e) {
+        }
+
+        public void mouseMoved(MouseEvent e) {
+            if (table != null) {
+                Point p = e.getPoint();
+                int oldRow = row;
+                int oldCol = col;
+                row = table.rowAtPoint(p);
+                col = table.columnAtPoint(p);
+                if (oldRow != -1 && oldCol != -1) {
+                    Rectangle rect = table.getCellRect(oldRow, oldCol, false);
+                    table.repaint(rect);
+                }
+                if (row != -1 && col != -1) {
+                    Rectangle rect = table.getCellRect(row, col, false);
+                    table.repaint(rect);
+                }
+            }
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            int selectedRow = table.getSelectedRow();
+            selectedId = (String) model.getValueAt(selectedRow, 0);
+            System.out.println(selectedId);
+            Point p = e.getPoint();
+            int c = table.columnAtPoint(p);
+            if(c != 9){
+                return;
+            }
+            try {
+                URL url = new URL(table.getValueAt(selectedRow, c).toString());
+                Desktop.getDesktop().browse(url.toURI());
+            } catch (Exception ex) {
+                Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
     }
+
 }
