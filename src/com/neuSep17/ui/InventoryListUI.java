@@ -619,11 +619,11 @@ public class InventoryListUI extends JFrame {
         scrollPane = new JScrollPane(table);
         scrollPane.setBounds(350, 220, 950, 580);
         table.setPreferredScrollableViewportSize(new Dimension(1950, 580));
-        //创建单元格渲染器暨鼠标事件监听器
+
         LinkCellRenderer renderer = new LinkCellRenderer();
-        //注入渲染器
+
         table.setDefaultRenderer(Object.class, renderer);
-        //注入监听器
+
         table.addMouseListener(renderer);
         table.addMouseMotionListener(renderer);
         
