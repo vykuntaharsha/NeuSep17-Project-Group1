@@ -158,7 +158,7 @@ public class ConsumerScreen extends UI {
     }
 
     private JLabel pictures() throws IOException{
-        JLabel picLabel = createPicture("C:\\Users\\diksh\\Desktop\\Info5100-Group1-Team3-master\\image.jpg");
+        JLabel picLabel = createPicture(ConsumerScreen.class.getResource("asset/ConsumerScreenHeaderImage.jpg")));
         return picLabel;
     }
 
