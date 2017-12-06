@@ -1,9 +1,9 @@
-package IncentiveBrowser;
+package com.neuSep17.ui;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class IncentiveScreen extends JFrame{
+public class ManageIncentivesScreen extends JFrame{
 
     private static JFrame mainFrame;
     private JPanel headerPanel;
