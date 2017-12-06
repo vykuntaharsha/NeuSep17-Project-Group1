@@ -104,7 +104,7 @@ public class InventoryEditUI extends JFrame {
         trim = new Component("Trim", 10, "Vehicle Trim.");
         type = new Component("Type", 20, "Vehicle Type.");
         price = new Component("Price", 20, "Integer Only.");
-        id.getInputTextField().setToolTipText("123");        
+        id.getInputTextField().setToolTipText("123");
         saveButton = new JButton("Save");
         saveButton.setBackground(Color.gray);
         saveButton.setForeground(Color.black);
@@ -114,13 +114,13 @@ public class InventoryEditUI extends JFrame {
         cancelButton = new JButton("Cancel");
         cancelButton.setBackground(Color.gray);
         cancelButton.setForeground(Color.black);
-        photo = new JLabel("Photo");//photo
+        photo = new JLabel("Photo");// photo
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                    saveVehicle(vehicle == null ? null : vehicle.getWebID(), 
-                            vehicle == null ? null : vehicle.getID());// save method;
+                    saveVehicle(vehicle == null ? null : vehicle.getWebID(), vehicle == null ? null : vehicle.getID());// save
+                                                                                                                       // method;
                     dispose();
                 }
             }
@@ -157,7 +157,7 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.setLayout(null);
         componetsPanel.setBackground(Color.lightGray);
 
-        //JLabel photo = new JLabel("Photo"); //by Bin Shi
+        // JLabel photo = new JLabel("Photo"); //by Bin Shi
         JTextField lineGraph = new JTextField();
 
         // photo
@@ -444,8 +444,8 @@ public class InventoryEditUI extends JFrame {
         type.getInputTextField().setInputVerifier(new TypeVerifier());
         model.getInputTextField().setInputVerifier(new ModelVerifier());
         trim.getInputTextField().setInputVerifier(new TrimVerifier());
-        
-        //photo listeners and actions by Bin Shi
+
+        // photo listeners and actions by Bin Shi
         photo.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -463,18 +463,22 @@ public class InventoryEditUI extends JFrame {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
         });
-        
+
     }
 
     // VIDListener & VIDVerifier
@@ -970,22 +974,26 @@ public class InventoryEditUI extends JFrame {
         vehicle = v;
         id.getInputTextField().setText(String.valueOf(vehicle.getID()));
         webId.getInputTextField().setText(String.valueOf(vehicle.getWebID()));
+        webId.getInputTextField().setCaretPosition(0);
         category.getInputTextField().setText(String.valueOf(vehicle.getCategory()));
         year.getInputTextField().setText(String.valueOf(vehicle.getYear()));
         make.getInputTextField().setText(String.valueOf(vehicle.getMake()));
         model.getInputTextField().setText(String.valueOf(vehicle.getModel()));
         trim.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
+        trim.getInputTextField().setCaretPosition(0);
         type.getInputTextField().setText(String.valueOf(vehicle.getTrim()));
+        type.getInputTextField().setCaretPosition(0);
         price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
 
         // load the photo by Bin Shi
         photo.setText("No Photo");
         if (vehicle.getPhotoURL() != null) {
-            SwingUtilities.invokeLater(() -> {//avoid to stop the loading
+            SwingUtilities.invokeLater(() -> {// avoid to stop the loading
                 Image image = PictureManager.getVehiclePhoto(vehicle);
                 if (image != null) {
                     ImageIcon icon = new ImageIcon(image);
-                    if (icon != null) photo.setIcon(icon);
+                    if (icon != null)
+                        photo.setIcon(icon);
                 }
             });
         }
@@ -997,8 +1005,7 @@ public class InventoryEditUI extends JFrame {
 
             Vehicle v = new Vehicle();
             boolean creatingNewVehicle = false;
-            if (prevWebID == null 
-                    || prevVID == null)  {
+            if (prevWebID == null || prevVID == null) {
                 creatingNewVehicle = true;
             } else if (this.id.getInputTextField().getText() != prevVID
                     || this.webId.getInputTextField().getText() != prevWebID) {
@@ -1006,7 +1013,7 @@ public class InventoryEditUI extends JFrame {
                 service.deleteVehicle(prevWebID, prevVID);
                 creatingNewVehicle = true;
             }
-            
+
             v.setID(this.id.getInputTextField().getText());
             v.setWebID(this.webId.getInputTextField().getText());
             v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
@@ -1016,16 +1023,16 @@ public class InventoryEditUI extends JFrame {
             v.setTrim(this.trim.getInputTextField().getText());
             v.setBodyType(this.type.getInputTextField().getText());
             v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-            
-            boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v) 
+
+            boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v)
                     : service.updateVehicle(v.getWebID(), v);
             if (listUI != null) {
                 listUI.refreshTable();
             }
-            
-            return result;         
+
+            return result;
         }
-        
+
         return false;
     }
 }
