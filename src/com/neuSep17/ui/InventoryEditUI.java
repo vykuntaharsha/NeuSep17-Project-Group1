@@ -650,16 +650,16 @@ public class InventoryEditUI extends JFrame {
                     && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
                 webId.setFalse();
                 e.consume();
-            } // invalid input:杈撳叆闄や簡鍥炶溅鍒犻櫎鍜屽ぇ灏忓啓瀛楁瘝浠ュ強妯嚎浠ュ鐨�
+            } //invalid input are those which exclude enter, backspace,letters and -
             String str = webId.getInputTextField().getText();
             int lastIndex = str.length() - 1;
             if (keyInput == KeyEvent.VK_MINUS) {
                 if (str.equals("")) {
-                    webId.setFalse();// 棣栦綅鍑虹幇妯嚎
+                    webId.setFalse();//- appears at the first position
                 }
             }
             if (keyInput == KeyEvent.VK_ENTER) {
-                if (str.contains("-") && str.charAt(lastIndex) != '-')// 涓嶈兘鏈熬涓�-
+                if (str.contains("-") && str.charAt(lastIndex) != '-')//cannot end by -
                     webId.setTrue();
                 else
                     webId.setFalse();
@@ -1040,7 +1040,7 @@ public class InventoryEditUI extends JFrame {
         photo.setText("No Photo");
         if (vehicle.getPhotoURL() != null) {
             SwingUtilities.invokeLater(() -> {// avoid to stop the loading
-                Image image = PictureManager.getVehiclePhoto(vehicle);
+                Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
                 if (image != null) {
                     ImageIcon icon = new ImageIcon(image);
                     if (icon != null)
