@@ -19,7 +19,7 @@ This function is to get the vehicle picture from a URL string of the vehicle obj
 * Late picture loading. Use `SwingUtilities.invokeLater()` method to display a picture at a later time because loading a picture form either URL or disk is time consuming.
 * Cache the picture to the disk for further usage.
 
-# Furture features
+# Furture Features
 
 - initilize whole picture libarary at the first time when the program launch
 - read the property `INIT_PICTURE_LIBARAY` from the configuration file
