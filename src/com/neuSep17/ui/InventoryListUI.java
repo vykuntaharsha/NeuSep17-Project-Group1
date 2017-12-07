@@ -499,6 +499,11 @@ public class InventoryListUI extends JFrame {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+            
+            public Class getColumnClass(int column)
+            {
+                return getValueAt(0, column).getClass();
+            }
         };
 
         table = new JTable(model);
@@ -957,9 +962,9 @@ public class InventoryListUI extends JFrame {
                 return;
             }
             try {
-                String s = table.getValueAt(selectedRow, c).toString();
-                URL url = new URL(s.split("\"")[1]);
-                Desktop.getDesktop().browse(url.toURI());
+//                String s = table.getValueAt(selectedRow, c).toString();
+//                URL url = new URL(s.split("\"")[1]);
+//                Desktop.getDesktop().browse(url.toURI());
             } catch (Exception ex) {
                 Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
             }
