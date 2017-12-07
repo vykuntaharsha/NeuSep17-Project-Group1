@@ -1026,8 +1026,10 @@ public class InventoryEditUI extends JFrame {
         this.validateTextFields();
         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
+            if (vehicle == null) {
+                vehicle = new Vehicle();
+            }
 
-            Vehicle v = new Vehicle();
             boolean creatingNewVehicle = false;
             if (prevWebID == null || prevVID == null) {
                 creatingNewVehicle = true;
@@ -1038,18 +1040,18 @@ public class InventoryEditUI extends JFrame {
                 creatingNewVehicle = true;
             }
 
-            v.setID(this.id.getInputTextField().getText());
-            v.setWebID(this.webId.getInputTextField().getText());
-            v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
-            v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-            v.setMake(this.make.getInputTextField().getText());
-            v.setModle(this.model.getInputTextField().getText());
-            v.setTrim(this.trim.getInputTextField().getText());
-            v.setBodyType(this.type.getInputTextField().getText());
-            v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+            vehicle.setID(this.id.getInputTextField().getText());
+            vehicle.setWebID(this.webId.getInputTextField().getText());
+            vehicle.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
+            vehicle.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+            vehicle.setMake(this.make.getInputTextField().getText());
+            vehicle.setModle(this.model.getInputTextField().getText());
+            vehicle.setTrim(this.trim.getInputTextField().getText());
+            vehicle.setBodyType(this.type.getInputTextField().getText());
+            vehicle.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
 
-            boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v)
-                    : service.updateVehicle(v.getWebID(), v);
+            boolean result = creatingNewVehicle ? service.addVehicle(vehicle.getWebID(), vehicle)
+                    : service.updateVehicle(vehicle.getWebID(), vehicle);
 
             if (listUI != null) {
                 listUI.refreshTable();
