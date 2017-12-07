@@ -2,13 +2,15 @@ package com.neuSep17.service;
 
 import com.neuSep17.dao.IncentiveImple;
 import com.neuSep17.dto.Incentive;
+import com.neuSep17.io.FileReading;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.*;
+
+//author: Zezhu Jin
+//Team #: 6
+//Team Lead: Nhat
 
 public class IncentiveService {
     //sort the incentives by incentiveID
@@ -220,36 +222,39 @@ public class IncentiveService {
     }
 
 
-    //search incentives by ID, DealerID, Title, Description, discountCriteria
-    public static ArrayList<Incentive> searchIncentives(String criteria, String criteriaValue){
-        //call data access object
-        IncentiveImple incentiveDAO = new IncentiveImple();
-        // UpperCase the Criteria
-        String searchCriteria = criteria.toUpperCase();
-        // initialize an arraylist of incentive objects
+    //search incentives by any criterias (except cashValue) from the input incentives
+    public static ArrayList<Incentive> searchIncentives(ArrayList<Incentive> inputIncentives,  String criteriaValue){
+        //initialize the filtered arraylist
         ArrayList<Incentive> resultIncents = new ArrayList<>();
-        // retrieve the incentives by search criteria
-        switch (searchCriteria){
-            case "ID":
-                //get incentive by incentiveID
-                resultIncents.add(incentiveDAO.getAIncentive(criteriaValue));
-                break;
-            case "DEALERID":
-                //get incentives for a specific Dealer
-                resultIncents = incentiveDAO.getIncentivesForDealer(criteriaValue);
-                break;
-            case "TITLE":
+        String str = criteriaValue.toUpperCase();
 
-                break;
-            case "DESCRIPTION":
+        //for loop to filter incentives
+        for (Incentive incent : inputIncentives){
+            HashSet<String> dic = new HashSet<>();
+            dic.add(incent.getDealerID().toUpperCase());
+            dic.add(incent.getID().toUpperCase());
+            dic.add(incent.getTitle().toUpperCase());
+            dic.add(incent.getStartDate().toUpperCase());
+            dic.add(incent.getEndDate().toUpperCase());
+            dic.add(incent.getDescription().toUpperCase());
+            for(String s : incent.getDiscountCriteria()){
+                dic.add(s.toUpperCase());
+            }
+            boolean[] dp = new boolean[str.length()+1];
+            dp[0] = true;
+            for(int i = 1; i <= str.length(); i++){
+                for (int j = 0; j < i; j++){
+                    if(dp[i] && dic.contains(str.substring(j,i))){
+                        dp[i] = true;
+                    }
+                }
+            }
 
-                break;
-            case "DISCOUNTCRITERIA":
-            default:
-                System.out.println("this searching criteria does not exist......");
-                break;
+            if(dp[str.length()]){
+                resultIncents.add(incent);
+            }
         }
-
+        
         return resultIncents;
     }
 
@@ -289,6 +294,9 @@ public class IncentiveService {
     public static ArrayList<Incentive> dealerIncentives(String dealerID){
         //call data access object
         IncentiveImple incentiveDAO = new IncentiveImple();
+        //return all incentives form all dealer if the dealerID input is null or empty
+        if(dealerID.isEmpty() || dealerID == null)
+            return FileReading.getAllIncentives();
         //call the get method
         return incentiveDAO.getIncentivesForDealer(dealerID);
     }
