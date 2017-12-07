@@ -30,7 +30,7 @@ public class InventoryEditUI extends JFrame {
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
-        InventoryEditUI imf = new InventoryEditUI();
+        new InventoryEditUI();
     }
 
     private class Component {
@@ -74,7 +74,7 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    public InventoryEditUI() {
+    public InventoryEditUI() {//code-review-bin: we may still need the vehicle list as the input
         super();
         createCompoments();
         createPanel();
@@ -84,7 +84,7 @@ public class InventoryEditUI extends JFrame {
         makeThisVisible();
     }
 
-    public InventoryEditUI(Vehicle v, InventoryListUI listUI) {
+    public InventoryEditUI(Vehicle v, InventoryListUI listUI) {//code-review-bin: we may only need vehicle and list (instead of listUI)
         super();
         createCompoments();
         createPanel();
@@ -1014,13 +1014,13 @@ public class InventoryEditUI extends JFrame {
         if(noPhoto) photoLabel.setText("No Photo");
     }
 
-    public boolean saveVehicle(String prevWebID, String prevVID) {
+    public boolean saveVehicle(String prevWebID, String prevVID) {//code-review-bin: take the current vehicle as the only input parameter
         this.validateTextFields();
         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
-                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
-            if (vehicle == null) {
+                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {//code-review-bin: too long
+            if (vehicle == null) {//code-review-bin: new vehicle for sure -> insert new to the list
                 vehicle = new Vehicle();
-            }
+            }//code-review-bin: otherwise, compare the vehicle's id with current value in the text (update vid | udpate other values)
 
             boolean creatingNewVehicle = false;
             if (prevWebID == null || prevVID == null) {
@@ -1045,7 +1045,7 @@ public class InventoryEditUI extends JFrame {
                     : service.updateVehicle(vehicle.getWebID(), vehicle);
 
             if (listUI != null) {
-                listUI.refreshTable();
+                listUI.refreshTable();//code-review-bin: we can use the ListUI service's filltabel function
             }
 
             return result;
