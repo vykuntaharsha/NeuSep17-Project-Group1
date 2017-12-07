@@ -1,5 +1,7 @@
 package com.neuSep17.service;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,11 +11,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.neuSep17.dao.PictureManager;
 import com.neuSep17.dto.Vehicle;
+import com.neuSep17.ui.InventoryListUI;
 
 public class InventoryListService {
 
@@ -103,7 +109,7 @@ public class InventoryListService {
 		tableModel.setRowCount(0);
 
 		for (Vehicle vehicle : list) {
-			String[] arr = new String[19];
+			Object[] arr = new Object[19];
 			arr[0] = vehicle.getID();
 			arr[1] = vehicle.getWebID();
 			arr[2] = vehicle.getCategory().toString();
@@ -113,7 +119,13 @@ public class InventoryListService {
 			arr[6] = vehicle.getTrim();
 			arr[7] = vehicle.getBodyType();
 			arr[8] = String.valueOf(vehicle.getPrice());
-			arr[9] = "<html><img src=\""+vehicle.getPhotoURL().toString()+"\"/></html>";
+			Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
+			if(image == null) {
+			    arr[9] = new ImageIcon(InventoryListService.class.getResource("../ui/asset/InventoryList-nophoto.jpg"));
+			}else {
+			    arr[9] = new ImageIcon(image);
+			}
+//			arr[9] = "<html><img src=\""+vehicle.getPhotoURL().toString()+"\"/></html>";
 			arr[10] = vehicle.getVin();
 			arr[11] = vehicle.getEntertainment();
 			arr[12] = vehicle.getInteriorColor();
