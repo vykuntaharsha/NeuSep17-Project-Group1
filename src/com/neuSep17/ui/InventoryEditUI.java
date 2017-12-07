@@ -4,8 +4,7 @@ import com.neuSep17.dao.PictureManager;
 
 /**
  * This function is for dealers to add/edit/delete vehicle information.
- * @author YuXin Li, Chun Yang, Lu Niu, Yuanyuan Jin, Bin Shi
- * Contact: Bin Shi (shi.b@husky.neu.edu)
+ * @author YuXin Li, Chun Yang, Lu Niu, Yuanyuan Jin, Bin Shi (Team Lead)
  */
 
 import com.neuSep17.dao.VehicleImple;
@@ -23,10 +22,11 @@ import javax.swing.event.*;
 @SuppressWarnings("serial")
 public class InventoryEditUI extends JFrame {
     private Component id, webId, category, year, make, model, trim, type, price;
-    private JLabel photo;
+    private JLabel photoLabel;
     private JButton saveButton;
     private JButton clearButton;
     private JButton cancelButton;
+    private static final boolean DEBUG=true;
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
@@ -115,7 +115,7 @@ public class InventoryEditUI extends JFrame {
         cancelButton = new JButton("Cancel");
         cancelButton.setBackground(Color.gray);
         cancelButton.setForeground(Color.black);
-        photo = new JLabel("Photo");// photo
+        photoLabel = new JLabel("Photo");// photo
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
@@ -158,14 +158,14 @@ public class InventoryEditUI extends JFrame {
         componetsPanel.setLayout(null);
         componetsPanel.setBackground(Color.lightGray);
 
-        // JLabel photo = new JLabel("Photo"); //by Bin Shi
         JTextField lineGraph = new JTextField();
 
-        // photo
-        photo.setBounds(315, 50, 100, 100);
-        photo.setHorizontalAlignment(SwingConstants.CENTER);
-        photo.setBackground(Color.lightGray);
-        componetsPanel.add(photo);
+        // photo by Bin Shi
+        photoLabel.setBounds(315, 50, 100, 100);
+        photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        photoLabel.setBackground(Color.lightGray);
+        photoLabel.setToolTipText("Click to Change");
+        componetsPanel.add(photoLabel);
 
         // save,cancel,clear
 
@@ -456,18 +456,18 @@ public class InventoryEditUI extends JFrame {
         trim.getInputTextField().setInputVerifier(new TrimVerifier());
 
         // photo listeners and actions by Bin Shi
-        photo.addMouseListener(new MouseAdapter() {
+        photoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String input = JOptionPane.showInputDialog(photo, "Enter the URL of the photo:", null);
+                String input = JOptionPane.showInputDialog(photoLabel, "Enter the URL of the photo:", null);
                 if (input != null && !input.isEmpty()) {
                     try {
                         URL url = new URL(input.trim());
                         vehicle.setPhotoURL(url);
-                        loadVehicle(vehicle); //maybe try to SwingUtilities.invokeLater()
+                        loadPhoto(url);
                     } catch (MalformedURLException e1) {
-                        System.out.println("Entered URL is not valid.");
-                        // e1.printStackTrace();
+                        System.out.println("Entered invalid URL:"+input);
+                        if(DEBUG) e1.printStackTrace();
                     }
                 }
             }
@@ -992,18 +992,26 @@ public class InventoryEditUI extends JFrame {
         type.getInputTextField().setCaretPosition(0);
         price.getInputTextField().setText(String.valueOf(vehicle.getPrice()));
 
-        // load the photo by Bin Shi
-        photo.setText("No Photo");
-        if (vehicle.getPhotoURL() != null) {
-            SwingUtilities.invokeLater(() -> {// avoid to stop the loading
-                Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
-                if (image != null) {
-                    ImageIcon icon = new ImageIcon(image);
-                    if (icon != null)
-                        photo.setIcon(icon);
+        //later load photo to avoid blocking UI by Bin Shi
+        SwingUtilities.invokeLater(() -> {
+            loadPhoto(vehicle.getPhotoURL());
+        });
+    }
+    
+    // load the photo by Bin Shi
+    private void loadPhoto(URL photoURL) {
+        boolean noPhoto = true;
+        if (photoURL != null) {
+            Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
+            if (image != null) {
+                ImageIcon icon = new ImageIcon(image);
+                if (icon != null){
+                    photoLabel.setIcon(icon);
+                    noPhoto = false;
                 }
-            });
+            }
         }
+        if(noPhoto) photoLabel.setText("No Photo");
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
@@ -1033,7 +1041,6 @@ public class InventoryEditUI extends JFrame {
             vehicle.setTrim(this.trim.getInputTextField().getText());
             vehicle.setBodyType(this.type.getInputTextField().getText());
             vehicle.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-//            vehicle.setPhotoURL(url);
             boolean result = creatingNewVehicle ? service.addVehicle(vehicle.getWebID(), vehicle)
                     : service.updateVehicle(vehicle.getWebID(), vehicle);
 
