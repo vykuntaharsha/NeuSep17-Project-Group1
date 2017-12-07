@@ -169,7 +169,10 @@ public class VehicleImple implements IVehicleManager {
 					sb.append(v.getFuelType()).append("~");
 					sb.append(v.getEngine()).append("~");
 					sb.append(v.getTransmission()).append("~");
-					sb.append(v.getBattery());
+					sb.append(v.getBattery()).append("~");
+					
+					// Fixed a bug caused by parsing vehicle. Team 2: Lu Niu.
+					sb.append(v.getOptionalFeatures());
 
 					bw.write(sb.toString() + "\n");
 

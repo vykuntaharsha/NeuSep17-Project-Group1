@@ -456,7 +456,7 @@ public class InventoryEditUI extends JFrame {
         trim.getInputTextField().setInputVerifier(new TrimVerifier());
 
         // photo listeners and actions by Bin Shi
-        photo.addMouseListener(new MouseListener() {
+        photo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String input = JOptionPane.showInputDialog(photo, "Enter the URL of the photo:", null);
@@ -464,28 +464,12 @@ public class InventoryEditUI extends JFrame {
                     try {
                         URL url = new URL(input.trim());
                         vehicle.setPhotoURL(url);
-                        loadVehicle(vehicle);
+                        loadVehicle(vehicle); //maybe try to SwingUtilities.invokeLater()
                     } catch (MalformedURLException e1) {
                         System.out.println("Entered URL is not valid.");
                         // e1.printStackTrace();
                     }
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
 
@@ -1026,8 +1010,10 @@ public class InventoryEditUI extends JFrame {
         this.validateTextFields();
         if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
                 && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
+            if (vehicle == null) {
+                vehicle = new Vehicle();
+            }
 
-            Vehicle v = new Vehicle();
             boolean creatingNewVehicle = false;
             if (prevWebID == null || prevVID == null) {
                 creatingNewVehicle = true;
@@ -1038,18 +1024,18 @@ public class InventoryEditUI extends JFrame {
                 creatingNewVehicle = true;
             }
 
-            v.setID(this.id.getInputTextField().getText());
-            v.setWebID(this.webId.getInputTextField().getText());
-            v.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
-            v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-            v.setMake(this.make.getInputTextField().getText());
-            v.setModle(this.model.getInputTextField().getText());
-            v.setTrim(this.trim.getInputTextField().getText());
-            v.setBodyType(this.type.getInputTextField().getText());
-            v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-
-            boolean result = creatingNewVehicle ? service.addVehicle(v.getWebID(), v)
-                    : service.updateVehicle(v.getWebID(), v);
+            vehicle.setID(this.id.getInputTextField().getText());
+            vehicle.setWebID(this.webId.getInputTextField().getText());
+            vehicle.setCategory(Category.valueOf(this.category.getInputTextField().getText()));
+            vehicle.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+            vehicle.setMake(this.make.getInputTextField().getText());
+            vehicle.setModle(this.model.getInputTextField().getText());
+            vehicle.setTrim(this.trim.getInputTextField().getText());
+            vehicle.setBodyType(this.type.getInputTextField().getText());
+            vehicle.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+//            vehicle.setPhotoURL(url);
+            boolean result = creatingNewVehicle ? service.addVehicle(vehicle.getWebID(), vehicle)
+                    : service.updateVehicle(vehicle.getWebID(), vehicle);
 
             if (listUI != null) {
                 listUI.refreshTable();
