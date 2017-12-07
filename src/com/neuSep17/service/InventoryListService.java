@@ -1,28 +1,16 @@
 package com.neuSep17.service;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.event.MouseInputListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.neuSep17.dto.Vehicle;
@@ -125,7 +113,7 @@ public class InventoryListService {
 			arr[6] = vehicle.getTrim();
 			arr[7] = vehicle.getBodyType();
 			arr[8] = String.valueOf(vehicle.getPrice());
-			arr[9] = vehicle.getPhotoURL().toString();
+			arr[9] = "<html><img src=\""+vehicle.getPhotoURL().toString()+"\"/></html>";
 			arr[10] = vehicle.getVin();
 			arr[11] = vehicle.getEntertainment();
 			arr[12] = vehicle.getInteriorColor();
