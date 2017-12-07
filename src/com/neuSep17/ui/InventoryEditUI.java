@@ -456,7 +456,7 @@ public class InventoryEditUI extends JFrame {
         trim.getInputTextField().setInputVerifier(new TrimVerifier());
 
         // photo listeners and actions by Bin Shi
-        photo.addMouseListener(new MouseListener() {
+        photo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String input = JOptionPane.showInputDialog(photo, "Enter the URL of the photo:", null);
@@ -464,28 +464,12 @@ public class InventoryEditUI extends JFrame {
                     try {
                         URL url = new URL(input.trim());
                         vehicle.setPhotoURL(url);
-                        loadVehicle(vehicle);
+                        loadVehicle(vehicle); //maybe try to SwingUtilities.invokeLater()
                     } catch (MalformedURLException e1) {
                         System.out.println("Entered URL is not valid.");
                         // e1.printStackTrace();
                     }
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
 
@@ -1049,7 +1033,7 @@ public class InventoryEditUI extends JFrame {
             vehicle.setTrim(this.trim.getInputTextField().getText());
             vehicle.setBodyType(this.type.getInputTextField().getText());
             vehicle.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-
+//            vehicle.setPhotoURL(url);
             boolean result = creatingNewVehicle ? service.addVehicle(vehicle.getWebID(), vehicle)
                     : service.updateVehicle(vehicle.getWebID(), vehicle);
 
