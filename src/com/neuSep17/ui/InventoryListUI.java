@@ -677,13 +677,24 @@ public class InventoryListUI extends JFrame {
 
         btnDelete = new JButton("Delete");
         btnDelete.setBorderPainted(false);
+         //team2: yuanyuan jin start
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // team 2: Lu Niu
-                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
-            }
-        });
+                VehicleImple service = new VehicleImple() ;
+                        int reply = JOptionPane.showConfirmDialog(null, "Confirm delete ?", "Delete", JOptionPane.YES_NO_OPTION);
+                        if (reply == JOptionPane.YES_OPTION) {
+                         //delete selected data
+                            for (Vehicle v : list) {
+                                if (v.getID().equals(getSelectedId())) {
+                                    service.deleteVehicle(v.getWebID(),v.getID());                               
+                                }                               
+                            }                       
+                        }                
+            }                    
+                });
+        
+       //team 2 Yuanyuan jin end
         btnDelete.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnDelete.setForeground(new Color(255, 255, 255));
         btnDelete.setBackground(btnColor);
