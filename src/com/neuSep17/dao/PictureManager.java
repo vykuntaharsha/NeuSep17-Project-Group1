@@ -45,6 +45,15 @@ public class PictureManager {
         } else {
             image = loadImageFromURL(photoURL);
             if(image!=null) cacheImage(image, getFullName(photoURL.getFile()));
+            else
+                //cache the empty file to disk even it is empty,
+                //because next time the program knows won't try to download it from the Internet.
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    System.out.println("Cannot create this empty file to disk "+ file.toString());
+                    e.printStackTrace();
+                }
         }
         return image;
     }
@@ -104,7 +113,6 @@ public class PictureManager {
             }
         }
     }
-        
     
     public static void main(String[] args){
         URL url=null;
