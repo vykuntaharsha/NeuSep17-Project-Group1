@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-public class ManageIncentivesScreen extends UI {
+public class ManageIncentivesScreen extends IncentiveUI {
     private static JFrame mainFrame;
     private JPanel headerPanel;
     private JPanel footerPanel;
