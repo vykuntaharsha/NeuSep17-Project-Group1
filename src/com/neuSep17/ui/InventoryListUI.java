@@ -37,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.InventoryListService;
 
@@ -529,8 +530,8 @@ public class InventoryListUI extends JFrame {
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getSelectedId() == null || getSelectedId().isEmpty()) {
-                    InventoryEditUI tempui = new InventoryEditUI();
+                if (getSelectedId() == null) {
+                    InventoryEditUI tempui = new InventoryEditUI(null, that);
                 } else {
                     for (Vehicle v : list) {
                         if (v.getID().equals(getSelectedId())) {
@@ -549,16 +550,32 @@ public class InventoryListUI extends JFrame {
 
         btnDelete = new JButton("Delete");
         btnDelete.setBorderPainted(false);
+        //team2: yuanyuan jin start
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (getSelectedId() == null || getSelectedId().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please Select An Item To Delete", "Error Message", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Please Select An Item To Delete", "Error Message",
+                            JOptionPane.ERROR_MESSAGE);
                 } else {
+                    VehicleImple service = new VehicleImple();
+                    int clickButton = JOptionPane.showConfirmDialog(null, "Confirm delete ?", "Delete",
+                            JOptionPane.YES_NO_OPTION);
+                    if (clickButton == JOptionPane.YES_OPTION) {
+                        // delete selected data
+                        for (Vehicle v : list) {
+                            if (v.getID().equals(getSelectedId())) {
+                                service.deleteVehicle(v.getWebID(), v.getID());
+                            }
+                        }
+                    }
+                    // refreshTable
+                    refreshTable(null);
                     InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
                 }
             }
         });
+       //team 2 Yuanyuan jin end
         btnDelete.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnDelete.setForeground(new Color(255, 255, 255));
         btnDelete.setBackground(btnColor);
@@ -759,8 +776,11 @@ public class InventoryListUI extends JFrame {
     
     // team 2: Lu Niu
     private File file;
-    public void refreshTable() {
-        list = InventoryListService.readAndGetVehicles(file);
+    public void refreshTable(Vehicle v) {
+        if (v != null) {
+            list.add(v);   
+        }
+        
         InventoryListService.fillTable(list, table);
     }
 }
