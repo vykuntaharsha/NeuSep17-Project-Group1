@@ -254,7 +254,7 @@ public class IncentiveService {
                 resultIncents.add(incent);
             }
         }
-        
+
         return resultIncents;
     }
 
@@ -336,8 +336,6 @@ public class IncentiveService {
 //        getSortedIncentives(incentivesInput, "startdate", true);
 //        for (Incentive i : incentivesInput)
 //            System.out.print(i.toString());
-        incentivesInput = searchIncentives("id", "001");
-        for (Incentive i : incentivesInput)
-            System.out.println(i.toString());
+
     }
 }

@@ -13,6 +13,7 @@ public class IncentiveImple implements IIncentiveManager {
 
     //An arrayList to store all the incentive object from data file 'data/incentives'
     ArrayList<Incentive>  allIncentives = new ArrayList<>();
+
     public IncentiveImple(){
         //retrieving all the incentives despite of dealerID
         allIncentives = FileReading.getAllIncentives();
