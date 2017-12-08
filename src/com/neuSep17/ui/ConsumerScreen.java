@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-public class ConsumerScreen extends UI {
+public class ConsumerScreen extends IncentiveUI {
 
     private JFrame mainFrame;
     private JLabel headerLabel;
