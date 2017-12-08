@@ -946,6 +946,14 @@ public class InventoryEditUI extends JFrame {
             return true;
         }
     }
+    
+    public boolean canSave(){
+        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
+                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot)
+            return true;
+        else
+            return false;
+    }
 
     private String[] categories = { "new", "used", "certified" };
     private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
@@ -1016,8 +1024,7 @@ public class InventoryEditUI extends JFrame {
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
         this.validateTextFields();
-        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
-                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
+        if (canSave()) {
             if (vehicle == null) {
                 vehicle = new Vehicle();
             }
