@@ -571,7 +571,6 @@ public class InventoryListUI extends JFrame {
                     }
                     // refreshTable
                     refreshTable(null);
-                    InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
                 }
             }
         });
