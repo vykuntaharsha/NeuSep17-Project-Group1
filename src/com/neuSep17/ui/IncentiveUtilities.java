@@ -2,7 +2,7 @@ package com.neuSep17.ui;
 
 import com.neuSep17.dto.Incentive;
 import com.neuSep17.service.IncentiveService;
-import com.neuSep17.validation.IncentiveScreenvalidation;
+import com.neuSep17.validation.IncentiveScreenValidation;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -288,8 +288,8 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         this.trim = trim;
     }
 
-    UI ui = new UI();
-    IncentiveScreenvalidation v = new IncentiveScreenvalidation();
+    IncentiveUI ui = new IncentiveUI();
+    IncentiveScreenValidation  v = new IncentiveScreenValidation();
     //        FileWriting fw = new FileWriting();
     //DealerScreen d = new DealerScreen();                 //wait for implementation of dealerScreen
     private JPanel dialogPane;
