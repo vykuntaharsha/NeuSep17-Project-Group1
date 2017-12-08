@@ -57,10 +57,10 @@ public class PropertyManager {
 
     private PropertyManager(){};
     
-    public static void main(String[] args) {
-        setProperty("debug","true");
-        setProperty("init-dealer-gmps-covert-country","true");
-        store();
-    }
+//    public static void main(String[] args) {
+//        setProperty("debug","true");
+//        setProperty("init-dealer-gmps-covert-country","true");
+//        store();
+//    }
 
 }
