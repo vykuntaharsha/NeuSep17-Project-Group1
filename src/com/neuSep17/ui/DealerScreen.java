@@ -1,20 +1,26 @@
+package com.neuSep17.ui;
+
+import com.neuSep17.dto.Dealer;
+import com.neuSep17.service.DealerImpleService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class DealerScreen1 {
+public class DealerScreen {
 
     private JFrame mainFrame;
     private JLabel headerLabel;
     private JLabel distanceLabel;
     private JLabel statusLabel;
     private JPanel controlPanel;
+    private JComboBox<Dealer> dealersComboBox;
 
     public static void main(String[] args) throws IOException {
-        DealerScreen1 welcome = new DealerScreen1();
+        DealerScreen welcome = new DealerScreen();
         welcome.createUI();
     }
 
@@ -57,7 +63,7 @@ public class DealerScreen1 {
     private void prepareGUI() throws IOException {
         mainFrame = new JFrame("Welcome Dealer");
         mainFrame.setSize(2500,2000);
-        mainFrame.setLayout(new GridLayout(2, 1));
+        mainFrame.setLayout(new GridLayout(3, 1));
 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -81,6 +87,10 @@ public class DealerScreen1 {
         imageNestedPanel.add(imageLabel);
         imageNestedPanel.add(headerLabel);
 
+        JPanel comboBoxPanel = new JPanel();
+        dealersComboBox = getDealersComboBox();
+        comboBoxPanel.add(dealersComboBox);
+
         statusLabel = new JLabel("", JLabel.CENTER);
         statusLabel.setFont(new Font("Arial", Font.PLAIN, 40));
 
@@ -88,6 +98,7 @@ public class DealerScreen1 {
         controlPanel.setLayout(new FlowLayout());
 
         mainFrame.add(imageNestedPanel);
+        mainFrame.add(comboBoxPanel);
         mainFrame.add(controlPanel);
         mainFrame.setVisible(true);
     }
@@ -118,13 +129,21 @@ public class DealerScreen1 {
 
     private JButton getInventoryButton() {
 
-        JButton Inventory = new JButton("Manage Inventory");
-        Inventory.addActionListener(new ActionListener() {
+        JButton inventoryButton = new JButton("Manage Inventory");
+        inventoryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //statusLabel.setText("Dealer: "+chooseDealer.getSelectedItem()+" is selected.");
+                Dealer selectedDealer = (Dealer) dealersComboBox.getSelectedItem();
+                String dealerId = selectedDealer.getId();
+                System.out.println("Selected dealer id: "+dealerId+","+selectedDealer.getName()+","+selectedDealer.getEmailId());
+                try {
+                    InventoryListUI inventoryListUI = new InventoryListUI(dealerId);
+                    inventoryListUI.setVisible(true);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
-        return Inventory;
+        return inventoryButton;
     }
 
     private JButton getIncentiveButton() {
@@ -133,7 +152,14 @@ public class DealerScreen1 {
 
         incentiveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //statusLabel.setText("Dealer: "+chooseDealer.getSelectedItem()+" is selected.");
+                Dealer selectedDealer = (Dealer) dealersComboBox.getSelectedItem();
+                String dealerId = selectedDealer.getId();
+                System.out.println("Selected dealer id: "+dealerId+","+selectedDealer.getName()+","+selectedDealer.getEmailId());
+                try {
+                    ManageIncentivesScreen manageIncentivesScreen = new ManageIncentivesScreen(dealerId);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         return incentiveButton;
@@ -164,9 +190,33 @@ public class DealerScreen1 {
 
     }
 
+    private JComboBox<Dealer> getDealersComboBox(){
+        ArrayList<Dealer> dealers = new ArrayList<>();
+        try {
+            DealerImpleService dealerImpleService = new DealerImpleService();
+            dealers = dealerImpleService.getDealers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JComboBox<Dealer> comboBox = new JComboBox(dealers.toArray());
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if(value instanceof Dealer){
+                    Dealer dealer = (Dealer) value;
+                    setText(dealer.getName());
+                }
+                return this;
+            }
+        } );
+        return comboBox;
+    }
+
+
     private JLabel pictures() throws IOException{
-        JLabel picLabel = new JLabel(new ImageIcon("C:\\Users\\diksh\\Desktop\\DealerScreen1.jpg"));
-        picLabel.setSize(new Dimension(500, 200));
+        JLabel picLabel = new JLabel(new ImageIcon("C:\\Users\\diksh\\Desktop\\NeuSep17-Project-Group1-master-src\\NeuSep17-Project-Group1-master\\src\\com\\neuSep17\\ui\\asset\\CarDealer.jpg"));
+        picLabel.setSize(new Dimension(5000, 2000));
 
         return picLabel;
     }
