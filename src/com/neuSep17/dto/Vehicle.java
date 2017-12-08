@@ -74,7 +74,7 @@ public class Vehicle implements Comparable<Vehicle> {
         public void setMake(String make) {
         	this.make=make;
         }
-        public void setModle(String model) {
+        public void setModel(String model) {
         	this.model=model;
         }
         public void setTrim(String trim) {

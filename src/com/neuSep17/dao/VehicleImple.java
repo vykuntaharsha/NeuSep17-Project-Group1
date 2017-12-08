@@ -144,7 +144,8 @@ public class VehicleImple implements IVehicleManager {
 			File file = new File(prefix); // directory path
 			String[] files = file.list();
 			for (String f : files) {
-				if (f.contains(dealerID)) {
+			    // Team: Lu Niu fix a bug caused by contains.
+				if (f.equalsIgnoreCase(dealerID)) {
 					fileReading = new FileReading(new File(prefix + f));
 					fileReading.checkID(v.getID());
 
@@ -173,7 +174,6 @@ public class VehicleImple implements IVehicleManager {
 					
 					// Fixed a bug caused by parsing vehicle. Team 2: Lu Niu.
 					sb.append(v.getOptionalFeatures());
-
 					bw.write(sb.toString() + "\n");
 
 					bw.close();
