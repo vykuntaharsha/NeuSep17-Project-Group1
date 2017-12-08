@@ -17,12 +17,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,21 +39,22 @@ import javax.swing.table.TableColumn;
 
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.InventoryListService;
-import com.neuSep17.ui.InventoryListUI.LinkCellRenderer;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
-import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputListener;
-import javax.swing.JRadioButton;
+import javax.swing.JComboBox;
 
 public class InventoryListUI extends JFrame {
 
@@ -76,26 +76,16 @@ public class InventoryListUI extends JFrame {
     private JButton btnAdd;
     private JButton btnEdit;
     private JButton btnDelete;
-
-    private JCheckBox chckbxYear;
-    private JCheckBox chckbxExteriorColor;
-    private JCheckBox chckbxId;
-    private JCheckBox chckbxPrice;
-    private JCheckBox chckbxInteriorColor;
-    private JCheckBox chckbxMake;
-    private JCheckBox chckbxModel;
-    private JCheckBox chckbxCategory;
-    private JCheckBox chckbxEngine;
-    private JCheckBox chckbxBodytype;
-    private List<JCheckBox> checkBoxGroup;
     private JLabel labelBG;
     private JLabel labelTitle;
     private JLabel labelTitleIcon;
+    private JLabel lblSortby;
 
     private JButton close;
     private JButton min;
 
     private String selectedId;
+    private String newSelectedId;
     
     private DefaultTableModel model;
 
@@ -106,17 +96,19 @@ public class InventoryListUI extends JFrame {
     private final Color tableEvenRow = new Color(224, 224, 224);
     private final Color tableHeaderColor = new Color(117, 117, 117);
 
-    private final Font checkbxFont = new Font("Segoe UI Historic", Font.ITALIC, 19);
-    private final Font radioFont = new Font("Segoe UI Historic", Font.ITALIC, 20);
+    private final Font sortCombobxFont = new Font("Arial", Font.ITALIC, 15);
     private final Font txtFont = new Font("Segoe UI Historic", Font.PLAIN, 22);
     private final Font tableHeaderFont = new Font("Segoe UI Historic", Font.PLAIN, 15);
-    private final Font titleFont = new Font("Malgun Gothic", Font.BOLD, 30);
+    private final Font titleFont = new Font("Showcard Gothic", Font.PLAIN, 33);
 
-    private ButtonGroup sortGroup;
-    private JRadioButton rdbtnHighToLow;
-    private JRadioButton rdbtnLowToHigh;
+    private final String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price", "Photo","Vin","Entertainment"
+            ,"InteriorColor","ExteriorColor","Fueltype","Engine","Transmission","Battery","OptionalFeatures"};
+    
+    private JComboBox<String> sortComboBox;
+    private JComboBox<String> sortOrdercomboBox;
 
     private boolean isAscending;
+    private int sortIndex;
     /**
      * Launch the application.
      */
@@ -126,7 +118,6 @@ public class InventoryListUI extends JFrame {
                 try {
                     String dealerName = "gmps-covert-country";
                     InventoryListUI frame = new InventoryListUI(dealerName);
-                    frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -150,6 +141,8 @@ public class InventoryListUI extends JFrame {
         list = InventoryListService.readAndGetVehicles(file);
         filter = new ArrayList<>();
         isAscending = true;
+        selectedId = "";
+        newSelectedId = "";
         contentPane = new JPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -157,14 +150,11 @@ public class InventoryListUI extends JFrame {
         contentPane.setLayout(null);
         setLocationRelativeTo(null);
         setContentPane(contentPane);
+        setVisible(true);
 
         registerPanel();
 
         registerAEDBtn();
-
-        registerRadio();
-
-        registerSortCheckBox();
 
         registerTable();
 
@@ -173,12 +163,62 @@ public class InventoryListUI extends JFrame {
         registerFilter();
 
         registerTitle();
+        
+        registerSortComboBox();
 
         setCloseAndMin();
 
         setDrag();
-
-        rdbtnLowToHigh.setSelected(true);
+    }
+    
+    //sortBycomboBox
+    private void registerSortComboBox() {
+        lblSortby = new JLabel("SortBy:");
+        lblSortby.setFont(txtFont);
+        lblSortby.setForeground(topFG);
+        lblSortby.setBounds(55, 174, 94, 25);
+        panelTop.add(lblSortby);
+        
+        ArrayList<Vehicle> tmp = new ArrayList<>(list);
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(headers);
+        sortComboBox = new JComboBox<String>(model);
+        sortComboBox.insertItemAt("Empty", 0);
+        sortComboBox.setFont(sortCombobxFont);
+        sortComboBox.setSelectedIndex(0);
+        sortComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                sortIndex = ((JComboBox)e.getSource()).getSelectedIndex();
+                if(sortIndex == 0) {
+                    InventoryListService.fillTable(list, table);
+                }else {
+                    InventoryListService.sortByHeaders(tmp, isAscending, headers[sortIndex-1]);
+                    InventoryListService.fillTable(tmp, table);
+                }
+            }
+        });
+        sortComboBox.setBounds(145, 175, 122, 27);
+        panelTop.add(sortComboBox);
+        
+        //sortOrderBox
+        String[] item = {"Sort From Low To High", "Sort From High To Low"}; 
+        DefaultComboBoxModel<String> modelOrder = new DefaultComboBoxModel<>(item);
+        sortOrdercomboBox = new JComboBox<String>(modelOrder);
+        sortOrdercomboBox.setFont(sortCombobxFont);
+        sortOrdercomboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int idx = ((JComboBox)e.getSource()).getSelectedIndex();
+                isAscending = idx == 0? true : false;
+                
+                if(sortIndex == 0) {
+                    InventoryListService.fillTable(list, table);
+                }else {
+                    InventoryListService.sortByHeaders(tmp, isAscending, headers[sortIndex-1]);
+                    InventoryListService.fillTable(tmp, table);
+                }
+            }
+        });
+        sortOrdercomboBox.setBounds(293, 175, 197, 27);
+        panelTop.add(sortOrdercomboBox);
     }
 
     // close
@@ -215,14 +255,16 @@ public class InventoryListUI extends JFrame {
 
     // Filter
     private void registerFilter() {
-        String placeholder = "Filter";
+        String placeholder = "Filter (type anything you want...)";
         txtFilter = new JTextField(placeholder);
+        txtFilter.setToolTipText("<html><h3 style =\"font-family : Arial; font-style: italic\">please type anything you want!"
+                + "<br/> please type the words using column order</h3></html>");
         txtFilter.setForeground(Color.GRAY);
         txtFilter.setBackground(topBG);
         txtFilter.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtFilter.setFont(txtFont);
         txtFilter.setCaretColor(topFG);
-        txtFilter.setBounds(270, 171, 177, 29);
+        txtFilter.setBounds(545, 111, 327, 29);
         panelTop.add(txtFilter);
         txtFilter.addFocusListener(new FocusListener() {
             @Override
@@ -230,7 +272,6 @@ public class InventoryListUI extends JFrame {
                 if (txtFilter.getText().equals(placeholder)) {
                     txtFilter.setText("");
                     txtFilter.setForeground(topFG);
-                    clearSelection();
                 }
             }
 
@@ -270,14 +311,16 @@ public class InventoryListUI extends JFrame {
 
     // Search
     private void registerSearch() {
-        String placeholder = "Search";
+        String placeholder = "SearchBy ID\\Vin\\Make\\Model\\...";
         txtSearch = new JTextField(placeholder);
         txtSearch.setForeground(Color.GRAY);
+        txtSearch.setToolTipText("<html><h3 style =\"font-family : Arial; font-style: italic\">please type anything you want!"
+                + "<br/> Need to type the complete words</h3></html>");
         txtSearch.setBackground(topBG);
         txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtSearch.setFont(txtFont);
         txtSearch.setCaretColor(topFG);
-        txtSearch.setBounds(57, 172, 177, 29);
+        txtSearch.setBounds(545, 65, 327, 29);
         panelTop.add(txtSearch);
         txtSearch.addFocusListener(new FocusListener() {
             @Override
@@ -285,7 +328,7 @@ public class InventoryListUI extends JFrame {
                 if (txtSearch.getText().equals(placeholder)) {
                     txtSearch.setText("");
                     txtSearch.setForeground(topFG);
-                    clearSelection();
+//                    clearSelection();
                 }
             }
 
@@ -323,176 +366,8 @@ public class InventoryListUI extends JFrame {
         });
     }
 
-    // Sort Function
-    private void registerSortCheckBox() {
-
-        ArrayList<Vehicle> tmp = new ArrayList<>(list);
-        checkBoxGroup = new ArrayList<JCheckBox>();
-        chckbxEngine = new JCheckBox("Engine");
-        chckbxEngine.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxEngine);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxEngine.setFont(checkbxFont);
-        chckbxEngine.setBackground(topBG);
-        chckbxEngine.setForeground(topFG);
-        chckbxEngine.setBounds(591, 75, 97, 29);
-        panelTop.add(chckbxEngine);
-
-        chckbxYear = new JCheckBox("Year");
-        chckbxYear.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxYear);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxYear.setFont(checkbxFont);
-        chckbxYear.setBackground(topBG);
-        chckbxYear.setForeground(topFG);
-        chckbxYear.setBounds(695, 75, 83, 29);
-        panelTop.add(chckbxYear);
-
-        chckbxId = new JCheckBox("Id");
-        chckbxId.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxId);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxId.setFont(checkbxFont);
-        chckbxId.setBackground(topBG);
-        chckbxId.setForeground(topFG);
-        chckbxId.setBounds(385, 75, 112, 29);
-        panelTop.add(chckbxId);
-        
-        chckbxExteriorColor = new JCheckBox("ExteriorColor");
-        chckbxExteriorColor.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxExteriorColor);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxExteriorColor.setFont(checkbxFont);
-        chckbxExteriorColor.setBackground(topBG);
-        chckbxExteriorColor.setForeground(topFG);
-        chckbxExteriorColor.setBounds(785, 111, 165, 29);
-        panelTop.add(chckbxExteriorColor);
-        
-        chckbxInteriorColor = new JCheckBox("InteriorColor");
-        chckbxInteriorColor.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxInteriorColor);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxInteriorColor.setFont(checkbxFont);
-        chckbxInteriorColor.setBackground(topBG);
-        chckbxInteriorColor.setForeground(topFG);
-        chckbxInteriorColor.setBounds(785, 75, 165, 29);
-        panelTop.add(chckbxInteriorColor);
-
-        chckbxPrice = new JCheckBox("Price");
-        chckbxPrice.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxPrice);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxPrice.setFont(checkbxFont);
-        chckbxPrice.setBackground(topBG);
-        chckbxPrice.setForeground(topFG);
-        chckbxPrice.setBounds(695, 111, 97, 29);
-        panelTop.add(chckbxPrice);
-
-        chckbxMake = new JCheckBox("Make");
-        chckbxMake.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxMake);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxMake.setFont(checkbxFont);
-        chckbxMake.setBackground(topBG);
-        chckbxMake.setForeground(topFG);
-        chckbxMake.setBounds(501, 75, 83, 29);
-        panelTop.add(chckbxMake);
-
-        chckbxCategory = new JCheckBox("Category");
-        chckbxCategory.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxCategory);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxCategory.setFont(checkbxFont);
-        chckbxCategory.setBackground(topBG);
-        chckbxCategory.setForeground(topFG);
-        chckbxCategory.setBounds(385, 111, 112, 29);
-        panelTop.add(chckbxCategory);
-
-        chckbxModel = new JCheckBox("Model");
-        chckbxModel.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxModel);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxModel.setFont(checkbxFont);
-        chckbxModel.setBackground(topBG);
-        chckbxModel.setForeground(topFG);
-        chckbxModel.setBounds(501, 111, 87, 29);
-        panelTop.add(chckbxModel);
-
-        chckbxBodytype = new JCheckBox("Type");
-        chckbxBodytype.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setSelectedCheckBox(chckbxBodytype);
-                fillTableAfterSorting(tmp);
-            }
-        });
-        chckbxBodytype.setFont(checkbxFont);
-        chckbxBodytype.setBackground(topBG);
-        chckbxBodytype.setForeground(topFG);
-        chckbxBodytype.setBounds(591, 111, 83, 29);
-        panelTop.add(chckbxBodytype);
-
-        checkBoxGroup.add(chckbxCategory);
-        checkBoxGroup.add(chckbxId);
-        checkBoxGroup.add(chckbxMake);
-        checkBoxGroup.add(chckbxModel);
-        checkBoxGroup.add(chckbxPrice);
-        checkBoxGroup.add(chckbxBodytype);
-        checkBoxGroup.add(chckbxEngine);
-        checkBoxGroup.add(chckbxYear);
-        checkBoxGroup.add(chckbxExteriorColor);
-        checkBoxGroup.add(chckbxInteriorColor);
-    }
-
     // ADD Table
     private void registerTable() {
-        String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price", "Photo","Vin","Entertainment"
-                ,"InteriorColor","ExteriorColor","Fueltype","Engine","Transmission","Battery","OptionalFeatures"};
         Object[][] cellData = null;
 
         model = new DefaultTableModel(cellData, headers) {
@@ -645,13 +520,19 @@ public class InventoryListUI extends JFrame {
     private void registerTitle() {
         labelTitleIcon = new JLabel("");
         labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
-        labelTitleIcon.setBounds(43, 11, 130, 129);
+        labelTitleIcon.setBounds(61, 12, 110, 129);
         panelTop.add(labelTitleIcon);
-        labelTitle = new JLabel("Inventory List Management");
+        labelTitle = new JLabel("Inventory List");
         labelTitle.setFont(titleFont);
         labelTitle.setForeground(topFG);
-        labelTitle.setBounds(199, 12, 481, 61);
+        labelTitle.setBounds(179, 38, 327, 56);
         panelTop.add(labelTitle);
+        
+        lblManagement = new JLabel("Management");
+        lblManagement.setForeground(topFG);
+        lblManagement.setFont(titleFont);
+        lblManagement.setBounds(221, 84, 247, 56);
+        panelTop.add(lblManagement);
     }
 
     // ADD DELETE EDIT BTN
@@ -662,7 +543,7 @@ public class InventoryListUI extends JFrame {
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getSelectedId() == null) {
+                if (getSelectedId() == null || getSelectedId().isEmpty()) {
                     InventoryEditUI tempui = new InventoryEditUI();
                 } else {
                     for (Vehicle v : list) {
@@ -685,8 +566,11 @@ public class InventoryListUI extends JFrame {
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // team 2: Lu Niu
-                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                if (getSelectedId() == null || getSelectedId().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Select An Item To Delete", "Error Message", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                }
             }
         });
         btnDelete.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
@@ -700,8 +584,11 @@ public class InventoryListUI extends JFrame {
         btnEdit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // team 2: Lu Niu
-                InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                if (getSelectedId() == null || getSelectedId().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please Select An Item To Edit", "Error Message", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                }
             }
         });
         btnEdit.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
@@ -738,52 +625,6 @@ public class InventoryListUI extends JFrame {
         panelTop.add(min);
     }
 
-    private void registerRadio() {
-        ArrayList<Vehicle> tmp = new ArrayList<>(list);
-        rdbtnHighToLow = new JRadioButton("Sort High To Low");
-        rdbtnHighToLow.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (rdbtnHighToLow.isSelected()) {
-                    isAscending = false;
-                    ArrayList<Vehicle> sortList = filter.size() == 0 ? tmp : filter;
-                    if (sortByCheckState(sortList)) {
-                        InventoryListService.fillTable(sortList, table);
-                    } else {
-                        InventoryListService.fillTable(list, table);
-                    }
-                }
-            }
-        });
-        rdbtnHighToLow.setFont(radioFont);
-        rdbtnHighToLow.setBounds(198, 75, 178, 29);
-        rdbtnHighToLow.setBackground(topBG);
-        rdbtnHighToLow.setForeground(topFG);
-
-        rdbtnLowToHigh = new JRadioButton("Sort Low To High");
-        rdbtnLowToHigh.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                isAscending = true;
-                ArrayList<Vehicle> sortList = filter.size() == 0 ? tmp : filter;
-                if (sortByCheckState(sortList)) {
-                    InventoryListService.fillTable(sortList, table);
-                } else {
-                    InventoryListService.fillTable(list, table);
-                }
-            }
-        });
-        rdbtnLowToHigh.setFont(radioFont);
-        rdbtnLowToHigh.setBounds(198, 111, 178, 29);
-        rdbtnLowToHigh.setBackground(topBG);
-        rdbtnLowToHigh.setForeground(topFG);
-
-        sortGroup = new ButtonGroup();
-        sortGroup.add(rdbtnHighToLow);
-        sortGroup.add(rdbtnLowToHigh);
-
-        panelTop.add(rdbtnHighToLow);
-        panelTop.add(rdbtnLowToHigh);
-    }
-
     // setDrag
     private void setDrag() {
         frame = (JFrame) contentPane.getParent().getParent().getParent();
@@ -803,74 +644,58 @@ public class InventoryListUI extends JFrame {
         });
     }
 
-    // clear Selected CheckBox;
-    private void clearSelection() {
-        for (JCheckBox cbx : checkBoxGroup) {
-            cbx.setSelected(false);
-        }
-    }
-
-    // set Selected to CheckBox;
-    private void setSelectedCheckBox(JCheckBox c) {
-        for (JCheckBox cbx : checkBoxGroup) {
-            if (cbx == c)
-                continue;
-            cbx.setSelected(false);
-        }
-    }
-
     // fill table using sort result;
-    private void fillTableAfterSorting(ArrayList<Vehicle> tmp) {
-        ArrayList<Vehicle> sortList = filter.size() == 0 ? tmp : filter;
-        if (sortByCheckState(sortList)) {
-            InventoryListService.fillTable(sortList, table);
-        } else {
-            InventoryListService.fillTable(list, table);
-        }
-    }
+//    private void fillTableAfterSorting(ArrayList<Vehicle> tmp) {
+//        ArrayList<Vehicle> sortList = filter.size() == 0 ? tmp : filter;
+//        if (sortByCheckState(sortList)) {
+//            InventoryListService.fillTable(sortList, table);
+//        } else {
+//            InventoryListService.fillTable(list, table);
+//        }
+//    }
 
  // check State
-    private boolean sortByCheckState(ArrayList<Vehicle> sortList) {
-        if (chckbxEngine.isSelected()) {
-            InventoryListService.sortByEngine(sortList, isAscending);
-            return true;
-
-        } else if (chckbxCategory.isSelected()) {
-            InventoryListService.sortByCategory(sortList, isAscending);
-            return true;
-
-        } else if (chckbxId.isSelected()) {
-            InventoryListService.sortById(sortList, isAscending);
-            return true;
-
-        } else if (chckbxMake.isSelected()) {
-            InventoryListService.sortByMake(sortList, isAscending);
-            return true;
-
-        } else if (chckbxModel.isSelected()) {
-            InventoryListService.sortByModel(sortList, isAscending);
-            return true;
-
-        } else if (chckbxPrice.isSelected()) {
-            InventoryListService.sortByPrice(sortList, isAscending);
-            return true;
-
-        } else if (chckbxBodytype.isSelected()) {
-            InventoryListService.sortByType(sortList, isAscending);
-            return true;
-
-        } else if (chckbxYear.isSelected()) {
-            InventoryListService.sortByYear(sortList, isAscending);
-            return true;
-        } else if (chckbxExteriorColor.isSelected()) {
-            InventoryListService.sortByExteriorColor(sortList, isAscending);
-            return true;
-        } else if (chckbxInteriorColor.isSelected()) {
-            InventoryListService.sortByInteriorColor(sortList, isAscending);
-            return true;
-        } 
-        return false;
-    }
+//    private boolean sortByCheckState(ArrayList<Vehicle> sortList) {
+//        if (chckbxEngine.isSelected()) {
+//            InventoryListService.sortByEngine(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxCategory.isSelected()) {
+//            InventoryListService.sortByCategory(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxId.isSelected()) {
+//            InventoryListService.sortById(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxMake.isSelected()) {
+//            InventoryListService.sortByMake(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxModel.isSelected()) {
+//            InventoryListService.sortByModel(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxPrice.isSelected()) {
+//            InventoryListService.sortByPrice(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxBodytype.isSelected()) {
+//            InventoryListService.sortByType(sortList, isAscending);
+//            return true;
+//
+//        } else if (chckbxYear.isSelected()) {
+//            InventoryListService.sortByYear(sortList, isAscending);
+//            return true;
+//        } else if (chckbxExteriorColor.isSelected()) {
+//            InventoryListService.sortByExteriorColor(sortList, isAscending);
+//            return true;
+//        } else if (chckbxInteriorColor.isSelected()) {
+//            InventoryListService.sortByInteriorColor(sortList, isAscending);
+//            return true;
+//        } 
+//        return false;
+//    }
 
     public String getSelectedId() {
         return selectedId;
@@ -954,17 +779,33 @@ public class InventoryListUI extends JFrame {
 
         public void mouseClicked(MouseEvent e) {
             int selectedRow = table.getSelectedRow();
-            selectedId = (String) model.getValueAt(selectedRow, 0);
-            System.out.println(selectedId);
+            if(selectedId.isEmpty()) {
+                selectedId = (String) model.getValueAt(selectedRow, 0);
+            }else {
+                newSelectedId = (String) model.getValueAt(selectedRow, 0);
+            }
+            
+            if(!newSelectedId.isEmpty() && !newSelectedId.equals(selectedId)) {
+                selectedId = newSelectedId;
+                newSelectedId = "";
+            }
+            
+            if(selectedId.equals(newSelectedId)) {
+                table.clearSelection();
+                selectedId = "";
+                newSelectedId = "";
+                return;
+            }
+            
             Point p = e.getPoint();
             int c = table.columnAtPoint(p);
             if(c != 9){
                 return;
             }
             try {
-//                String s = table.getValueAt(selectedRow, c).toString();
-//                URL url = new URL(s.split("\"")[1]);
-//                Desktop.getDesktop().browse(url.toURI());
+                String s = table.getValueAt(selectedRow, c).toString();
+                URL url = new URL(s.split("\"")[1]);
+                Desktop.getDesktop().browse(url.toURI());
             } catch (Exception ex) {
                 Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -985,6 +826,7 @@ public class InventoryListUI extends JFrame {
     
     // team 2: Lu Niu
     private File file;
+    private JLabel lblManagement;
     public void refreshTable() {
         list = InventoryListService.readAndGetVehicles(file);
         InventoryListService.fillTable(list, table);
