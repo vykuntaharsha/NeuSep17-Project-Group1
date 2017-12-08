@@ -658,7 +658,7 @@ public class InventoryListUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (getSelectedId() == null) {
-                    InventoryEditUI tempui = new InventoryEditUI();
+                    InventoryEditUI tempui = new InventoryEditUI(null, that);
                 } else {
                     for (Vehicle v : list) {
                         if (v.getID().equals(getSelectedId())) {
@@ -980,8 +980,8 @@ public class InventoryListUI extends JFrame {
     
     // team 2: Lu Niu
     private File file;
-    public void refreshTable() {
-        list = InventoryListService.readAndGetVehicles(file);
+    public void refreshTable(Vehicle v) {
+        list.add(v);
         InventoryListService.fillTable(list, table);
     }
 }
