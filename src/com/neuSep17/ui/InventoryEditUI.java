@@ -1,16 +1,12 @@
 package com.neuSep17.ui;
 
-import com.neuSep17.dao.PictureManager;
-
 /**
  * This function is for dealers to add/edit/delete vehicle information.
  * @author YuXin Li, Chun Yang, Lu Niu, Yuanyuan Jin, Bin Shi (Team Lead)
  */
 
-import com.neuSep17.dao.VehicleImple;
-import com.neuSep17.dto.Category;
-import com.neuSep17.dto.Vehicle;
-
+import com.neuSep17.dao.*;
+import com.neuSep17.dto.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -26,7 +22,6 @@ public class InventoryEditUI extends JFrame {
     private JButton saveButton;
     private JButton clearButton;
     private JButton cancelButton;
-    private static final boolean DEBUG=true;
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
@@ -121,7 +116,7 @@ public class InventoryEditUI extends JFrame {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     try {
-                        // save                                                                                               // method;
+                        // save method;
                         saveVehicle(vehicle);
                     } catch (MalformedURLException e1) {
                         // TODO Auto-generated catch block
@@ -471,7 +466,9 @@ public class InventoryEditUI extends JFrame {
                         loadPhoto(url);
                     } catch (MalformedURLException e1) {
                         System.out.println("Entered invalid URL:"+input);
-                        if(DEBUG) e1.printStackTrace();
+                        if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
             }
@@ -1066,7 +1063,7 @@ public class InventoryEditUI extends JFrame {
     private void loadPhoto(URL photoURL) {
         boolean noPhoto = true;
         if (photoURL != null) {
-            Image image = PictureManager.getVehiclePhoto(photoURL);
+            Image image = vehicle.getPhoto();
             if (image != null) {
                 ImageIcon icon = new ImageIcon(image);
                 if (icon != null){
