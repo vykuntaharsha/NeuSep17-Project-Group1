@@ -479,8 +479,14 @@ public class InventoryEditUI extends JFrame {
     private class VIDListener implements KeyListener {
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    id.setTrue();
+                    return;
+                }
+                return;
+            }
         }
-
         @Override
         public void keyReleased(KeyEvent e) {
         }
@@ -543,6 +549,13 @@ public class InventoryEditUI extends JFrame {
     private class PriceListener implements KeyListener {
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    price.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -630,6 +643,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    webId.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -677,6 +697,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    category.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -743,6 +770,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    year.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -779,8 +813,8 @@ public class InventoryEditUI extends JFrame {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
                     && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {// invalid input(only
-                                                                                               // letters and special
-                                                                                               // case)
+                // letters and special
+                // case)
                 make.setFalse();
                 e.consume();
             }
@@ -804,6 +838,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    make.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -866,6 +907,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    type.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
