@@ -11,10 +11,10 @@ import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Category;
 import com.neuSep17.dto.Vehicle;
 
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -95,7 +95,7 @@ public class InventoryEditUI extends JFrame {
         makeThisVisible();
         this.listUI = listUI;
     }
-
+    
     private void createCompoments() {
         id = new Component("ID", 10, "Numeric value of size 10.");
         webId = new Component("WebID", 20, "Valid letter input split by \"-\".");
@@ -120,7 +120,13 @@ public class InventoryEditUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                    saveVehicle(vehicle);// save                                                                                               // method;
+                    try {
+                        // save                                                                                               // method;
+                        saveVehicle(vehicle);
+                    } catch (MalformedURLException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                     dispose();
                 }
             }
@@ -462,7 +468,6 @@ public class InventoryEditUI extends JFrame {
                 if (input != null && !input.isEmpty()) {
                     try {
                         URL url = new URL(input.trim());
-                        vehicle.setPhotoURL(url);
                         loadPhoto(url);
                     } catch (MalformedURLException e1) {
                         System.out.println("Entered invalid URL:"+input);
@@ -478,8 +483,14 @@ public class InventoryEditUI extends JFrame {
     private class VIDListener implements KeyListener {
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    id.setTrue();
+                    return;
+                }
+                return;
+            }
         }
-
         @Override
         public void keyReleased(KeyEvent e) {
         }
@@ -542,6 +553,13 @@ public class InventoryEditUI extends JFrame {
     private class PriceListener implements KeyListener {
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    price.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -629,6 +647,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    webId.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -676,6 +701,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    category.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -742,6 +774,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    year.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -778,8 +817,8 @@ public class InventoryEditUI extends JFrame {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
                     && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {// invalid input(only
-                                                                                               // letters and special
-                                                                                               // case)
+                // letters and special
+                // case)
                 make.setFalse();
                 e.consume();
             }
@@ -803,6 +842,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    make.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -865,6 +911,13 @@ public class InventoryEditUI extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if(e.isMetaDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    type.setTrue();
+                    return;
+                }
+                return;
+            }
         }
 
         @Override
@@ -945,6 +998,14 @@ public class InventoryEditUI extends JFrame {
             return true;
         }
     }
+    
+    public boolean canSave(){
+        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
+                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot)
+            return true;
+        else
+            return false;
+    }
 
     private String[] categories = { "NEW", "USED", "CERTIFIED" };
     private String[] makes = { "All Make", "Acura", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti", "Buick",
@@ -1005,7 +1066,7 @@ public class InventoryEditUI extends JFrame {
     private void loadPhoto(URL photoURL) {
         boolean noPhoto = true;
         if (photoURL != null) {
-            Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
+            Image image = PictureManager.getVehiclePhoto(photoURL);
             if (image != null) {
                 ImageIcon icon = new ImageIcon(image);
                 if (icon != null){
@@ -1015,13 +1076,12 @@ public class InventoryEditUI extends JFrame {
             }
         }
         if(noPhoto) photoLabel.setText("No Photo");
+        else photoLabel.setText(photoURL.toString());
     }
 
-    public boolean saveVehicle(Vehicle vehicle) {
+    public boolean saveVehicle(Vehicle vehicle) throws MalformedURLException {
         this.validateTextFields();
-        if (VIDSuccessOrNot && PriceSuccessOrNot && WebIDSuccessOrNot && CategorySuccessOrNot && YearSuccessOrNot
-                && MakeSuccessOrNot && TypeSuccessOrNot && ModelSuccessOrNot && TrimSuccessOrNot) {
-            
+        if (canSave()) {
             Vehicle v = new Vehicle();
             String idText = this.id.getInputTextField().getText();
             String webIdText = this.webId.getInputTextField().getText();
@@ -1034,12 +1094,16 @@ public class InventoryEditUI extends JFrame {
             v.setTrim(this.trim.getInputTextField().getText());
             v.setBodyType(this.type.getInputTextField().getText());
             v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+            URL url;
             try {
-                v.setPhotoURL(new URL("https://vignette.wikia.nocookie.net/arthur/images/a/a7/No_Image.jpg"));
+                // This will throw exception in case of no photo.
+                url = new URL(photoLabel.getText());
             } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
+                url = new URL("https://vignette.wikia.nocookie.net/arthur/images/a/a7/No_Image.jpg");
             }
+            
+            v.setPhotoURL(url);
             v.setSortingField("sF");
             if(vehicle != null) {
                 v.setEntertainment(vehicle.getEntertainment());
