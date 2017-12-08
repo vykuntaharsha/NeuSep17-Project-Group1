@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class UI {
+public class IncentiveUI {
 
     int screenWidth;
     int screenHeight;
 
-    public UI() {
+    public IncentiveUI() {
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
         screenWidth = screenSize.width;
