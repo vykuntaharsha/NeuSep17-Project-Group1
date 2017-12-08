@@ -48,7 +48,6 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
@@ -77,7 +76,6 @@ public class InventoryListUI extends JFrame {
     private JButton btnEdit;
     private JButton btnDelete;
     private JLabel labelBG;
-    private JLabel labelTitle;
     private JLabel labelTitleIcon;
     private JLabel lblSortby;
 
@@ -99,7 +97,6 @@ public class InventoryListUI extends JFrame {
     private final Font sortCombobxFont = new Font("Arial", Font.ITALIC, 15);
     private final Font txtFont = new Font("Segoe UI Historic", Font.PLAIN, 22);
     private final Font tableHeaderFont = new Font("Segoe UI Historic", Font.PLAIN, 15);
-    private final Font titleFont = new Font("Showcard Gothic", Font.PLAIN, 33);
 
     private final String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price", "Photo","Vin","Entertainment"
             ,"InteriorColor","ExteriorColor","Fueltype","Engine","Transmission","Battery","OptionalFeatures"};
@@ -520,19 +517,8 @@ public class InventoryListUI extends JFrame {
     private void registerTitle() {
         labelTitleIcon = new JLabel("");
         labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
-        labelTitleIcon.setBounds(39, 15, 110, 129);
+        labelTitleIcon.setBounds(25, 15, 438, 129);
         panelTop.add(labelTitleIcon);
-        labelTitle = new JLabel("Inventory List");
-        labelTitle.setFont(titleFont);
-        labelTitle.setForeground(topFG);
-        labelTitle.setBounds(157, 41, 282, 48);
-        panelTop.add(labelTitle);
-        
-        lblManagement = new JLabel("Management");
-        lblManagement.setForeground(topFG);
-        lblManagement.setFont(titleFont);
-        lblManagement.setBounds(198, 97, 225, 42);
-        panelTop.add(lblManagement);
     }
 
     // ADD DELETE EDIT BTN
@@ -773,7 +759,6 @@ public class InventoryListUI extends JFrame {
     
     // team 2: Lu Niu
     private File file;
-    private JLabel lblManagement;
     public void refreshTable() {
         list = InventoryListService.readAndGetVehicles(file);
         InventoryListService.fillTable(list, table);
