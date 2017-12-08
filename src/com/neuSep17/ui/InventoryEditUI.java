@@ -11,10 +11,10 @@ import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Category;
 import com.neuSep17.dto.Vehicle;
 
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -95,7 +95,7 @@ public class InventoryEditUI extends JFrame {
         makeThisVisible();
         this.listUI = listUI;
     }
-
+    
     private void createCompoments() {
         id = new Component("ID", 10, "Numeric value of size 10.");
         webId = new Component("WebID", 20, "Valid letter input split by \"-\".");
@@ -463,7 +463,6 @@ public class InventoryEditUI extends JFrame {
                 if (input != null && !input.isEmpty()) {
                     try {
                         URL url = new URL(input.trim());
-                        vehicle.setPhotoURL(url);
                         loadPhoto(url);
                     } catch (MalformedURLException e1) {
                         System.out.println("Entered invalid URL:"+input);
@@ -1068,6 +1067,7 @@ public class InventoryEditUI extends JFrame {
             }
         }
         if(noPhoto) photoLabel.setText("No Photo");
+        else photoLabel.setText(photoURL.toString());
     }
 
     public boolean saveVehicle(String prevWebID, String prevVID) {
