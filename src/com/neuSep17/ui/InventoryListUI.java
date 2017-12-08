@@ -677,21 +677,24 @@ public class InventoryListUI extends JFrame {
 
         btnDelete = new JButton("Delete");
         btnDelete.setBorderPainted(false);
-         //team2: yuanyuan jin start
+              //team2: yuanyuan jin start
         btnDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                VehicleImple service = new VehicleImple() ;
-                        int reply = JOptionPane.showConfirmDialog(null, "Confirm delete ?", "Delete", JOptionPane.YES_NO_OPTION);
-                        if (reply == JOptionPane.YES_OPTION) {
+                VehicleImple service = new VehicleImple() ;             
+                        int clickButton = JOptionPane.showConfirmDialog(null, "Confirm delete ?", "Delete", JOptionPane.YES_NO_OPTION);
+                        if (clickButton == JOptionPane.YES_OPTION) {
                          //delete selected data
                             for (Vehicle v : list) {
                                 if (v.getID().equals(getSelectedId())) {
                                     service.deleteVehicle(v.getWebID(),v.getID());                               
                                 }                               
                             }                       
-                        }                
-            }                    
+                        } 
+                        //refreshTable
+                         refreshTable();
+            }       
+
                 });
         
        //team 2 Yuanyuan jin end
