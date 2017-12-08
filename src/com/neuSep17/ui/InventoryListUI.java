@@ -176,7 +176,7 @@ public class InventoryListUI extends JFrame {
         lblSortby = new JLabel("SortBy:");
         lblSortby.setFont(txtFont);
         lblSortby.setForeground(topFG);
-        lblSortby.setBounds(55, 174, 94, 25);
+        lblSortby.setBounds(39, 177, 94, 25);
         panelTop.add(lblSortby);
         
         ArrayList<Vehicle> tmp = new ArrayList<>(list);
@@ -196,7 +196,7 @@ public class InventoryListUI extends JFrame {
                 }
             }
         });
-        sortComboBox.setBounds(145, 175, 122, 27);
+        sortComboBox.setBounds(129, 178, 122, 27);
         panelTop.add(sortComboBox);
         
         //sortOrderBox
@@ -217,7 +217,7 @@ public class InventoryListUI extends JFrame {
                 }
             }
         });
-        sortOrdercomboBox.setBounds(293, 175, 197, 27);
+        sortOrdercomboBox.setBounds(277, 178, 197, 27);
         panelTop.add(sortOrdercomboBox);
     }
 
@@ -264,7 +264,7 @@ public class InventoryListUI extends JFrame {
         txtFilter.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtFilter.setFont(txtFont);
         txtFilter.setCaretColor(topFG);
-        txtFilter.setBounds(545, 111, 327, 29);
+        txtFilter.setBounds(533, 100, 326, 40);
         panelTop.add(txtFilter);
         txtFilter.addFocusListener(new FocusListener() {
             @Override
@@ -320,7 +320,7 @@ public class InventoryListUI extends JFrame {
         txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtSearch.setFont(txtFont);
         txtSearch.setCaretColor(topFG);
-        txtSearch.setBounds(545, 65, 327, 29);
+        txtSearch.setBounds(533, 54, 326, 40);
         panelTop.add(txtSearch);
         txtSearch.addFocusListener(new FocusListener() {
             @Override
@@ -520,18 +520,18 @@ public class InventoryListUI extends JFrame {
     private void registerTitle() {
         labelTitleIcon = new JLabel("");
         labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
-        labelTitleIcon.setBounds(61, 12, 110, 129);
+        labelTitleIcon.setBounds(39, 15, 110, 129);
         panelTop.add(labelTitleIcon);
         labelTitle = new JLabel("Inventory List");
         labelTitle.setFont(titleFont);
         labelTitle.setForeground(topFG);
-        labelTitle.setBounds(179, 38, 327, 56);
+        labelTitle.setBounds(157, 41, 282, 48);
         panelTop.add(labelTitle);
         
         lblManagement = new JLabel("Management");
         lblManagement.setForeground(topFG);
         lblManagement.setFont(titleFont);
-        lblManagement.setBounds(221, 84, 247, 56);
+        lblManagement.setBounds(198, 97, 225, 42);
         panelTop.add(lblManagement);
     }
 
@@ -558,7 +558,7 @@ public class InventoryListUI extends JFrame {
         btnAdd.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnAdd.setForeground(new Color(255, 255, 255));
         btnAdd.setBackground(btnColor);
-        btnAdd.setBounds(545, 165, 110, 40);
+        btnAdd.setBounds(533, 165, 120, 40);
         panelTop.add(btnAdd);
 
         btnDelete = new JButton("Delete");
@@ -576,7 +576,7 @@ public class InventoryListUI extends JFrame {
         btnDelete.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnDelete.setForeground(new Color(255, 255, 255));
         btnDelete.setBackground(btnColor);
-        btnDelete.setBounds(805, 165, 110, 40);
+        btnDelete.setBounds(803, 165, 120, 40);
         panelTop.add(btnDelete);
 
         btnEdit = new JButton("Edit");
@@ -594,7 +594,7 @@ public class InventoryListUI extends JFrame {
         btnEdit.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
         btnEdit.setForeground(new Color(255, 255, 255));
         btnEdit.setBackground(btnColor);
-        btnEdit.setBounds(675, 165, 110, 40);
+        btnEdit.setBounds(668, 165, 120, 40);
         panelTop.add(btnEdit);
     }
 
