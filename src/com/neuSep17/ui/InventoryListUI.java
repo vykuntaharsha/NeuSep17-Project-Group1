@@ -644,59 +644,6 @@ public class InventoryListUI extends JFrame {
         });
     }
 
-    // fill table using sort result;
-//    private void fillTableAfterSorting(ArrayList<Vehicle> tmp) {
-//        ArrayList<Vehicle> sortList = filter.size() == 0 ? tmp : filter;
-//        if (sortByCheckState(sortList)) {
-//            InventoryListService.fillTable(sortList, table);
-//        } else {
-//            InventoryListService.fillTable(list, table);
-//        }
-//    }
-
- // check State
-//    private boolean sortByCheckState(ArrayList<Vehicle> sortList) {
-//        if (chckbxEngine.isSelected()) {
-//            InventoryListService.sortByEngine(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxCategory.isSelected()) {
-//            InventoryListService.sortByCategory(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxId.isSelected()) {
-//            InventoryListService.sortById(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxMake.isSelected()) {
-//            InventoryListService.sortByMake(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxModel.isSelected()) {
-//            InventoryListService.sortByModel(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxPrice.isSelected()) {
-//            InventoryListService.sortByPrice(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxBodytype.isSelected()) {
-//            InventoryListService.sortByType(sortList, isAscending);
-//            return true;
-//
-//        } else if (chckbxYear.isSelected()) {
-//            InventoryListService.sortByYear(sortList, isAscending);
-//            return true;
-//        } else if (chckbxExteriorColor.isSelected()) {
-//            InventoryListService.sortByExteriorColor(sortList, isAscending);
-//            return true;
-//        } else if (chckbxInteriorColor.isSelected()) {
-//            InventoryListService.sortByInteriorColor(sortList, isAscending);
-//            return true;
-//        } 
-//        return false;
-//    }
-
     public String getSelectedId() {
         return selectedId;
     }
