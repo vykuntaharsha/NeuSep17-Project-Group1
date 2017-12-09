@@ -276,7 +276,7 @@ public class InventoryListUI extends JFrame {
         txtFilter.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtFilter.setFont(txtFont);
         txtFilter.setCaretColor(topFG);
-        txtFilter.setBounds(533, 100, 326, 40);
+        txtFilter.setBounds(533, 100, 360, 40);
         panelTop.add(txtFilter);
         txtFilter.addFocusListener(new FocusListener() {
             @Override
@@ -332,7 +332,7 @@ public class InventoryListUI extends JFrame {
         txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtSearch.setFont(txtFont);
         txtSearch.setCaretColor(topFG);
-        txtSearch.setBounds(533, 54, 326, 40);
+        txtSearch.setBounds(533, 54, 360, 40);
         panelTop.add(txtSearch);
         txtSearch.addFocusListener(new FocusListener() {
             @Override
@@ -532,7 +532,7 @@ public class InventoryListUI extends JFrame {
     private void registerTitle() {
         labelTitleIcon = new JLabel("");
         labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
-        labelTitleIcon.setBounds(25, 15, 438, 129);
+        labelTitleIcon.setBounds(30, 15, 438, 129);
         panelTop.add(labelTitleIcon);
     }
 
@@ -544,7 +544,7 @@ public class InventoryListUI extends JFrame {
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getSelectedId() == null) {
+                if (getSelectedId() == null || getSelectedId().isEmpty()) {
                     InventoryEditUI tempui = new InventoryEditUI(null, that);
                 } else {
                     for (Vehicle v : list) {
