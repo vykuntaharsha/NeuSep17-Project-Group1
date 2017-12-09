@@ -10,7 +10,11 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -158,7 +162,7 @@ public class ConsumerApplication extends IncentiveUI {
     }
 
     private JLabel pictures() throws IOException{
-        JLabel picLabel = createPicture("picture\\ConsumerHeaderImage.png");
+        JLabel picLabel = createPicture("ConsumerHeaderImage.png");
         return picLabel;
     }
 }
