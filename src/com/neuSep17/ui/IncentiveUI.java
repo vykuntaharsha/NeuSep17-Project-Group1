@@ -89,7 +89,8 @@ public class IncentiveUI {
 
     public ImageIcon createImageIcon(String path) {
         String rootPath = Paths.get("").toAbsolutePath().toString();
-        rootPath+= File.separator+"NeuSep17-Project-Group1-master"+File.separator+"picture"+File.separator+path;
+//        rootPath+= File.separator+"NeuSep17-Project-Group1-master"+File.separator+"picture"+File.separator+path;
+        rootPath+= File.separator+"picture"+File.separator+path;
 
         return new ImageIcon(rootPath);
     }
