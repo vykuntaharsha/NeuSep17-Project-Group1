@@ -563,9 +563,10 @@ public class InventoryListUI extends JFrame {
                             JOptionPane.YES_NO_OPTION);
                     if (clickButton == JOptionPane.YES_OPTION) {
                         // delete selected data
-                        for (Vehicle v : list) {
-                            if (v.getID().equals(getSelectedId())) {
-                                service.deleteVehicle(v.getWebID(), v.getID());
+                        for(int i=0;i<list.size();i++){
+                            if(list.get(i).getID().equals(getSelectedId())){
+                                service.deleteVehicle(list.get(i).getWebID(), list.get(i).getID());
+                                list.remove(i);// remove the vehicle from the list object
                             }
                         }
                     }
