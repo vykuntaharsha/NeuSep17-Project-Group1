@@ -1,7 +1,9 @@
-package com.neuSep17.ui;
+package com.neuSep17.main;
 
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.service.DealerImpleService;
+import com.neuSep17.ui.InventoryListUI;
+import com.neuSep17.ui.ManageIncentivesUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DealerScreen {
+public class DealerApplication {
 
     private JFrame mainFrame;
     private JLabel headerLabel;
@@ -20,7 +22,7 @@ public class DealerScreen {
     private JComboBox<Dealer> dealersComboBox;
 
     public static void main(String[] args) throws IOException {
-        DealerScreen welcome = new DealerScreen();
+        DealerApplication welcome = new DealerApplication();
         welcome.createUI();
     }
 
@@ -61,7 +63,7 @@ public class DealerScreen {
     }
 
     private void prepareGUI() throws IOException {
-        mainFrame = new JFrame("Welcome Dealer");
+        mainFrame = new JFrame("Welcome Dealer !");
         mainFrame.setSize(2500,2000);
         mainFrame.setLayout(new GridLayout(3, 1));
 
@@ -78,14 +80,16 @@ public class DealerScreen {
         }
 
         JPanel imageNestedPanel = new JPanel();
-        imageNestedPanel.setLayout(new GridLayout(2,1));
+        imageNestedPanel.setLayout(new GridLayout(4,1));
         JLabel imageLabel = pictures();
+        JLabel imageLabel1  = pictures1();
 
         headerLabel = new JLabel("Welcome Dealer", JLabel.CENTER);
         headerLabel.setFont(new Font("Arial", Font.PLAIN, 50));
 
         imageNestedPanel.add(imageLabel);
         imageNestedPanel.add(headerLabel);
+        imageNestedPanel.add(imageLabel1);
 
         JPanel comboBoxPanel = new JPanel();
         dealersComboBox = getDealersComboBox();
@@ -93,6 +97,8 @@ public class DealerScreen {
 
         statusLabel = new JLabel("", JLabel.CENTER);
         statusLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+
+
 
         controlPanel = new JPanel();
         controlPanel.setLayout(new FlowLayout());
@@ -156,7 +162,7 @@ public class DealerScreen {
                 String dealerId = selectedDealer.getId();
                 System.out.println("Selected dealer id: "+dealerId+","+selectedDealer.getName()+","+selectedDealer.getEmailId());
                 try {
-                    ManageIncentivesScreen manageIncentivesScreen = new ManageIncentivesScreen(dealerId);
+                    ManageIncentivesUI manageIncentivesUI = new ManageIncentivesUI(dealerId);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -215,11 +221,16 @@ public class DealerScreen {
 
 
     private JLabel pictures() throws IOException{
-        JLabel picLabel = new JLabel(new ImageIcon("C:\\Users\\diksh\\Desktop\\NeuSep17-Project-Group1-master-src\\NeuSep17-Project-Group1-master\\src\\com\\neuSep17\\ui\\asset\\CarDealer.jpg"));
-        picLabel.setSize(new Dimension(5000, 2000));
+        JLabel picLabel = new JLabel(new ImageIcon("picture\\DealerHeaderImage1.png"));
+        picLabel.setSize(new Dimension(7000, 4000));
 
         return picLabel;
     }
+
+    private JLabel pictures1() throws IOException{
+        JLabel picLabel1 = new JLabel(new ImageIcon("picture\\DealerHeaderImage2.png"));
+        picLabel1.setSize(new Dimension(5000, 3000));
+
+        return picLabel1;
+    }
 }
-
-
