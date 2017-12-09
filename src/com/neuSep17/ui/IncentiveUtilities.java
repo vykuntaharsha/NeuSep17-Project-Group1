@@ -289,9 +289,9 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
     }
 
     IncentiveUI ui = new IncentiveUI();
-    IncentiveScreenValidation  v = new IncentiveScreenValidation();
+    IncentiveScreenValidation v = new IncentiveScreenValidation();
     //        FileWriting fw = new FileWriting();
-    //DealerScreen d = new DealerScreen();                 //wait for implementation of dealerScreen
+    //DealerApplication d = new DealerApplication();                 //wait for implementation of dealerScreen
     private JPanel dialogPane;
     private JPanel contentPanel;
     private JLabel addIncentiveLabel;
