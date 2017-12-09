@@ -699,11 +699,11 @@ public class InventoryListUI extends JFrame {
             if (row % 2 == 1)
                 setBackground(tableOddRow);
             //link style
-            if (row == this.row && column == this.col && column == 9) {
+           /* if (row == this.row && column == this.col && column == 9) {
                     this.setForeground(Color.RED);
                     table.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     return this;
-            }
+            }*/
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
 
@@ -761,7 +761,8 @@ public class InventoryListUI extends JFrame {
                 return;
             }
             
-            Point p = e.getPoint();
+            //link to web
+           /* Point p = e.getPoint();
             int c = table.columnAtPoint(p);
             if(c != 9){
                 return;
@@ -772,7 +773,7 @@ public class InventoryListUI extends JFrame {
                 Desktop.getDesktop().browse(url.toURI());
             } catch (Exception ex) {
                 Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
 
         @Override
