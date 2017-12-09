@@ -530,7 +530,7 @@ public class InventoryListUI extends JFrame {
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getSelectedId() == null) {
+                if (getSelectedId() == "" || getSelectedId() == null) { 
                     InventoryEditUI tempui = new InventoryEditUI(null, that);
                 } else {
                     for (Vehicle v : list) {
