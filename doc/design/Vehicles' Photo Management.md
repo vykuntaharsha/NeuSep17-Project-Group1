@@ -1,14 +1,20 @@
-# Design of Displaying and Update Vehicle's Photo Information
-
-## Function Description
+# Function Description
 
 This function is to get the vehicle picture from a URL string of the vehicle object, which could be either cached in the local file system or fetched from the remote if it is not existed locally.
 
- The methods signatures are as below.
+The methods signatures are as below in the `vehicle.java` file.
 
-`public static BufferedImage getVehiclePhoto(URL photoURL)`
+```java
+//get the actual image from the photo library or the Internet (team 2: Bin Shi)
+//Note: if this image is not valid, return null instead.
+public Image getPhoto(){
+  return PictureManager.getVehiclePhoto(photoUrl);
+}
+```
 
-## Process Flow
+And the main implementation is in `src/com/neuSep17/dao/PictureManager.java`
+
+# Process Flow
 
 ## Display Photo
 
@@ -25,11 +31,8 @@ This function is to get the vehicle picture from a URL string of the vehicle obj
 # Optimization
 
 * Later photo loading. Use `SwingUtilities.invokeLater()` method to display a picture at a later time to avoid blocking UI loading.
-
-# Furture Features
-
-- initilize whole picture libarary at the first time when the program launch
-- read the property `INIT_PICTURE_LIBARAY` from the configuration file
+* Use Java 8's paralle stream feature to initialize the photo libaray. (Reduce the first loadin time from 10min to xxx. )
+* Read the property `INIT_PICTURE_LIBARAY` from the configuration file.
 
 # Source Code
 
