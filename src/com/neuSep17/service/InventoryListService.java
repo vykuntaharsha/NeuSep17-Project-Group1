@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,27 +53,27 @@ public class InventoryListService {
     public static ArrayList<Vehicle> search(ArrayList<Vehicle> filter, ArrayList<Vehicle> list, JTextField txtSearch) {
         filter = new ArrayList<>();
         String str = txtSearch.getText();
-        str = str.toUpperCase();
+        str = str.replaceAll(" ", "").toUpperCase();
 
         for (Vehicle item : list) {
             HashSet<String> dic = new HashSet<>();
-            dic.add(item.getID().toUpperCase());
-            dic.add(item.getWebID().toUpperCase());
-            dic.add(item.getCategory().toString().toUpperCase());
-            dic.add(item.getMake().toUpperCase());
-            dic.add(item.getModel().toUpperCase());
-            dic.add(item.getTrim().toUpperCase());
-            dic.add(item.getBodyType().toUpperCase());
-            dic.add(String.valueOf(item.getYear()).toUpperCase());
-            dic.add(item.getBattery().toUpperCase());
-            dic.add(item.getEngine().toUpperCase());
-            dic.add(item.getExteriorColor().toUpperCase());
-            dic.add(item.getInteriorColor().toUpperCase());
-            dic.add(item.getFuelType().toUpperCase());
-            dic.add(item.getOptionalFeatures().toUpperCase());
-            dic.add(item.getTransmission().toUpperCase());
-            dic.add(item.getVin().toUpperCase());
-            dic.add(item.getEntertainment().toUpperCase());
+            dic.add(item.getID().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getWebID().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getCategory().toString().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getMake().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getModel().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getTrim().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getBodyType().replaceAll(" ", "").toUpperCase());
+            dic.add(String.valueOf(item.getYear()).replaceAll(" ", "").toUpperCase());
+            dic.add(item.getBattery().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getEngine().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getExteriorColor().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getInteriorColor().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getFuelType().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getOptionalFeatures().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getTransmission().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getVin().replaceAll(" ", "").toUpperCase());
+            dic.add(item.getEntertainment().replaceAll(" ", "").toUpperCase());
             boolean[] dp = new boolean[str.length() + 1];
             dp[0] = true;
             for (int i = 1; i <= str.length(); i++) {
@@ -109,8 +110,8 @@ public class InventoryListService {
     public static void fillTable(ArrayList<Vehicle> list, JTable table) {
         DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
         tableModel.setRowCount(0);
-
-        for (Vehicle vehicle : list) {
+      
+        for(Vehicle vehicle : list) {
             Object[] arr = new Object[19];
             arr[0] = vehicle.getID();
             arr[1] = vehicle.getWebID();
@@ -121,15 +122,13 @@ public class InventoryListService {
             arr[6] = vehicle.getTrim();
             arr[7] = vehicle.getBodyType();
             arr[8] = String.valueOf(vehicle.getPrice());
-            //team2 image method;
-            // Image image = PictureManager.getVehiclePhoto(vehicle.getPhotoURL());
-            // if(image == null) {
-            // arr[9] = new
-            // ImageIcon(InventoryListService.class.getResource("../ui/asset/InventoryList-nophoto.jpg"));
-            // }else {
-            // arr[9] = new ImageIcon(image);
-            // }
-            arr[9] = "<html><img src=\"" + vehicle.getPhotoURL().toString() + "\"/></html>";
+            Image image = vehicle.getPhoto();
+            if (image == null) {
+                arr[9] = new ImageIcon(InventoryListService.class.getResource("../ui/asset/InventoryList-nophoto.jpg"));
+            } else {
+                arr[9] = new ImageIcon(image);
+            }
+//            arr[9] = "<html><img src=\"" + vehicle.getPhotoURL().toString() + "\"/></html>";
             arr[10] = vehicle.getVin();
             arr[11] = vehicle.getEntertainment();
             arr[12] = vehicle.getInteriorColor();
@@ -142,7 +141,7 @@ public class InventoryListService {
 
             tableModel.addRow(arr);
         }
-
+        
         table.invalidate();
     }
 
