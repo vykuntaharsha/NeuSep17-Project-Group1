@@ -120,7 +120,7 @@ public class ManageIncentivesUI extends IncentiveUI {
         length = incentives.size();
         for (int i = 0; i < length; i++) {
             jp[i] = new JPanel();
-            ii[i] = new ImageIcon("picture\\flame.jpg");
+            ii[i] = createImageIcon("flame.jpg");
             imageLabel[i] = new JLabel(ii[i]);
             imageLabel[i].setBounds(0, 0, 24, 31);
             jp[i].add(imageLabel[i], new Integer(Integer.MIN_VALUE));
@@ -346,6 +346,3 @@ public class ManageIncentivesUI extends IncentiveUI {
         return incentives;
     }
 }
-
-
-
