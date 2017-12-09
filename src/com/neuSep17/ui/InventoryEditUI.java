@@ -476,7 +476,7 @@ public class InventoryEditUI extends JFrame {
 
     }
 
-    // VIDListener & VIDVerifier
+    // 1.VIDListener & VIDVerifier
     private class VIDListener implements KeyListener {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -485,7 +485,12 @@ public class InventoryEditUI extends JFrame {
                     id.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    id.setTrue();
+                    return;
+                }
             }
         }
         @Override
@@ -496,11 +501,15 @@ public class InventoryEditUI extends JFrame {
         public void keyTyped(KeyEvent e) {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-                    && (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)) {
+                    && (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)&& (!e.isControlDown())) {
                 id.setFalse();
                 e.consume();// invalid numeric input will be eliminated
             }
             String str = id.getInputTextField().getText();
+            if(e.isControlDown()){
+                e.consume();
+                id.setTrue();
+            }
             if (keyInput == KeyEvent.VK_ENTER) {// enter
                 if (str.length() != 10)
                     id.setFalse();
@@ -523,9 +532,8 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // all SuccessOrNot instance variable is a mark for save button function!!!
+    // all SuccessOrNot instance variable is a mark for save button function
     private boolean VIDSuccessOrNot;
-
     private class VehicleIDVerifier extends InputVerifier {
         public boolean verify(JComponent input) {
             String vid = ((JTextField) input).getText();
@@ -546,7 +554,7 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // PriceListener & PriceVerifier
+    //2. PriceListener & PriceVerifier
     private class PriceListener implements KeyListener {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -555,7 +563,12 @@ public class InventoryEditUI extends JFrame {
                     price.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    price.setTrue();
+                    return;
+                }
             }
         }
 
@@ -567,11 +580,15 @@ public class InventoryEditUI extends JFrame {
         public void keyTyped(KeyEvent e) {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-                    && (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)) {
+                    && (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9) && !e.isControlDown()) {
                 price.setFalse();
                 e.consume();
             }
             String str = price.getInputTextField().getText();
+            if(e.isControlDown()){
+                e.consume();
+                price.setTrue();
+            }
             if (keyInput == KeyEvent.VK_ENTER) {
                 if (str.equals(""))
                     price.setFalse();
@@ -611,18 +628,22 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // WebIDListener & WebIDVerifier
+    //3. WebIDListener & WebIDVerifier
     private class WebIDListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE && keyInput != KeyEvent.VK_MINUS
-                    && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
+                    && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122) && !e.isControlDown()) {
                 webId.setFalse();
                 e.consume();
             } //invalid input are those which exclude enter, backspace,letters and -
             String str = webId.getInputTextField().getText();
             int lastIndex = str.length() - 1;
+            if(e.isControlDown()){
+                e.consume();
+                webId.setTrue();
+            }
             if (keyInput == KeyEvent.VK_MINUS) {
                 if (str.equals("")) {
                     webId.setFalse();//- appears at the first position
@@ -649,7 +670,12 @@ public class InventoryEditUI extends JFrame {
                     webId.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    webId.setTrue();
+                    return;
+                }
             }
         }
 
@@ -682,13 +708,13 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // CategoryListener & CategoryVerifier
+    //4. CategoryListener & CategoryVerifier
     private class CategoryListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
             char keyInput = e.getKeyChar();
             if (keyInput == 'c' || keyInput == 'C' || keyInput == 'u' || keyInput == 'U' || keyInput == 'n'
-                    || keyInput == 'N' || keyInput == KeyEvent.VK_ENTER || keyInput == KeyEvent.VK_BACK_SPACE) {
+                    || keyInput == 'N' || keyInput == KeyEvent.VK_ENTER || keyInput == KeyEvent.VK_BACK_SPACE || e.isControlDown()) {
                 category.setTrue();
             } else {
                 category.setFalse();
@@ -703,7 +729,12 @@ public class InventoryEditUI extends JFrame {
                     category.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    category.setTrue();
+                    return;
+                }
             }
         }
 
@@ -737,17 +768,21 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // YearListener & YearVerifier
+    //5. YearListener & YearVerifier
     private class YearListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-                    && (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9)) {
+                    && (keyInput < KeyEvent.VK_0 || keyInput > KeyEvent.VK_9) && !e.isControlDown()) {
                 year.setFalse();
                 e.consume();
             }
             String str = year.getInputTextField().getText();
+            if(e.isControlDown()){
+                e.consume();
+                year.setTrue();
+            }
             if (keyInput == KeyEvent.VK_ENTER) {// enter
                 if (str.length() != 4)
                     year.setFalse();
@@ -776,7 +811,12 @@ public class InventoryEditUI extends JFrame {
                     year.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    year.setTrue();
+                    return;
+                }
             }
         }
 
@@ -807,19 +847,23 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // MakeListener & MakeVerifier
+    //6. MakeListener & MakeVerifier
     private class MakeListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-                    && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {// invalid input(only
+                    && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122) && !e.isControlDown()) {// invalid input(only
                 // letters and special
                 // case)
                 make.setFalse();
                 e.consume();
             }
             String str = make.getInputTextField().getText();
+            if(e.isControlDown()){
+                e.consume();
+                make.setTrue();
+            }
             if (keyInput == KeyEvent.VK_ENTER) {
                 if (str.equals("") || str.equals(null))
                     make.setFalse();
@@ -844,7 +888,12 @@ public class InventoryEditUI extends JFrame {
                     make.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    make.setTrue();
+                    return;
+                }
             }
         }
 
@@ -877,17 +926,21 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // TypeListener & TypeVerifier
+    //7. TypeListener & TypeVerifier
     private class TypeListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {
             int keyInput = e.getKeyChar();
             if (keyInput != KeyEvent.VK_ENTER && keyInput != KeyEvent.VK_BACK_SPACE
-                    && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122)) {
+                    && (keyInput < 65 || (keyInput > 90 && keyInput < 97) || keyInput > 122) && !e.isControlDown()) {
                 type.setFalse();
                 e.consume();
             }
             String str = make.getInputTextField().getText();
+            if(e.isControlDown()){
+                e.consume();
+                type.setTrue();
+            }
             if (keyInput == KeyEvent.VK_ENTER) {
                 if (str.equals("") || str.equals(null))
                     type.setFalse();
@@ -913,7 +966,12 @@ public class InventoryEditUI extends JFrame {
                     type.setTrue();
                     return;
                 }
-                return;
+            }
+            if(e.isControlDown()){
+                if(e.getKeyCode() == KeyEvent.VK_C){
+                    type.setTrue();
+                    return;
+                }
             }
         }
 
@@ -946,7 +1004,7 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // ModelVerifier
+    //8. ModelVerifier
     private boolean ModelSuccessOrNot;
 
     private class ModelVerifier extends InputVerifier {
@@ -971,7 +1029,7 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    // TrimVerifier
+    //9. TrimVerifier
     private boolean TrimSuccessOrNot;
 
     private class TrimVerifier extends InputVerifier {
