@@ -127,28 +127,10 @@ public class InventoryListUI extends JFrame {
      * Create the frame.
      */
     public InventoryListUI(String dealerName) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String f = "data/"+dealerName;
-        File file = new File(f);
-        this.file = file; // team 2: Lu Niu
-        list = InventoryListService.readAndGetVehicles(file);
-        filter = new ArrayList<>();
-        isAscending = true;
-        selectedId = "";
-        newSelectedId = "";
-        contentPane = new JPanel();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        setBounds(100, 100, 1300, 800);
-        contentPane.setLayout(null);
-        setLocationRelativeTo(null);
-        setContentPane(contentPane);
-        setVisible(true);
+//        long startTime=System.currentTimeMillis();
+        init(dealerName);
+//        long endTime=System.currentTimeMillis();
+//        System.out.println("Read Pic 1148, RunTime£º "+(endTime-startTime)+"ms");
 
         registerPanel();
 
@@ -167,6 +149,38 @@ public class InventoryListUI extends JFrame {
         setCloseAndMin();
 
         setDrag();
+    }
+    
+    //init basic
+    private void init(String dealerName) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String f = "data/"+dealerName;
+        File file = new File(f);
+        this.file = file; // team 2: Lu Niu
+        list = InventoryListService.readAndGetVehicles(file);
+//        list.stream().forEach(vehicle -> {
+//            vehicle.getPhoto();
+//        });
+        list.parallelStream().forEach(vehicle -> {
+            vehicle.getPhoto();
+        });
+        filter = new ArrayList<>();
+        isAscending = true;
+        selectedId = "";
+        newSelectedId = "";
+        contentPane = new JPanel();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setBounds(100, 100, 1300, 800);
+        contentPane.setLayout(null);
+        setLocationRelativeTo(null);
+        setContentPane(contentPane);
+        setVisible(true);
     }
     
     //sortBycomboBox
@@ -484,7 +498,7 @@ public class InventoryListUI extends JFrame {
             }
         }
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        
         InventoryListService.fillTable(list, table);
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setReorderingAllowed(false);
