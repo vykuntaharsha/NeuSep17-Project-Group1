@@ -1,6 +1,5 @@
 package com.neuSep17.utility;
 
-
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Inventory;
 import com.neuSep17.dto.Vehicle;
@@ -8,92 +7,74 @@ import com.neuSep17.service.DealerImpleService;
 import com.neuSep17.service.VehicleImpleService.VehicleImpleService;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BrowseInventoryUtility {
     Collection<Vehicle> vehicles = new ArrayList<>();
 
     public Collection<Vehicle> setObjectsforUtility() throws IOException {
         DealerImpleService dealerServiceObject = new DealerImpleService();
-        VehicleImpleService vehicleServiceObject = new VehicleImpleService("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data\\gmps-camino.txt");
+        VehicleImpleService vehicleServiceObject = new VehicleImpleService("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data");
         Dealer dealerObject = dealerServiceObject.getADealer("gmps-camino");
         Inventory inventoryObject = vehicleServiceObject.getAllVehicles(dealerObject.getId());
         vehicles = inventoryObject.getVehicles();
         return vehicles;
     }
 
-
-    public List<Vehicle> sortByPrice(List<Vehicle> vehicles) {
-        Collections.sort(vehicles, new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                Vehicle v1 = (Vehicle) o1;
-                Vehicle v2 = (Vehicle) o2;
-                if (v1.getPrice() > v2.getPrice()) {
-                    return 1;
-                } else if (v1.getPrice() == v1.getPrice()) {
-                    return 0;
-                } else {
-                    return -1;
-                }
+    public ArrayList<Vehicle> filterVehicles(ArrayList<Vehicle> vehicles, HashMap<String, String> filter) {
+        ArrayList<Vehicle> filterVehicles = new ArrayList<Vehicle>();
+        filterVehicles.addAll(vehicles);
+        for (String c : filter.keySet()) {
+            if (filter.get(c) == "NONE") {
+                continue;
             }
-            /**  createResultsPanel
-             display **/
-        });
-        return vehicles;
+
+            filterVehicles = filterVehicle(filterVehicles, c, filter.get(c));
+        }
+        return filterVehicles;
     }
 
-    public List<Vehicle> sortByYear(List<Vehicle> vehicles) {
-        Collections.sort(vehicles, new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                Vehicle v1 = (Vehicle) o1;
-                Vehicle v2 = (Vehicle) o2;
-                if (v1.getYear() > v2.getYear()) {
-                    return 1;
-                } else if (v1.getYear() == v1.getYear()) {
-                    return 0;
+
+    public ArrayList<Vehicle> filterVehicle(ArrayList<Vehicle> vehicles, String condition, String value) {
+        List<Vehicle> filterVehicles = new ArrayList<Vehicle>();
+
+        switch (condition) {
+            case "Year":
+                filterVehicles = vehicles.stream()
+                        .filter(v -> v.getYear() == Integer.parseInt(value)).collect(Collectors.toList());
+                break;
+            case "Make":
+                filterVehicles = vehicles.stream()
+                        .filter(v -> v.getMake().toUpperCase().equals(value)).collect(Collectors.toList());
+                break;
+            case "Type":
+                filterVehicles = vehicles.stream()
+                        .filter(v -> v.getBodyType().toUpperCase().equals(value)).collect(Collectors.toList());
+                break;
+            case "Category":
+                System.out.println(vehicles.get(1).getCategory().toString());
+                filterVehicles = vehicles.stream()
+                        .filter(v -> v.getCategory().toString() == value).collect(Collectors.toList());
+                break;
+            case "Price":
+                String[] price = value.split("-", 2);
+                double lo = Double.parseDouble(price[0]);
+                if (price.length > 1) {
+                    double hi = Double.parseDouble(price[1]);
+                    // Double.POSITIVE_INFINITY;
+                    filterVehicles = vehicles.stream()
+                            .filter(v -> v.getPrice() >= lo && v.getPrice() <= hi).collect(Collectors.toList());
                 } else {
-                    return -1;
+                    filterVehicles = vehicles.stream()
+                            .filter(v -> v.getPrice() >= lo).collect(Collectors.toList());
                 }
-            }
-          /**  createResultsPanel
-                    display **/
-        });
-        return vehicles;
+        }
+
+        return (ArrayList<Vehicle>) filterVehicles;
     }
-    /** public ArrayList<Vehicle> filter(ArrayList<Vehicle> vehicles, String condition, String value) {
-     int value=Integer.parseInt(value);
-     switch (condition) {
-     case "year":
-     vehicles = vehicles.stream()
-     .filter(v -> v.getYear() == value).collect(Collectors.toList());
-     case "model":
-     vehicles = vehicles.stream()
-     .filter(v -> v.getModel() == value).collect(Collectors.toList());
-     case "type":
-     vehicles = vehicles.stream()
-     .filter(v -> v.getBodyType() == value).collect(Collectors.toList());
-     case "color":
-     vehicles = vehicles.stream()
-     .filter(v -> v.getColor() == value).collect(Collectors.toList());
-     case "category":
-     vehicles = vehicles.stream()
-     .filter(v -> v.getCategory() == value).collect(Collectors.toList());
-     case "price":
-     String [] price = str.split("-", 2);
-     int lo = price[0];
-     int hi = price[1];
-
-     vehicles = vehicles.stream()
-     .filter(v -> v.getPrice() >= lo && v.getPrice() <= hi).collect(Collectors.toList());
-     }
-
-     return vehicles;
-     createResultsPanel
-     display
-     }
-     **/
-
 
 }
