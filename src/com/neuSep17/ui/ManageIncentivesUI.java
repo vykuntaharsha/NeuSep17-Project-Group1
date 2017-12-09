@@ -1,11 +1,8 @@
 package com.neuSep17.ui;
 
 import com.neuSep17.dao.IncentiveImple;
-import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Incentive;
-import com.neuSep17.service.DealerImpleService;
 import com.neuSep17.service.IncentiveService;
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
 
 import java.awt.EventQueue;
 
@@ -14,11 +11,10 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-public class ManageIncentivesScreen extends IncentiveUI {
+
+public class ManageIncentivesUI extends IncentiveUI {
     private static JFrame mainFrame;
     private JPanel headerPanel;
     private JPanel footerPanel;
@@ -47,7 +43,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
     private JButton viewAll;
 
     //  private IncentiveImple;
-    public ManageIncentivesScreen(String dealerid) throws FileNotFoundException {
+    public ManageIncentivesUI(String dealerid) throws FileNotFoundException {
         this.dealerid = dealerid;
         mainFrame = new JFrame();
         initialize();
@@ -124,7 +120,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
         length = incentives.size();
         for (int i = 0; i < length; i++) {
             jp[i] = new JPanel();
-            ii[i] = new ImageIcon("flame.jpg");
+            ii[i] = createImageIcon("flame.jpg");
             imageLabel[i] = new JLabel(ii[i]);
             imageLabel[i].setBounds(0, 0, 24, 31);
             jp[i].add(imageLabel[i], new Integer(Integer.MIN_VALUE));
@@ -151,7 +147,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
 
                     mainFrame.dispose();
                     try {
-                        ManageIncentivesScreen screen = new ManageIncentivesScreen(ManageIncentivesScreen.dealerid);
+                        ManageIncentivesUI screen = new ManageIncentivesUI(ManageIncentivesUI.dealerid);
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
@@ -186,7 +182,6 @@ public class ManageIncentivesScreen extends IncentiveUI {
                         isAsc = true;
                     else
                         isAsc = false;
-                    System.out.println("Sorting incentives..");
                     incentives = selectSortCriteria(incentives, isAsc, sortoption);
                     listPanel.removeAll();
                     listPanel.revalidate();
@@ -208,7 +203,6 @@ public class ManageIncentivesScreen extends IncentiveUI {
                         isAsc = true;
                     else
                         isAsc = false;
-                    System.out.println("Sorting incentives..");
                     incentives = selectSortCriteria(incentives, isAsc, sortoption);
                     listPanel.removeAll();
                     listPanel.revalidate();
@@ -248,7 +242,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
                 public void mouseClicked(MouseEvent arg0) {
                     mainFrame.dispose();
                     try {
-                        ManageIncentivesScreen screen = new ManageIncentivesScreen(ManageIncentivesScreen.dealerid);
+                        ManageIncentivesUI screen = new ManageIncentivesUI(ManageIncentivesUI.dealerid);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -270,7 +264,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
                 public void mouseClicked(MouseEvent arg0) {
                     mainFrame.dispose();
                     try {
-                        ManageIncentivesScreen screen = new ManageIncentivesScreen(ManageIncentivesScreen.dealerid);
+                        ManageIncentivesUI screen = new ManageIncentivesUI(ManageIncentivesUI.dealerid);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -320,7 +314,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
 
     private void makeThisVisible() {
         mainFrame.setSize(2000, 2000);//make it smaller and in the middle of the screen
-        UI ui = new UI();
+        IncentiveUI ui = new IncentiveUI();
         ui.displayCenter(mainFrame);
         mainFrame.setBackground(Color.white);
         mainFrame.setVisible(true);
@@ -330,7 +324,7 @@ public class ManageIncentivesScreen extends IncentiveUI {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    ManageIncentivesScreen screen = new ManageIncentivesScreen("gmps-bresee");
+                    ManageIncentivesUI screen = new ManageIncentivesUI("gmps-bresee");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

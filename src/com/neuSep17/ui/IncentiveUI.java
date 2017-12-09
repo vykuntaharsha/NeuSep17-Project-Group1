@@ -2,7 +2,9 @@ package com.neuSep17.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 public class IncentiveUI {
 
@@ -85,8 +87,16 @@ public class IncentiveUI {
         return textField;
     }
 
+    public ImageIcon createImageIcon(String path) {
+        String rootPath = Paths.get("").toAbsolutePath().toString();
+//        rootPath+= File.separator+"NeuSep17-Project-Group1-master"+File.separator+"picture"+File.separator+path;
+        rootPath+= File.separator+"picture"+File.separator+path;
+
+        return new ImageIcon(rootPath);
+    }
+
     public JLabel createPicture(String path) throws IOException{
-        JLabel picLabel = new JLabel(new ImageIcon(path));
+        JLabel picLabel = new JLabel(createImageIcon(path));
         picLabel.setSize(new Dimension(screenWidth/10, screenHeight/10));
         picLabel.setBounds(screenWidth/30, screenHeight/10, screenWidth/2, screenHeight/3);
         return picLabel;
