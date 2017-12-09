@@ -1,7 +1,9 @@
 package com.neuSep17.main;
 
 import com.neuSep17.dto.Dealer;
+import com.neuSep17.dto.Incentive;
 import com.neuSep17.service.DealerImpleService;
+import com.neuSep17.ui.IncentiveUI;
 import com.neuSep17.ui.InventoryListUI;
 import com.neuSep17.ui.ManageIncentivesUI;
 
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DealerApplication {
+public class DealerApplication extends IncentiveUI {
 
     private JFrame mainFrame;
     private JLabel headerLabel;
@@ -221,16 +223,19 @@ public class DealerApplication {
 
 
     private JLabel pictures() throws IOException{
-        JLabel picLabel = new JLabel(new ImageIcon("picture\\DealerHeaderImage1.png"));
+        JLabel picLabel = createPicture("DealerHeaderImage1.png");
         picLabel.setSize(new Dimension(7000, 4000));
 
         return picLabel;
     }
 
     private JLabel pictures1() throws IOException{
-        JLabel picLabel1 = new JLabel(new ImageIcon("picture\\DealerHeaderImage2.png"));
+        JLabel picLabel1 = createPicture("DealerHeaderImage2.png");
         picLabel1.setSize(new Dimension(5000, 3000));
 
         return picLabel1;
     }
 }
+
+
+
