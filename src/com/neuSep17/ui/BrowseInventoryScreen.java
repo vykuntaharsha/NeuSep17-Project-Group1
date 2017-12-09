@@ -1,11 +1,13 @@
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.utility.BrowseInventoryUtility;
+import com.neuSep17.service.InventoryListService;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -13,27 +15,37 @@ import java.util.List;
 public class BrowseInventoryScreen implements ActionListener {
     BrowseInventoryUtility utilityObject = new BrowseInventoryUtility();
     Collection<Vehicle> vehicles = utilityObject.setObjectsforUtility();
-
+    InventoryListService inventoryServiceObject = new InventoryListService();
+    ArrayList<Vehicle> vehicleList = new ArrayList<>(vehicles);
 
     final int WIDTH = 1300;
     final int HEIGHT = 700;
 
+    int startingIndexToDisplay = 5;
+    ArrayList<Vehicle> filterVehicleList = new ArrayList<>();
+    int countOfResultsDisplayed = 0;
+
     JFrame browseInventoryFrame;
     JPanel contentPane;
     JTextField searchTextField;
-    JButton searchButton, previousPageNavigateButton, nextPageNavigateButton, sortButton;
+    JButton searchButton, previousPageNavigateButton, nextPageNavigateButton, sortButton, filterButton;
     JComboBox categorySelect, makeSelect, typeSelect, yearSelect, priceRangeSelect, sortTypeSelect, sortValueSelect;
     JLabel makeLabel, typeLabel, yearLabel, priceLabel, categoryLabel, sortLabel, navigationLabel;
     JPanel searchPanel, filterOptionsPanel, filterResultMainPanel, navigationOptionsPanel, firstImagePanel, secondImagePanel, thirdImagePanel;
-
+    List<JPanel> imagePanelObjectsList;
 
     public BrowseInventoryScreen() throws IOException {
+        initializeJFrame();
+        initializeJButtons();
+        initializeJComboBox();
+        initializeJLabel();
+        initializeJPanel();
+        initializeJTextField();
+        settingLayout();
+        addingComponents();
     }
 
-
-    void setComponents() throws IOException {
-        String property;
-
+    void initializeJFrame() {
         browseInventoryFrame = new JFrame("Find Your Dream Car");
         browseInventoryFrame.setSize(WIDTH, HEIGHT);
         browseInventoryFrame.setLocation(100, 150);
@@ -41,8 +53,26 @@ public class BrowseInventoryScreen implements ActionListener {
         browseInventoryFrame.setVisible(true);
         contentPane = new JPanel();
         browseInventoryFrame.setContentPane(contentPane);
-        searchTextField = new JTextField();
+    }
+
+    void initializeJButtons() {
         searchButton = new JButton("Search");
+        filterButton = new JButton("FILTER");
+        sortButton = new JButton("SORT");
+        previousPageNavigateButton = new JButton(" << ");
+        nextPageNavigateButton = new JButton(" >> ");
+
+        searchButton.setBounds(500, 14, 100, 35);
+        filterButton.setBounds(40, 200, 100, 35);
+        sortButton.setBounds(1010, 14, 100, 30);
+        previousPageNavigateButton.setBounds(500, 0, 80, 30);
+        nextPageNavigateButton.setBounds(700, 0, 80, 30);
+
+        previousPageNavigateButton.setEnabled(false);
+    }
+
+    void initializeJComboBox() {
+        String property;
         String[] category = {"NONE", "NEW", "USED", "CERTIFIED PRE OWNED"};
         categorySelect = new JComboBox(category);
         property = "make";
@@ -59,14 +89,24 @@ public class BrowseInventoryScreen implements ActionListener {
         yearSelect.setSelectedItem("NONE");
         String[] price = {"NONE", "0-10000", "10000-20000", "20000-30000", "30000-40000", "above 40000"};
         priceRangeSelect = new JComboBox(price);
+
         String[] sortType = {"NONE", "PRICE", "YEAR"};
         sortTypeSelect = new JComboBox(sortType);
         String[] sortValues = {"NONE", "HIGH TO LOW", "LOW TO HIGH"};
         sortValueSelect = new JComboBox(sortValues);
-        sortButton = new JButton("SORT");
-        previousPageNavigateButton = new JButton(" << ");
-        nextPageNavigateButton = new JButton(" >> ");
 
+
+        categorySelect.setBounds(120, 10, 170, 20);
+        makeSelect.setBounds(120, 50, 170, 20);
+        typeSelect.setBounds(120, 90, 170, 20);
+        yearSelect.setBounds(120, 130, 170, 20);
+        priceRangeSelect.setBounds(120, 170, 170, 20);
+        sortTypeSelect.setBounds(790, 14, 100, 30);
+        sortValueSelect.setBounds(900, 14, 100, 30);
+
+    }
+
+    void initializeJLabel() {
         categoryLabel = new JLabel("CATEGORY");
         makeLabel = new JLabel("MAKE");
         typeLabel = new JLabel("TYPE");
@@ -77,50 +117,42 @@ public class BrowseInventoryScreen implements ActionListener {
         int totalNum = 10;
         navigationLabel = new JLabel("Page " + num + " of " + totalNum);
 
+
+        categoryLabel.setBounds(40, 10, 80, 20);
+        makeLabel.setBounds(40, 50, 40, 20);
+        typeLabel.setBounds(40, 90, 40, 20);
+        yearLabel.setBounds(40, 130, 40, 20);
+        priceLabel.setBounds(40, 170, 40, 20);
+        sortLabel.setBounds(730, 14, 50, 30);
+        navigationLabel.setBounds(600, 0, 120, 30);
+
+    }
+
+    void initializeJPanel() {
         searchPanel = new JPanel();
         filterOptionsPanel = new JPanel();
-        filterResultMainPanel = new JPanel();
         navigationOptionsPanel = new JPanel();
 
-        firstImagePanel = new JPanel();
-        secondImagePanel = new JPanel();
-        thirdImagePanel = new JPanel();
-
-        browseInventoryFrame.setLayout(null);
         searchPanel.setBounds(0, 0, 1200, 85);
-        filterOptionsPanel.setBounds(0, 95, 250, 250);
-        filterResultMainPanel.setBounds(0, 95, 1100, 500);
+        filterOptionsPanel.setBounds(0, 95, 350, 250);
         navigationOptionsPanel.setBounds(0, 600, 800, 50);
+    }
 
-        searchPanel.setLayout(null);
+    void initializeJTextField() {
+        searchTextField = new JTextField();
         searchTextField.setBounds(175, 14, 300, 35);
-        searchButton.setBounds(500, 14, 100, 35);
-        sortLabel.setBounds(730, 14, 50, 30);
-        sortTypeSelect.setBounds(790, 14, 100, 30);
-        sortValueSelect.setBounds(900, 14, 100, 30);
-        sortButton.setBounds(1010, 14, 100, 30);
 
+    }
+
+    void settingLayout() {
+        browseInventoryFrame.setLayout(null);
+        searchPanel.setLayout(null);
         filterOptionsPanel.setLayout(null);
-        categoryLabel.setBounds(40, 10, 80, 20);
-        categorySelect.setBounds(120, 10, 120, 20);
-        makeLabel.setBounds(40, 50, 40, 20);
-        makeSelect.setBounds(120, 50, 120, 20);
-        typeLabel.setBounds(40, 90, 40, 20);
-        typeSelect.setBounds(120, 90, 120, 20);
-        yearLabel.setBounds(40, 130, 40, 20);
-        yearSelect.setBounds(120, 130, 120, 20);
-        priceLabel.setBounds(40, 170, 40, 20);
-        priceRangeSelect.setBounds(120, 170, 120, 20);
-
-
-        filterResultMainPanel.setLayout(null);
-        filterResultMainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
         navigationOptionsPanel.setLayout(null);
-        navigationLabel.setBounds(600, 0, 120, 30);
-        previousPageNavigateButton.setBounds(500, 0, 80, 30);
-        nextPageNavigateButton.setBounds(700, 0, 80, 30);
 
+    }
+
+    void addingComponents() throws IOException {
         searchPanel.add(searchTextField);
         searchPanel.add(searchButton);
 
@@ -139,18 +171,24 @@ public class BrowseInventoryScreen implements ActionListener {
         filterOptionsPanel.add(yearSelect);
         filterOptionsPanel.add(priceLabel);
         filterOptionsPanel.add(priceRangeSelect);
+        filterOptionsPanel.add(filterButton);
 
         navigationOptionsPanel.add(previousPageNavigateButton);
         navigationOptionsPanel.add(navigationLabel);
         navigationOptionsPanel.add(nextPageNavigateButton);
 
-
         contentPane.add(searchPanel);
         contentPane.add(filterOptionsPanel);
-        contentPane.add(filterResultMainPanel);
         contentPane.add(navigationOptionsPanel);
 
-
+        /** Displaying all the vehicles of a particular Dealer **/
+        addFilterResultPanel();
+        imagePanelObjectsList = createResultsPanel(5);
+        try {
+            display(0, vehicleList, imagePanelObjectsList);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 
     private String[] findUniqueVehiclePropertyValues(Collection<Vehicle> vehicles, String property) {
@@ -171,54 +209,186 @@ public class BrowseInventoryScreen implements ActionListener {
 
     void addListeners() {
         searchButton.addActionListener(this);
+        filterButton.addActionListener(this);
         previousPageNavigateButton.addActionListener(this);
         nextPageNavigateButton.addActionListener(this);
         sortButton.addActionListener(this);
     }
 
     public void actionPerformed(ActionEvent e) {
+        List<JPanel> imagePanelObjectsList;
+        JLabel filterResultLabel=new JLabel("SEARCH RESULTS");
+        filterResultLabel.setSize(200,20);
+        filterResultLabel.setBounds(300,40,200,20);
 
+        /** Performing appropriate Actions Based on the Event occurred **/
         if (e.getSource() == searchButton) {
+            previousPageNavigateButton.setEnabled(true);
+            nextPageNavigateButton.setEnabled(true);
+            resetFilterValues();
+            if (!searchTextField.getText().isEmpty()) {
+                filterVehicleList = inventoryServiceObject.search(filterVehicleList, vehicleList, searchTextField);
+                if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
+                    inventoryServiceObject.sortByYear(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                } else if ((sortTypeSelect.getSelectedItem().toString()) == "PRICE") {
+                    inventoryServiceObject.sortByPrice(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                }
+                countOfResultsDisplayed = 0;
+                try {
+                    removeCurrentResultPanel();
+                    addFilterResultPanel();
+                    imagePanelObjectsList = createResultsPanel(5);
+                    filterResultMainPanel.add(filterResultLabel);
+                    display(0, filterVehicleList, imagePanelObjectsList);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } else if (e.getSource() == filterButton) {
+            previousPageNavigateButton.setEnabled(false);
+            nextPageNavigateButton.setEnabled(true);
+            if(filterVehicleList.size()!=0) {
+                filterVehicleList = utilityObject.filterVehicles(filterVehicleList, getFilterValues());
+            }
+            else{
+                filterVehicleList = utilityObject.filterVehicles(vehicleList, getFilterValues());
+            }
+            if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
+                inventoryServiceObject.sortByYear(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+            } else if ((sortTypeSelect.getSelectedItem().toString()) == "PRICE") {
+                inventoryServiceObject.sortByPrice(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+            }
+            countOfResultsDisplayed = 0;
+            removeCurrentResultPanel();
+            addFilterResultPanel();
+            imagePanelObjectsList = createResultsPanel(5);
             try {
-                List<JPanel> imagePanelObjectsList = createResultsPanel(7);
-                display(0, vehicles, imagePanelObjectsList);
-
+                filterResultMainPanel.add(filterResultLabel);
+                display(0, filterVehicleList, imagePanelObjectsList);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         } else if (e.getSource() == sortButton) {
-            // call the method to sort
-        } else if (e.getSource() == previousPageNavigateButton) {
-            // call the method to navigate
-        } else if (e.getSource() == nextPageNavigateButton) {
-            // call the method to navigate
+            removeCurrentResultPanel();
+            addFilterResultPanel();
+            imagePanelObjectsList = createResultsPanel(5);
+            if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
+                if (filterVehicleList.size() != 0) {
+                    try {
+                        inventoryServiceObject.sortByYear(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        filterResultMainPanel.add(filterResultLabel);
+                        display(0, filterVehicleList, imagePanelObjectsList);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    try {
+                        inventoryServiceObject.sortByYear(vehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        filterResultMainPanel.add(filterResultLabel);
+                        display(0, vehicleList, imagePanelObjectsList);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
 
+            } else if ((sortTypeSelect.getSelectedItem().toString()) == "PRICE") {
+                if (filterVehicleList.size() != 0) {
+                    try {
+                        inventoryServiceObject.sortByPrice(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        filterResultMainPanel.add(filterResultLabel);
+                        display(0, filterVehicleList, imagePanelObjectsList);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    try {
+                        inventoryServiceObject.sortByPrice(vehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        filterResultMainPanel.add(filterResultLabel);
+                        display(0, vehicleList, imagePanelObjectsList);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        } else if (e.getSource() == previousPageNavigateButton) {
+            startingIndexToDisplay = startingIndexToDisplay - 5;
+            removeCurrentResultPanel();
+            addFilterResultPanel();
+            imagePanelObjectsList = createResultsPanel(5);
             try {
-                List<JPanel> imagePanelObjectsList = createResultsPanel(7);
-                display(7, vehicles, imagePanelObjectsList);
+                if (filterVehicleList.size() != 0) {
+                    filterResultMainPanel.add(filterResultLabel);
+                    display(startingIndexToDisplay, filterVehicleList, imagePanelObjectsList);
+                } else {
+                    display(startingIndexToDisplay, vehicleList, imagePanelObjectsList);
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if (startingIndexToDisplay == 0) {
+                previousPageNavigateButton.setEnabled(false);
+            }
+        } else if (e.getSource() == nextPageNavigateButton) {
+            previousPageNavigateButton.setEnabled(true);
+            try {
+                removeCurrentResultPanel();
+                addFilterResultPanel();
+                imagePanelObjectsList = createResultsPanel(5);
+                if (filterVehicleList.size() != 0) {
+                    filterResultMainPanel.add(filterResultLabel);
+                    display(startingIndexToDisplay, filterVehicleList, imagePanelObjectsList);
+                    startingIndexToDisplay = startingIndexToDisplay + 5;
+                } else {
+                    display(startingIndexToDisplay, vehicleList, imagePanelObjectsList);
+                    startingIndexToDisplay = startingIndexToDisplay + 5;
+                }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
     }
 
-    public void display(int startIndex, Collection<Vehicle> vehicles, List<JPanel> imagePanelObjectsList) throws IOException {
-        List<Vehicle> vehicleList = new ArrayList<>(vehicles);
+    private void resetFilterValues() {
+        categorySelect.setSelectedItem("NONE");
+        makeSelect.setSelectedItem("NONE");
+        typeSelect.setSelectedItem("NONE");
+        yearSelect.setSelectedItem("NONE");
+        priceRangeSelect.setSelectedItem("NONE");
+    }
+
+    HashMap<String, String> getFilterValues() {
+        HashMap<String, String> filterValuesMap = new HashMap<>();
+        filterValuesMap.put("Category", categorySelect.getSelectedItem().toString());
+        filterValuesMap.put("Make", makeSelect.getSelectedItem().toString());
+        filterValuesMap.put("Type", typeSelect.getSelectedItem().toString());
+        filterValuesMap.put("Year", yearSelect.getSelectedItem().toString());
+        filterValuesMap.put("Price", priceRangeSelect.getSelectedItem().toString());
+        return filterValuesMap;
+    }
+
+    public void display(int startIndex, ArrayList<Vehicle> vehiclesToDisplay, List<JPanel> imagePanelObjectsList) throws IOException {
         int counter = 0;
-        while (counter < 7) {
-            Image image = ImageIO.read(vehicleList.get(startIndex).getPhotoURL().openStream());
-            JLabel imageLabel = new JLabel(new ImageIcon(image));
-            imageLabel.setBounds(95, 10, 100, 50);
-            imagePanelObjectsList.get(counter).add(imageLabel);
-            JLabel vehicleIDLabel = new JLabel("ID: " + vehicleList.get(startIndex).getID());
+        while (counter < 5) {
+            try {
+                Image image = ImageIO.read(vehiclesToDisplay.get(startIndex).getPhotoURL().openStream());
+                JButton imageButton = new JButton(new ImageIcon(image));
+                imageButton.setBounds(95, 10, 100, 45);
+                imageButton.addActionListener(this);
+                imagePanelObjectsList.get(counter).add(imageButton);
+            } catch (FileNotFoundException fe) {
+                JButton imageButton = new JButton("NO IMAGE");
+                imageButton.setBounds(95, 10, 100, 50);
+                imagePanelObjectsList.get(counter).add(imageButton);
+            }
+            JLabel vehicleIDLabel = new JLabel("ID: " + vehiclesToDisplay.get(startIndex).getID());
             vehicleIDLabel.setBounds(200, 10, 100, 20);
-            JLabel vehicleMakeLabel = new JLabel("Make: " + vehicleList.get(startIndex).getMake());
+            JLabel vehicleMakeLabel = new JLabel("Make: " + vehiclesToDisplay.get(startIndex).getMake());
             vehicleMakeLabel.setBounds(200, 40, 200, 20);
-            JLabel vehicleTypeLabel = new JLabel("Type: " + vehicleList.get(startIndex).getBodyType());
+            JLabel vehicleTypeLabel = new JLabel("Type: " + vehiclesToDisplay.get(startIndex).getBodyType());
             vehicleTypeLabel.setBounds(300, 40, 200, 20);
-            JLabel vehiclePriceLabel = new JLabel("Price: " + Double.toString(vehicleList.get(startIndex).getPrice()));
+            JLabel vehiclePriceLabel = new JLabel("Price: " + Double.toString(vehiclesToDisplay.get(startIndex).getPrice()));
             vehiclePriceLabel.setBounds(500, 40, 100, 20);
-            JLabel vehicleYearLabel = new JLabel("Year: " + Integer.toString(vehicleList.get(startIndex).getYear()));
+            JLabel vehicleYearLabel = new JLabel("Year: " + Integer.toString(vehiclesToDisplay.get(startIndex).getYear()));
             vehicleYearLabel.setBounds(600, 40, 100, 20);
             imagePanelObjectsList.get(counter).add(vehicleIDLabel);
             imagePanelObjectsList.get(counter).add(vehicleMakeLabel);
@@ -227,41 +397,37 @@ public class BrowseInventoryScreen implements ActionListener {
             imagePanelObjectsList.get(counter).add(vehicleYearLabel);
             counter++;
             startIndex++;
+            countOfResultsDisplayed++;
         }
-
-
     }
 
-    /**
-     * private void removeCurrentPanel() {
-     * filterResultMainPanel.remove();
-     * }
-     **/
+
+    private void removeCurrentResultPanel() {
+        contentPane.remove(filterResultMainPanel);
+    }
+
+    private void addFilterResultPanel() {
+        filterResultMainPanel = new JPanel();
+        filterResultMainPanel.setBounds(350, 110, 750, 450);
+        filterResultMainPanel.setLayout(null);
+        filterResultMainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY,2));
+        contentPane.add(filterResultMainPanel);
+    }
 
     List<JPanel> createResultsPanel(int vehicleSizetoDisplay) {
-        List<JPanel> imagePanelObjectsList = new ArrayList<>();
-        int y = 10;
+        imagePanelObjectsList = new ArrayList<>();
+        int y = 75;
         for (int i = 0; i < vehicleSizetoDisplay; i++) {
             JPanel resultImagePanel = new JPanel();
             resultImagePanel.setLayout(null);
-            resultImagePanel.setBounds(320, y, 700, 60);
-            resultImagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            resultImagePanel.setBounds(5, y, 700, 60);
+        //    resultImagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             y = y + 65;
             imagePanelObjectsList.add(resultImagePanel);
             filterResultMainPanel.add(resultImagePanel);
-
         }
-        /**  firstImagePanel.setBounds(320, 10, 700, 60);
-         secondImagePanel.setBounds(320, 75, 700, 60);
-         thirdImagePanel.setBounds(320, 140, 700, 60); **/
-
-
-        /**   filterResultMainPanel.add(firstImagePanel);
-         filterResultMainPanel.add(secondImagePanel);
-         filterResultMainPanel.add(thirdImagePanel); **/
 
         return imagePanelObjectsList;
     }
-
 
 }
