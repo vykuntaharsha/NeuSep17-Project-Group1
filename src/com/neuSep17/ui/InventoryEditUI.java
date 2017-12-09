@@ -25,7 +25,7 @@ public class InventoryEditUI extends JFrame {
 
     // for testing purpose. will delete when delivery
     public static void main(String[] args) {
-        InventoryEditUI imf = new InventoryEditUI();
+        new InventoryEditUI();
     }
 
     private class Component {
@@ -69,7 +69,7 @@ public class InventoryEditUI extends JFrame {
         }
     }
 
-    public InventoryEditUI() {
+    public InventoryEditUI() {//code-review-bin: we may still need the vehicle list as the input
         super();
         createCompoments();
         createPanel();
@@ -79,7 +79,7 @@ public class InventoryEditUI extends JFrame {
         makeThisVisible();
     }
 
-    public InventoryEditUI(Vehicle v, InventoryListUI listUI) {
+    public InventoryEditUI(Vehicle v, InventoryListUI listUI) {//code-review-bin: we may only need vehicle and list (instead of listUI)
         super();
         createCompoments();
         createPanel();
@@ -1075,7 +1075,7 @@ public class InventoryEditUI extends JFrame {
         if(noPhoto) photoLabel.setText("No Photo");
         else photoLabel.setText(photoURL.toString());
     }
-
+  
     public boolean saveVehicle(Vehicle vehicle) throws MalformedURLException {
         this.validateTextFields();
         if (canSave()) {
