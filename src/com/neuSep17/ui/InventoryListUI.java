@@ -201,10 +201,10 @@ public class InventoryListUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 sortIndex = ((JComboBox)e.getSource()).getSelectedIndex();
                 if(sortIndex == 0) {
-                    InventoryListService.fillTable(list, table);
+                    InventoryListService.fillTable(filter.size() == 0? list : filter, table);
                 }else {
-                    InventoryListService.sortByHeaders(tmp, isAscending, headers[sortIndex-1]);
-                    InventoryListService.fillTable(tmp, table);
+                    InventoryListService.sortByHeaders(filter.size() == 0? tmp : filter, isAscending, headers[sortIndex-1]);
+                    InventoryListService.fillTable(filter.size() == 0? tmp : filter, table);
                 }
             }
         });
@@ -222,10 +222,10 @@ public class InventoryListUI extends JFrame {
                 isAscending = idx == 0? true : false;
                 
                 if(sortIndex == 0) {
-                    InventoryListService.fillTable(list, table);
+                    InventoryListService.fillTable(filter.size() == 0? list : filter, table);
                 }else {
-                    InventoryListService.sortByHeaders(tmp, isAscending, headers[sortIndex-1]);
-                    InventoryListService.fillTable(tmp, table);
+                    InventoryListService.sortByHeaders(filter.size() == 0? tmp : filter, isAscending, headers[sortIndex-1]);
+                    InventoryListService.fillTable(filter.size() == 0? tmp : filter, table);
                 }
             }
         });
