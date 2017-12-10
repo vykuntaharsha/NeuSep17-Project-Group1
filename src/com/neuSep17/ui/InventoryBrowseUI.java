@@ -217,9 +217,9 @@ public class BrowseInventoryScreen implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         List<JPanel> imagePanelObjectsList;
-        JLabel filterResultLabel=new JLabel("SEARCH RESULTS");
-        filterResultLabel.setSize(200,20);
-        filterResultLabel.setBounds(300,40,200,20);
+        JLabel filterResultLabel = new JLabel("SEARCH RESULTS");
+        filterResultLabel.setSize(200, 20);
+        filterResultLabel.setBounds(300, 40, 200, 20);
 
         /** Performing appropriate Actions Based on the Event occurred **/
         if (e.getSource() == searchButton) {
@@ -247,10 +247,9 @@ public class BrowseInventoryScreen implements ActionListener {
         } else if (e.getSource() == filterButton) {
             previousPageNavigateButton.setEnabled(false);
             nextPageNavigateButton.setEnabled(true);
-            if(filterVehicleList.size()!=0) {
+            if (filterVehicleList.size() != 0) {
                 filterVehicleList = utilityObject.filterVehicles(filterVehicleList, getFilterValues());
-            }
-            else{
+            } else {
                 filterVehicleList = utilityObject.filterVehicles(vehicleList, getFilterValues());
             }
             if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
@@ -382,6 +381,8 @@ public class BrowseInventoryScreen implements ActionListener {
             }
             JLabel vehicleIDLabel = new JLabel("ID: " + vehiclesToDisplay.get(startIndex).getID());
             vehicleIDLabel.setBounds(200, 10, 100, 20);
+            JLabel vehicleCategoryLabel=new JLabel("Category: " + vehiclesToDisplay.get(startIndex).getCategory().toString());
+            vehicleCategoryLabel.setBounds(305,10,100,20);
             JLabel vehicleMakeLabel = new JLabel("Make: " + vehiclesToDisplay.get(startIndex).getMake());
             vehicleMakeLabel.setBounds(200, 40, 200, 20);
             JLabel vehicleTypeLabel = new JLabel("Type: " + vehiclesToDisplay.get(startIndex).getBodyType());
@@ -391,6 +392,7 @@ public class BrowseInventoryScreen implements ActionListener {
             JLabel vehicleYearLabel = new JLabel("Year: " + Integer.toString(vehiclesToDisplay.get(startIndex).getYear()));
             vehicleYearLabel.setBounds(600, 40, 100, 20);
             imagePanelObjectsList.get(counter).add(vehicleIDLabel);
+            imagePanelObjectsList.get(counter).add(vehicleCategoryLabel);
             imagePanelObjectsList.get(counter).add(vehicleMakeLabel);
             imagePanelObjectsList.get(counter).add(vehicleTypeLabel);
             imagePanelObjectsList.get(counter).add(vehiclePriceLabel);
@@ -410,7 +412,7 @@ public class BrowseInventoryScreen implements ActionListener {
         filterResultMainPanel = new JPanel();
         filterResultMainPanel.setBounds(350, 110, 750, 450);
         filterResultMainPanel.setLayout(null);
-        filterResultMainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY,2));
+        filterResultMainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         contentPane.add(filterResultMainPanel);
     }
 
@@ -421,7 +423,7 @@ public class BrowseInventoryScreen implements ActionListener {
             JPanel resultImagePanel = new JPanel();
             resultImagePanel.setLayout(null);
             resultImagePanel.setBounds(5, y, 700, 60);
-        //    resultImagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            //    resultImagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             y = y + 65;
             imagePanelObjectsList.add(resultImagePanel);
             filterResultMainPanel.add(resultImagePanel);
