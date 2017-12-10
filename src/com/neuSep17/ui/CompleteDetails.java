@@ -2,6 +2,8 @@
  * 
  * Author - Aarabhi Pugazhendhi
  */
+//Used under VehicleDetailsUI.java
+package com.neuSep17.ui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import javax.swing.JDialog;
