@@ -1,3 +1,9 @@
+/**
+*
+* @author Aarabhi Pugazhendhi
+*/
+//Used for vehicleDetailsUI.java 
+package com.neuSep17.ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
