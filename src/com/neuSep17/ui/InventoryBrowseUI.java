@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class BrowseInventoryScreen implements ActionListener {
-    BrowseInventoryUtility utilityObject = new BrowseInventoryUtility();
+public class InventoryBrowseUI implements ActionListener {
+    InventoryBrowseUtility utilityObject = new InventoryBrowseUtility();
     Collection<Vehicle> vehicles = utilityObject.setObjectsforUtility();
     InventoryListService inventoryServiceObject = new InventoryListService();
     ArrayList<Vehicle> vehicleList = new ArrayList<>(vehicles);
@@ -34,7 +34,7 @@ public class BrowseInventoryScreen implements ActionListener {
     JPanel searchPanel, filterOptionsPanel, filterResultMainPanel, navigationOptionsPanel, firstImagePanel, secondImagePanel, thirdImagePanel;
     List<JPanel> imagePanelObjectsList;
 
-    public BrowseInventoryScreen() throws IOException {
+    public InventoryBrowseUI() throws IOException {
         initializeJFrame();
         initializeJButtons();
         initializeJComboBox();
