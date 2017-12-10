@@ -1,5 +1,5 @@
 import com.neuSep17.dto.Vehicle;
-import com.neuSep17.utility.BrowseInventoryUtility;
+import com.neuSep17.utility.InventoryBrowseUtility;
 import com.neuSep17.service.InventoryListService;
 
 import javax.imageio.ImageIO;
