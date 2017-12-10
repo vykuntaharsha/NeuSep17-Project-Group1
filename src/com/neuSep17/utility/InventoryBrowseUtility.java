@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BrowseInventoryUtility {
+public class InventoryBrowseUtility  {
     Collection<Vehicle> vehicles = new ArrayList<>();
 
     public Collection<Vehicle> setObjectsforUtility() throws IOException {
