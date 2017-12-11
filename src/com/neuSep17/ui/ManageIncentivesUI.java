@@ -1,6 +1,7 @@
 package com.neuSep17.ui;
 
 import com.neuSep17.dao.IncentiveImple;
+import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Incentive;
 import com.neuSep17.service.IncentiveService;
 
@@ -12,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ManageIncentivesUI extends IncentiveUI {
@@ -210,6 +212,19 @@ public class ManageIncentivesUI extends IncentiveUI {
                     displayIncentives(incentives);
                     listPanel.setVisible(true);
                 }
+            }
+        });
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = jtf.getText();
+                incentives = IncentiveService.searchIncentives("ID", text);
+                listPanel.removeAll();
+                listPanel.revalidate();
+                listPanel.repaint();
+                displayIncentives(incentives);
+                listPanel.setVisible(true);
             }
         });
 
