@@ -551,16 +551,15 @@ public class InventoryListUI extends JFrame {
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getSelectedId() == null || getSelectedId().isEmpty()) {
-                    InventoryEditUI tempui = new InventoryEditUI(null, that);
+                if (getSelectedId() == null || getSelectedId().isEmpty()) { 
+                    InventoryEditUI tempui = new InventoryEditUI(null, that, true);
                 } else {
                     for (Vehicle v : list) {
                         if (v.getID().equals(getSelectedId())) {
-                            InventoryEditUI inventoryEditUI = new InventoryEditUI(v, that);
+                            InventoryEditUI inventoryEditUI = new InventoryEditUI(v, that, true);
                         }
                     }
                 }
-
             }
         });
         btnAdd.setFont(new Font("Segoe UI Historic", Font.PLAIN, 25));
@@ -582,7 +581,9 @@ public class InventoryListUI extends JFrame {
                     VehicleImple service = new VehicleImple();
                     int clickButton = JOptionPane.showConfirmDialog(null, "Confirm delete ?", "Delete",
                             JOptionPane.YES_NO_OPTION);
+                    Vehicle deleteV = null;
                     if (clickButton == JOptionPane.YES_OPTION) {
+                        
                         // delete selected data
                         for(int i=0;i<list.size();i++){
                             if(list.get(i).getID().equals(getSelectedId())){
@@ -591,8 +592,9 @@ public class InventoryListUI extends JFrame {
                             }
                         }
                     }
+                    
                     // refreshTable
-                    refreshTable(null);
+                    refreshTable(null,deleteV);
                 }
             }
         });
@@ -611,7 +613,7 @@ public class InventoryListUI extends JFrame {
                 if (getSelectedId() == null || getSelectedId().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Please Select An Item To Edit", "Error Message", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that);
+                    InventoryEditUI imf = new InventoryEditUI(getSelectedVehicle(), that, false);
                 }
             }
         });
@@ -798,9 +800,22 @@ public class InventoryListUI extends JFrame {
     
     // team 2: Lu Niu
     private File file;
-    public void refreshTable(Vehicle v) {
-        if (v != null) {
-            list.add(v);   
+    public void refreshTable(Vehicle addedVehicle, Vehicle deletedVehicle) {
+        if (addedVehicle != null) {
+            Vehicle vToBeRemoved = null;
+            for (Vehicle v : list) {
+                if (v.getWebID().equalsIgnoreCase(addedVehicle.getWebID()) && 
+                        v.getID().equalsIgnoreCase(addedVehicle.getID())) {
+                    vToBeRemoved = v;
+                }
+            }
+            
+            list.remove(vToBeRemoved);
+            list.add(addedVehicle);   
+        }       
+        
+        if (deletedVehicle != null) {
+            list.remove(deletedVehicle);
         }
         
         InventoryListService.fillTable(list, table);

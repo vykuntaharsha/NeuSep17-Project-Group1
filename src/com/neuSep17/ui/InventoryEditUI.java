@@ -79,7 +79,7 @@ public class InventoryEditUI extends JFrame {
         makeThisVisible();
     }
 
-    public InventoryEditUI(Vehicle v, InventoryListUI listUI) {//code-review-bin: we may only need vehicle and list (instead of listUI)
+    public InventoryEditUI(Vehicle v, InventoryListUI listUI, boolean addNew) {//code-review-bin: we may only need vehicle and list (instead of listUI)
         super();
         createCompoments();
         createPanel();
@@ -89,6 +89,7 @@ public class InventoryEditUI extends JFrame {
         setupAutoCompletes();
         makeThisVisible();
         this.listUI = listUI;
+        this.addNew = addNew;
     }
     
     private void createCompoments() {
@@ -113,16 +114,20 @@ public class InventoryEditUI extends JFrame {
         photoLabel = new JLabel("Photo");// photo
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
+                if (JOptionPane.showConfirmDialog(null, "Save?", "Save",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+                    // don't dispose if save failed: Lu Niu
+                    boolean res = false;
                     try {
-                        // save method;
-                        saveVehicle(vehicle);
+                        res = saveVehicle(vehicle);
                     } catch (MalformedURLException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                    dispose();
+                    
+                    if(res) {
+                        dispose();    
+                    }
                 }
             }
         });
@@ -1084,6 +1089,7 @@ public class InventoryEditUI extends JFrame {
 
     private Vehicle vehicle;
     private InventoryListUI listUI;
+    private boolean addNew = false;
 
     private void setupAutoCompletes() {
         setupAutoComplete(category.getInputTextField(), new ArrayList<String>(Arrays.asList(categories)));
@@ -1134,21 +1140,21 @@ public class InventoryEditUI extends JFrame {
         else photoLabel.setText(photoURL.toString());
     }
   
-    public boolean saveVehicle(Vehicle vehicle) throws MalformedURLException {
+    public boolean saveVehicle(Vehicle preVehicle) throws MalformedURLException {
         this.validateTextFields();
         if (canSave()) {
-            Vehicle v = new Vehicle();
+            Vehicle newVehicle = new Vehicle();
             String idText = this.id.getInputTextField().getText();
             String webIdText = this.webId.getInputTextField().getText();
-            v.setID(idText);
-            v.setWebID(webIdText);
-            v.setCategory(Category.valueOf(this.category.getInputTextField().getText().toUpperCase()));
-            v.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
-            v.setMake(this.make.getInputTextField().getText());
-            v.setModel(this.model.getInputTextField().getText());
-            v.setTrim(this.trim.getInputTextField().getText());
-            v.setBodyType(this.type.getInputTextField().getText());
-            v.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
+            newVehicle.setID(idText);
+            newVehicle.setWebID(webIdText);
+            newVehicle.setCategory(Category.valueOf(this.category.getInputTextField().getText().toUpperCase()));
+            newVehicle.setYear(Integer.valueOf(this.year.getInputTextField().getText()));
+            newVehicle.setMake(this.make.getInputTextField().getText());
+            newVehicle.setModel(this.model.getInputTextField().getText());
+            newVehicle.setTrim(this.trim.getInputTextField().getText());
+            newVehicle.setBodyType(this.type.getInputTextField().getText());
+            newVehicle.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
             URL url;
             try {
                 // This will throw exception in case of no photo.
@@ -1158,56 +1164,56 @@ public class InventoryEditUI extends JFrame {
                 url = new URL("https://vignette.wikia.nocookie.net/arthur/images/a/a7/No_Image.jpg");
             }
             
-            v.setPhotoURL(url);
-            v.setSortingField("sF");
-            if(vehicle != null) {
-                v.setEntertainment(vehicle.getEntertainment());
-                v.setExteriorColor(vehicle.getExteriorColor());
-                v.setBattery(vehicle.getBattery());
-                v.setEngine(vehicle.getEngine());
-                v.setFuelType(vehicle.getFuelType());
-                v.setInteriorColor(vehicle.getInteriorColor());
-                v.setOptionalFeatures(vehicle.getOptionalFeatures());
-                v.setTransmission(vehicle.getTransmission());
-                v.setVin(vehicle.getVin());               
+            newVehicle.setPhotoURL(url);
+            newVehicle.setSortingField("sF");
+            if(preVehicle != null) {
+                newVehicle.setEntertainment(preVehicle.getEntertainment());
+                newVehicle.setExteriorColor(preVehicle.getExteriorColor());
+                newVehicle.setBattery(preVehicle.getBattery());
+                newVehicle.setEngine(preVehicle.getEngine());
+                newVehicle.setFuelType(preVehicle.getFuelType());
+                newVehicle.setInteriorColor(preVehicle.getInteriorColor());
+                newVehicle.setOptionalFeatures(preVehicle.getOptionalFeatures());
+                newVehicle.setTransmission(preVehicle.getTransmission());
+                newVehicle.setVin(preVehicle.getVin());               
             } else {
-                v.setEntertainment(" ");
-                v.setExteriorColor(" ");
-                v.setBattery(" ");
-                v.setEngine(" ");
-                v.setFuelType(" ");
-                v.setInteriorColor(" ");
-                v.setOptionalFeatures(" ");
-                v.setTransmission(" ");
-                v.setVin(" "); 
-            }
+                newVehicle.setEntertainment(" ");
+                newVehicle.setExteriorColor(" ");
+                newVehicle.setBattery(" ");
+                newVehicle.setEngine(" ");
+                newVehicle.setFuelType(" ");
+                newVehicle.setInteriorColor(" ");
+                newVehicle.setOptionalFeatures(" ");
+                newVehicle.setTransmission(" ");
+                newVehicle.setVin(" "); 
+            }           
 
-            boolean creatingNewVehicle = false;
-            if (vehicle == null || vehicle.getID() == null || vehicle.getWebID() == null) {
-                creatingNewVehicle = true;
-            } else if (!idText.equalsIgnoreCase(vehicle.getID())
-                    || !webIdText.equalsIgnoreCase(vehicle.getWebID())) {
-
-                service.deleteVehicle(vehicle.getWebID(), vehicle.getID());
-                creatingNewVehicle = true;
+            boolean result = false;
+            Vehicle deletedVehicle = null;
+            if (preVehicle != null && preVehicle.getWebID().equalsIgnoreCase(newVehicle.getWebID())
+                    && preVehicle.getID().equalsIgnoreCase(newVehicle.getID())) {
+                result = service.updateVehicle(newVehicle.getWebID(), newVehicle);
+            } else if (!this.addNew && (!preVehicle.getWebID().equalsIgnoreCase(newVehicle.getWebID())
+                    || !preVehicle.getID().equals(newVehicle.getID()))) {
+                service.deleteVehicle(preVehicle.getWebID(), preVehicle.getID());
+                deletedVehicle = preVehicle;
+                result = service.addVehicle(newVehicle.getWebID(), newVehicle);
+            } else {
+                result = service.addVehicle(newVehicle.getWebID(), newVehicle);
             }
             
-            boolean result = creatingNewVehicle ? 
-                    service.addVehicle(v.getWebID(), v)
-                    : service.updateVehicle(v.getWebID(), v);
-                    
             if (!result) {
                 JOptionPane.showMessageDialog(null, "Failed to save, please verify your input.");
                 return false;
             }
                     
             if (listUI != null) {
-                listUI.refreshTable(v);
+                listUI.refreshTable(newVehicle, deletedVehicle);
             }
 
             return true;
         }
-
+        JOptionPane.showMessageDialog(null, "Failed to save, please verify your input.");
         return false;
     }
 }
