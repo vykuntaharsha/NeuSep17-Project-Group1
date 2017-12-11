@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class InventoryBrowseUtility {
     Collection<Vehicle> vehicles = new ArrayList<>();
 
-    public Collection<Vehicle> setObjectsforUtility() throws IOException {
+    public Collection<Vehicle> setObjectsforUtility(String dealer) throws IOException {
         DealerImpleService dealerServiceObject = new DealerImpleService();
         VehicleImple vehicleImpleObject = new VehicleImple(new File("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data"));
-        Dealer dealerObject = dealerServiceObject.getADealer("gmps-camino");
-        Inventory inventoryObject = vehicleImpleObject.getInventory(dealerObject.getId().toString());
+        Dealer dealerObject = dealerServiceObject.getADealer(dealer);
+        Inventory inventoryObject = vehicleImpleObject.getInventory(dealerObject.getId().toString()+".txt");
         vehicles = inventoryObject.getVehicles();
         return vehicles;
     }
