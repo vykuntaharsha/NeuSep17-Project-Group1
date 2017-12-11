@@ -5,7 +5,7 @@
  */
 package com.neuSep17.ui;
 
-import swingx.border.DropShadowBorder;
+//import swingx.border.DropShadowBorder;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -108,9 +108,9 @@ class VehicleDetailUI extends JFrame {
      * */
     public void createDesPanel() {
 	tabs = new JTabbedPane();
-        DropShadowBorder shadow = new DropShadowBorder(Color.BLACK, 1, 20, 0.8f);
+        //DropShadowBorder shadow = new DropShadowBorder(Color.BLACK, 1, 20, 0.8f);
         tabs.setBackground(new Color(240, 230, 140));
-        tabs.setBorder(shadow);
+        //tabs.setBorder(shadow);
 
         tabs.setFont(new Font("Bookman Old Style", Font.BOLD, 16));
          dealerTab = new JPanel();
