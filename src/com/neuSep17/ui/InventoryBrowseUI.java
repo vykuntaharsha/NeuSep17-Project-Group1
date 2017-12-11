@@ -1,7 +1,8 @@
-import com.neuSep17.dto.Vehicle;
+package com.neuSep17.ui;
+
+import com.neuSep17.dto.*;
 import com.neuSep17.utility.InventoryBrowseUtility;
 import com.neuSep17.service.InventoryListService;
-import com.neuSep17.utility.InventoryBrowseUtility;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
