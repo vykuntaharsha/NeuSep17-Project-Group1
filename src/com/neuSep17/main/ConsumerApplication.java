@@ -3,6 +3,8 @@ package com.neuSep17.main;
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.service.DealerImpleService;
 import com.neuSep17.ui.IncentiveUI;
+import com.neuSep17.ui.InventoryBrowseUI;
+import com.neuSep17.utility.InventoryBrowseUtility;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -100,7 +102,11 @@ public class ConsumerApplication extends IncentiveUI {
                 Dealer selectedDealer = (Dealer) chooseDealer.getSelectedItem();
                 String dealerId = selectedDealer.getId();
                 System.out.println("Selected dealer id: "+dealerId+","+selectedDealer.getName()+","+selectedDealer.getEmailId());
-                // TODO: Call Browse inventory screen by passing dealerId
+                try {
+                    InventoryBrowseUI inventoryBrowseUI = new InventoryBrowseUI(dealerId);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
