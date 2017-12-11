@@ -1,11 +1,9 @@
 /**
  * 
  * @author aarabhi Pugazhendhi
- * PLEASE ADD SWINGX JAR FILE AS A PART OF EXTERNAL JARS
  */
 package com.neuSep17.ui;
 
-//import swingx.border.DropShadowBorder;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -453,9 +451,17 @@ class VehicleDetailUI extends JFrame {
             @Override
             public void windowOpened(WindowEvent e) {
                 // TODO Auto-generated method stub
-
-                Image image = Toolkit.getDefaultToolkit().getImage(vehicle.getPhotoURL());
-                System.out.println(vehicle.getPhotoURL());
+		    BufferedImage image = null;
+		try {
+		    image = ImageIO.read(vehicle.getPhotoURL());
+		} catch (Exception e1) {
+		      try {
+			image = ImageIO.read(new File("data/No_Image_Available.jpg"));
+		    } catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		    }
+		}
                 ImageIcon icon = new ImageIcon(image);
                 photoLabel.setImage(image);
                 icon=new ImageIcon(icon.getImage().getScaledInstance(photoLabel.getWidth(),photoLabel.getHeight(), Image.SCALE_DEFAULT));
