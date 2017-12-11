@@ -24,6 +24,7 @@ public class PictureManager {
     private static final String PICTURE_DIR = "picture";
     private static final boolean DEBUG = false;
 
+    //replaced by the getPhoto() in the Vehicle class
     @Deprecated
     public static Image getVehiclePhoto(Vehicle v) {
         if(v==null || v.getPhotoURL() == null || v.getPhotoURL().getFile().isEmpty() ) return null;
@@ -52,7 +53,7 @@ public class PictureManager {
                     file.createNewFile();
                 } catch (IOException e) {
                     System.out.println("Cannot create this empty file to disk "+ file.toString());
-                    e.printStackTrace();
+                    if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) e.printStackTrace();
                 }
         }
         return image;
@@ -83,7 +84,7 @@ public class PictureManager {
             image = ImageIO.read(imageFile);
         } catch (IOException e) {
             System.out.println("Cannot read from disk.");
-            if(DEBUG) e.printStackTrace();
+            if(PropertyManager.getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
         }
 //        System.out.println("loaded from disk " + image.toString());
         return image;
@@ -95,7 +96,7 @@ public class PictureManager {
             if(url.openStream()!=null) image = ImageIO.read(url);
         } catch (IOException e) {
             System.out.println("Cannot load the photo from " + url.toString());
-            if(DEBUG) e.printStackTrace();
+            if(PropertyManager.getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
         }
 //        System.out.println("loaded from URL " + image.toString());
         return image;
@@ -109,7 +110,7 @@ public class PictureManager {
                 ImageIO.write(image, getFileExt(fileName), file);
             } catch (IOException e) {
                 System.out.println("Cannot cache the photo.");
-                if(DEBUG) e.printStackTrace();
+                if(PropertyManager.getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
             }
         }
     }
@@ -120,7 +121,7 @@ public class PictureManager {
             url = new URL("http://inventory-dmg.assets-cdk.com/chrome_jpgs/2016/15879x90.jpg");
 //            url = new URL("http://inventory-dmg.assets-cdk.com/5/6/7/13918653765x90.jpg");
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) e.printStackTrace();
         }
         PictureManager.getVehiclePhoto(url);
     }
