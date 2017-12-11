@@ -15,14 +15,13 @@ public class InventoryBrowseUtility {
     Collection<Vehicle> vehicles = new ArrayList<>();
 
     public Collection<Vehicle> setObjectsforUtility(String dealer) throws IOException {
-        DealerImpleService dealerServiceObject = new DealerImpleService();
-        VehicleImple vehicleImpleObject = new VehicleImple(new File("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data"));
-        Dealer dealerObject = dealerServiceObject.getADealer(dealer);
-        Inventory inventoryObject = vehicleImpleObject.getInventory(dealerObject.getId().toString()+".txt");
+        DealerImple dealerImpleObject = new DealerImple();
+        VehicleImple vehicleImpleObject = new VehicleImple(new File("data"));
+        Dealer dealerObject = dealerImpleObject.getADealer(dealer);
+        Inventory inventoryObject = vehicleImpleObject.getInventory(dealerObject.getId().toString());
         vehicles = inventoryObject.getVehicles();
         return vehicles;
     }
-
     public ArrayList<Vehicle> filterVehicles(ArrayList<Vehicle> vehicles, HashMap<String, String> filter) {
         ArrayList<Vehicle> filterVehicles = new ArrayList<Vehicle>();
         filterVehicles.addAll(vehicles);
