@@ -34,8 +34,8 @@ public class ManageIncentivesUI extends IncentiveUI {
     private JLabel[] imageLabel;
     private JButton searchButton;
     private int length;
-    private ArrayList<Incentive> incentives;//to save incentives read from file
-    private ArrayList<Incentive> Allincentives;
+    public ArrayList<Incentive> incentives;//to save incentives read from file
+    public ArrayList<Incentive> Allincentives;
     private static String dealerid;
     private JComboBox jsort;
     private JButton searchby;
@@ -122,7 +122,7 @@ public class ManageIncentivesUI extends IncentiveUI {
         length = incentives.size();
         for (int i = 0; i < length; i++) {
             jp[i] = new JPanel();
-            ii[i] = createImageIcon("flame.jpg");
+            ii[i] = createImageIcon("C:\\Users\\diksh\\Desktop\\NeuSep17-Project-Group1-master-src\\NeuSep17-Project-Group1-master\\picture\\flame.jpg");
             imageLabel[i] = new JLabel(ii[i]);
             imageLabel[i].setBounds(0, 0, 24, 31);
             jp[i].add(imageLabel[i], new Integer(Integer.MIN_VALUE));
@@ -219,7 +219,7 @@ public class ManageIncentivesUI extends IncentiveUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String text = jtf.getText();
-                incentives = IncentiveService.searchIncentives("ID", text);
+                incentives = IncentiveService.searchIncentives(incentives, text);
                 listPanel.removeAll();
                 listPanel.revalidate();
                 listPanel.repaint();
