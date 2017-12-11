@@ -1,6 +1,7 @@
 import com.neuSep17.dto.Vehicle;
-import com.neuSep17.utility.BrowseInventoryUtility;
+import com.neuSep17.utility.InventoryBrowseUtility;
 import com.neuSep17.service.InventoryListService;
+import com.neuSep17.utility.InventoryBrowseUtility;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,16 +13,17 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class BrowseInventoryScreen implements ActionListener {
-    BrowseInventoryUtility utilityObject = new BrowseInventoryUtility();
-    Collection<Vehicle> vehicles = utilityObject.setObjectsforUtility();
+public class InventoryBrowseUI implements ActionListener {
+    InventoryBrowseUtility utilityObject=new InventoryBrowseUtility();
     InventoryListService inventoryServiceObject = new InventoryListService();
-    ArrayList<Vehicle> vehicleList = new ArrayList<>(vehicles);
+    Collection<Vehicle> vehicles;
+    ArrayList<Vehicle> vehicleList;
 
     final int WIDTH = 1300;
     final int HEIGHT = 700;
 
     int startingIndexToDisplay = 5;
+    int pageNumber=1;
     ArrayList<Vehicle> filterVehicleList = new ArrayList<>();
     int countOfResultsDisplayed = 0;
 
@@ -34,7 +36,11 @@ public class BrowseInventoryScreen implements ActionListener {
     JPanel searchPanel, filterOptionsPanel, filterResultMainPanel, navigationOptionsPanel, firstImagePanel, secondImagePanel, thirdImagePanel;
     List<JPanel> imagePanelObjectsList;
 
-    public BrowseInventoryScreen() throws IOException {
+    public InventoryBrowseUI(String dealerID) throws IOException {
+        InventoryBrowseUtility utilityObject = new InventoryBrowseUtility();
+        vehicles = utilityObject.setObjectsforUtility(dealerID);
+        vehicleList = new ArrayList<>(vehicles);
+
         initializeJFrame();
         initializeJButtons();
         initializeJComboBox();
@@ -43,7 +49,9 @@ public class BrowseInventoryScreen implements ActionListener {
         initializeJTextField();
         settingLayout();
         addingComponents();
+        addListeners();
     }
+
 
     void initializeJFrame() {
         browseInventoryFrame = new JFrame("Find Your Dream Car");
@@ -69,6 +77,7 @@ public class BrowseInventoryScreen implements ActionListener {
         nextPageNavigateButton.setBounds(700, 0, 80, 30);
 
         previousPageNavigateButton.setEnabled(false);
+        nextPageNavigateButton.setEnabled(true);
     }
 
     void initializeJComboBox() {
@@ -90,19 +99,15 @@ public class BrowseInventoryScreen implements ActionListener {
         String[] price = {"NONE", "0-10000", "10000-20000", "20000-30000", "30000-40000", "above 40000"};
         priceRangeSelect = new JComboBox(price);
 
-        String[] sortType = {"NONE", "PRICE", "YEAR"};
+        String[] sortType = {"NONE", "PRICE HIGH TO LOW", "PRICE LOW TO HIGH", "YEAR LOW TO HIGH", "YEAR HIGH TO LOW"};
         sortTypeSelect = new JComboBox(sortType);
-        String[] sortValues = {"NONE", "HIGH TO LOW", "LOW TO HIGH"};
-        sortValueSelect = new JComboBox(sortValues);
-
 
         categorySelect.setBounds(120, 10, 170, 20);
         makeSelect.setBounds(120, 50, 170, 20);
         typeSelect.setBounds(120, 90, 170, 20);
         yearSelect.setBounds(120, 130, 170, 20);
         priceRangeSelect.setBounds(120, 170, 170, 20);
-        sortTypeSelect.setBounds(790, 14, 100, 30);
-        sortValueSelect.setBounds(900, 14, 100, 30);
+        sortTypeSelect.setBounds(790, 14, 200, 30);
 
     }
 
@@ -113,9 +118,7 @@ public class BrowseInventoryScreen implements ActionListener {
         yearLabel = new JLabel("YEAR");
         priceLabel = new JLabel("PRICE");
         sortLabel = new JLabel("SORT BY");
-        int num = 1;
-        int totalNum = 10;
-        navigationLabel = new JLabel("Page " + num + " of " + totalNum);
+        navigationLabel = new JLabel("Page "+pageNumber);
 
 
         categoryLabel.setBounds(40, 10, 80, 20);
@@ -124,7 +127,7 @@ public class BrowseInventoryScreen implements ActionListener {
         yearLabel.setBounds(40, 130, 40, 20);
         priceLabel.setBounds(40, 170, 40, 20);
         sortLabel.setBounds(730, 14, 50, 30);
-        navigationLabel.setBounds(600, 0, 120, 30);
+        navigationLabel.setBounds(620, 0, 100, 30);
 
     }
 
@@ -158,7 +161,6 @@ public class BrowseInventoryScreen implements ActionListener {
 
         searchPanel.add(sortLabel);
         searchPanel.add(sortTypeSelect);
-        searchPanel.add(sortValueSelect);
         searchPanel.add(sortButton);
 
         filterOptionsPanel.add(categoryLabel);
@@ -186,6 +188,7 @@ public class BrowseInventoryScreen implements ActionListener {
         imagePanelObjectsList = createResultsPanel(5);
         try {
             display(0, vehicleList, imagePanelObjectsList);
+            countOfResultsDisplayed=countOfResultsDisplayed+5;
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -223,86 +226,102 @@ public class BrowseInventoryScreen implements ActionListener {
 
         /** Performing appropriate Actions Based on the Event occurred **/
         if (e.getSource() == searchButton) {
+            countOfResultsDisplayed=0;
             previousPageNavigateButton.setEnabled(true);
             nextPageNavigateButton.setEnabled(true);
             resetFilterValues();
             if (!searchTextField.getText().isEmpty()) {
                 filterVehicleList = inventoryServiceObject.search(filterVehicleList, vehicleList, searchTextField);
-                if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
-                    inventoryServiceObject.sortByYear(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
-                } else if ((sortTypeSelect.getSelectedItem().toString()) == "PRICE") {
-                    inventoryServiceObject.sortByPrice(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                if (sortTypeSelect.getSelectedItem().toString().contains("YEAR")) {
+                    utilityObject.sortByYear(filterVehicleList, (sortTypeSelect.getSelectedItem().toString() == "YEAR LOW TO HIGH"));
+                } else if (sortTypeSelect.getSelectedItem().toString().contains("PRICE")) {
+                    utilityObject.sortByPrice(filterVehicleList, (sortTypeSelect.getSelectedItem().toString() == "PRICE LOW TO HIGH"));
                 }
-                countOfResultsDisplayed = 0;
                 try {
                     removeCurrentResultPanel();
                     addFilterResultPanel();
                     imagePanelObjectsList = createResultsPanel(5);
                     filterResultMainPanel.add(filterResultLabel);
                     display(0, filterVehicleList, imagePanelObjectsList);
+                    pageNumber=1;
+                    navigationLabel.setText("Page "+pageNumber);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
         } else if (e.getSource() == filterButton) {
-            previousPageNavigateButton.setEnabled(false);
+            countOfResultsDisplayed=0;
             nextPageNavigateButton.setEnabled(true);
             if (filterVehicleList.size() != 0) {
                 filterVehicleList = utilityObject.filterVehicles(filterVehicleList, getFilterValues());
             } else {
                 filterVehicleList = utilityObject.filterVehicles(vehicleList, getFilterValues());
             }
-            if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
-                inventoryServiceObject.sortByYear(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
-            } else if ((sortTypeSelect.getSelectedItem().toString()) == "PRICE") {
-                inventoryServiceObject.sortByPrice(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+            if (sortTypeSelect.getSelectedItem().toString().contains("YEAR")) {
+                utilityObject.sortByYear(filterVehicleList, (sortTypeSelect.getSelectedItem().toString() == "YEAR LOW TO HIGH"));
+            } else if (sortTypeSelect.getSelectedItem().toString().contains("PRICE")) {
+                utilityObject.sortByPrice(filterVehicleList, (sortTypeSelect.getSelectedItem().toString() == "PRICE LOW TO HIGH"));
             }
-            countOfResultsDisplayed = 0;
             removeCurrentResultPanel();
             addFilterResultPanel();
             imagePanelObjectsList = createResultsPanel(5);
             try {
                 filterResultMainPanel.add(filterResultLabel);
                 display(0, filterVehicleList, imagePanelObjectsList);
+                pageNumber=1;
+                navigationLabel.setText("Page "+pageNumber);
+                if(countOfResultsDisplayed>filterVehicleList.size()){
+                    nextPageNavigateButton.setEnabled(false);
+                }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         } else if (e.getSource() == sortButton) {
+            nextPageNavigateButton.setEnabled(true);
+            countOfResultsDisplayed=0;
             removeCurrentResultPanel();
             addFilterResultPanel();
             imagePanelObjectsList = createResultsPanel(5);
-            if ((sortTypeSelect.getSelectedItem().toString()) == "YEAR") {
+            if (sortTypeSelect.getSelectedItem().toString().contains("YEAR")) {
                 if (filterVehicleList.size() != 0) {
                     try {
-                        inventoryServiceObject.sortByYear(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        utilityObject.sortByYear(filterVehicleList, (sortTypeSelect.getSelectedItem().toString() == "YEAR LOW TO HIGH"));
                         filterResultMainPanel.add(filterResultLabel);
                         display(0, filterVehicleList, imagePanelObjectsList);
+                        pageNumber=1;
+                        navigationLabel.setText("Page "+pageNumber);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 } else {
                     try {
-                        inventoryServiceObject.sortByYear(vehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        utilityObject.sortByYear(vehicleList, (sortTypeSelect.getSelectedItem().toString() == "YEAR LOW TO HIGH"));
                         filterResultMainPanel.add(filterResultLabel);
                         display(0, vehicleList, imagePanelObjectsList);
+                        pageNumber=1;
+                        navigationLabel.setText("Page "+pageNumber);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 }
 
-            } else if ((sortTypeSelect.getSelectedItem().toString()) == "PRICE") {
+            } else if (sortTypeSelect.getSelectedItem().toString().contains("PRICE")) {
                 if (filterVehicleList.size() != 0) {
                     try {
-                        inventoryServiceObject.sortByPrice(filterVehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        utilityObject.sortByPrice(filterVehicleList, (sortTypeSelect.getSelectedItem().toString() == "PRICE LOW TO HIGH"));
                         filterResultMainPanel.add(filterResultLabel);
                         display(0, filterVehicleList, imagePanelObjectsList);
+                        pageNumber=1;
+                        navigationLabel.setText("Page "+pageNumber);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 } else {
                     try {
-                        inventoryServiceObject.sortByPrice(vehicleList, (sortValueSelect.getSelectedItem().toString() == "LOW TO HIGH"));
+                        utilityObject.sortByPrice(vehicleList, (sortTypeSelect.getSelectedItem().toString() == "PRICE LOW TO HIGH"));
                         filterResultMainPanel.add(filterResultLabel);
+                        pageNumber=1;
+                        navigationLabel.setText("Page "+pageNumber);
                         display(0, vehicleList, imagePanelObjectsList);
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -310,7 +329,9 @@ public class BrowseInventoryScreen implements ActionListener {
                 }
             }
         } else if (e.getSource() == previousPageNavigateButton) {
-            startingIndexToDisplay = startingIndexToDisplay - 5;
+            nextPageNavigateButton.setEnabled(true);
+            startingIndexToDisplay = startingIndexToDisplay - 10;
+            pageNumber--;
             removeCurrentResultPanel();
             addFilterResultPanel();
             imagePanelObjectsList = createResultsPanel(5);
@@ -321,14 +342,16 @@ public class BrowseInventoryScreen implements ActionListener {
                 } else {
                     display(startingIndexToDisplay, vehicleList, imagePanelObjectsList);
                 }
+                navigationLabel.setText("Page "+pageNumber);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            if (startingIndexToDisplay == 0) {
+            if (startingIndexToDisplay == 5) {
                 previousPageNavigateButton.setEnabled(false);
             }
         } else if (e.getSource() == nextPageNavigateButton) {
             previousPageNavigateButton.setEnabled(true);
+            pageNumber++;
             try {
                 removeCurrentResultPanel();
                 addFilterResultPanel();
@@ -337,10 +360,16 @@ public class BrowseInventoryScreen implements ActionListener {
                     filterResultMainPanel.add(filterResultLabel);
                     display(startingIndexToDisplay, filterVehicleList, imagePanelObjectsList);
                     startingIndexToDisplay = startingIndexToDisplay + 5;
+                    navigationLabel.setText("Page "+pageNumber);
                 } else {
                     display(startingIndexToDisplay, vehicleList, imagePanelObjectsList);
                     startingIndexToDisplay = startingIndexToDisplay + 5;
+                    navigationLabel.setText("Page "+pageNumber);
+                    if(countOfResultsDisplayed==vehicleList.size()){
+                        nextPageNavigateButton.setEnabled(false);
+                    }
                 }
+
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -367,7 +396,7 @@ public class BrowseInventoryScreen implements ActionListener {
 
     public void display(int startIndex, ArrayList<Vehicle> vehiclesToDisplay, List<JPanel> imagePanelObjectsList) throws IOException {
         int counter = 0;
-        while (counter < 5) {
+        while (counter < 5 && startIndex < vehiclesToDisplay.size()) {
             try {
                 Image image = ImageIO.read(vehiclesToDisplay.get(startIndex).getPhotoURL().openStream());
                 JButton imageButton = new JButton(new ImageIcon(image));
@@ -380,9 +409,11 @@ public class BrowseInventoryScreen implements ActionListener {
                 imagePanelObjectsList.get(counter).add(imageButton);
             }
             JLabel vehicleIDLabel = new JLabel("ID: " + vehiclesToDisplay.get(startIndex).getID());
+
+
             vehicleIDLabel.setBounds(200, 10, 100, 20);
-            JLabel vehicleCategoryLabel=new JLabel("Category: " + vehiclesToDisplay.get(startIndex).getCategory().toString());
-            vehicleCategoryLabel.setBounds(305,10,100,20);
+            JLabel vehicleCategoryLabel = new JLabel("Category: " + vehiclesToDisplay.get(startIndex).getCategory().toString());
+            vehicleCategoryLabel.setBounds(305, 10, 100, 20);
             JLabel vehicleMakeLabel = new JLabel("Make: " + vehiclesToDisplay.get(startIndex).getMake());
             vehicleMakeLabel.setBounds(200, 40, 200, 20);
             JLabel vehicleTypeLabel = new JLabel("Type: " + vehiclesToDisplay.get(startIndex).getBodyType());
@@ -401,7 +432,12 @@ public class BrowseInventoryScreen implements ActionListener {
             startIndex++;
             countOfResultsDisplayed++;
         }
+        if (countOfResultsDisplayed >= vehiclesToDisplay.size()) {
+                nextPageNavigateButton.setEnabled(false);
+            }
     }
+
+
 
 
     private void removeCurrentResultPanel() {

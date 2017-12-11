@@ -1,11 +1,10 @@
 /**
  * 
  * @author aarabhi Pugazhendhi
- * PLEASE ADD SWINGX JAR FILE AS A PART OF EXTERNAL JARS
  */
 package com.neuSep17.ui;
 
-import swingx.border.DropShadowBorder;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -13,9 +12,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.text.DateFormat;
@@ -23,7 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.table.DefaultTableModel;
@@ -33,7 +37,8 @@ import com.neuSep17.dao.IncentiveImple;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Incentive;
-
+import com.neuSep17.dto.Inventory;
+import com.neuSep17.dao.VehicleImple;
 
 
 class VehicleDetailUI extends JFrame {
@@ -57,6 +62,12 @@ class VehicleDetailUI extends JFrame {
     private JLabel YouSave;
     private boolean isDealAvailable;
     private static IncentiveImple impl = new IncentiveImple();
+    private static VehicleImple vimpl = new VehicleImple(new File("data"));
+    private JPanel moreVehiclesPanel;
+    private JLabel lblYouMayLike;
+    private JLabel[] similarVehiclePics = new JLabel[4];
+    private JLabel[] similarVehicleNames = new JLabel[4];
+    private Vehicle[] selectedVehicle = new Vehicle[4];
 
     public VehicleDetailUI(Vehicle v, Dealer dealer) throws IOException {
     	setType(Type.POPUP);
@@ -108,9 +119,7 @@ class VehicleDetailUI extends JFrame {
      * */
     public void createDesPanel() {
 	tabs = new JTabbedPane();
-        DropShadowBorder shadow = new DropShadowBorder(Color.BLACK, 1, 20, 0.8f);
         tabs.setBackground(new Color(240, 230, 140));
-        tabs.setBorder(shadow);
 
         tabs.setFont(new Font("Bookman Old Style", Font.BOLD, 16));
          dealerTab = new JPanel();
@@ -380,10 +389,18 @@ class VehicleDetailUI extends JFrame {
 	return discountedPrice;
 	
     }
-
+      
+    private Vehicle [] getSimilarVehicles() {
+	// TODO Auto-generated method stub
+	Inventory inv = vimpl.getInventory(dealer.getId());
+	Collection<Vehicle> vehicles = inv.getVehicles();
+	return vehicles.toArray(new Vehicle[vehicles.size()]);
+    }
 
     public void addComponentsUsingLayout() throws IOException {
         Container container = getContentPane();
+        container.removeAll();
+
         vehicleTab.setBackground(new Color(245, 245, 220));
         dealerTab.setBackground(new Color(245, 245, 220));
         
@@ -410,10 +427,81 @@ class VehicleDetailUI extends JFrame {
 
         container.setBackground(new Color(245, 245, 220));
         tabs.setBackground(Color.WHITE);
+        
+        moreVehiclesPanel = new JPanel();
+        moreVehiclesPanel.setBackground(new Color(255, 222, 173));
+        moreVehiclesPanel.setPreferredSize(new Dimension(300, 215));
+        getContentPane().add(moreVehiclesPanel, BorderLayout.SOUTH);
+        moreVehiclesPanel.setLayout(null);
+        	
+        createBottomPanel();
+        
+        for(int j = 0 ; j<4; j++)
+        {
+            moreVehiclesPanel.add(similarVehiclePics[j]);
+            moreVehiclesPanel.add(similarVehicleNames[j]);            
+        }
+    
+        moreVehiclesPanel.add(lblYouMayLike);       	        
+        container.revalidate();
+        container.repaint();
     }
 
-   
-    
+    private void createBottomPanel() {
+	Image im = null;
+	int i,m;
+	          
+       Vehicle[] vehi = getSimilarVehicles(); 
+       int numOfSelectedVehicle = 0;
+       for(i = 0 ; i < vehi.length;i++)
+       {
+	 im = vehi[i].getPhoto();
+	 if(im==null)
+	 {
+	    continue;
+	 }
+	 selectedVehicle[numOfSelectedVehicle] = vehi[i];
+	 numOfSelectedVehicle++;
+	 if(numOfSelectedVehicle==4)
+	     break;
+       }
+       for(m=0;m<4;m++)
+       {
+	        similarVehiclePics[m] = new JLabel();
+       		similarVehiclePics[m].setIcon(new ImageIcon(new ImageIcon(selectedVehicle[m].getPhotoURL()).getImage().getScaledInstance(242, 138, Image.SCALE_DEFAULT)));
+       		similarVehicleNames[m] = new JLabel(selectedVehicle[m].getMake()+" "+selectedVehicle[m].getModel()+" "+selectedVehicle[m].getYear()+" "+selectedVehicle[m].getCategory());
+       		similarVehicleNames[m].setHorizontalAlignment(SwingConstants.CENTER);
+                Vehicle v = selectedVehicle[m];
+                similarVehiclePics[m].addMouseListener(new MouseAdapter() {
+    		@Override
+    		public void mouseClicked(MouseEvent e) {
+    		    try {
+    			new VehicleDetailUI(v,dealer);
+		    } catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		    }
+    		}
+    	});
+        }
+            
+         
+       similarVehiclePics[0].setBounds(135, 42, 242, 138);
+       similarVehiclePics[1].setBounds(529, 42, 242, 138);
+       similarVehiclePics[2].setBounds(974, 42, 239, 138);        
+       similarVehiclePics[3].setBounds(1420, 42, 242, 138);
+        
+       similarVehicleNames[0].setBounds(135, 186, 242, 20);
+       similarVehicleNames[1].setBounds(529, 186, 242, 25);
+       similarVehicleNames[2].setBounds(974, 186, 239, 20);
+       similarVehicleNames[3].setBounds(1430, 179, 194, 20);
+        
+        lblYouMayLike = new JLabel("You may like...");
+        lblYouMayLike.setFont(new Font("Tahoma", Font.BOLD, 22));
+        lblYouMayLike.setBounds(15, 0, 165, 36);	
+    }
+
+
     public void setPanelBorders(int width, int height) {
 
         int[] title = { height/20, width/20, height/20, 0 };
@@ -423,6 +511,7 @@ class VehicleDetailUI extends JFrame {
         pageTitle.setBorder(new EmptyBorder(title[0],title[1],title[2],title[3]));
         tabs.setBorder( new EmptyBorder(des[0],des[1],des[2],des[3]));
         picPanel.setBorder(new EmptyBorder(pic[0],pic[1],pic[2],pic[3]));
+        
     }
 
 
@@ -437,8 +526,8 @@ class VehicleDetailUI extends JFrame {
 
 
     private void makeThisVisible() {
-        int width = screenWidth * 2 / 3;
-        int height = screenHeight * 2 / 3;
+        int width = screenWidth * 9/10;
+        int height = screenHeight * 9/10;
         int x = (screenWidth - width) / 2;
         int y = (screenHeight - height) / 2;
         // Initialize the window always pop out at the center of the screen;
@@ -454,8 +543,18 @@ class VehicleDetailUI extends JFrame {
             public void windowOpened(WindowEvent e) {
                 // TODO Auto-generated method stub
 
-                Image image = Toolkit.getDefaultToolkit().getImage(vehicle.getPhotoURL());
-                System.out.println(vehicle.getPhotoURL());
+                //Image image = Toolkit.getDefaultToolkit().getImage(vehicle.getPhotoURL());
+                BufferedImage image = null;
+		try {
+		    image = ImageIO.read(vehicle.getPhotoURL());
+		} catch (Exception e1) {
+		      try {
+			image = ImageIO.read(new File("data/No_Image_Available.jpg"));
+		    } catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		    }
+		}
                 ImageIcon icon = new ImageIcon(image);
                 photoLabel.setImage(image);
                 icon=new ImageIcon(icon.getImage().getScaledInstance(photoLabel.getWidth(),photoLabel.getHeight(), Image.SCALE_DEFAULT));
@@ -508,7 +607,7 @@ class VehicleDetailUI extends JFrame {
 	    	clip.open(audioIn);
 	    	clip.start();
 	    
-		Thread.sleep(4000);
+		Thread.sleep(3000);
 	    
 	    
 	    clip.close();

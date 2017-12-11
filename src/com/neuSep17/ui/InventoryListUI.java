@@ -49,6 +49,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
@@ -181,6 +182,7 @@ public class InventoryListUI extends JFrame {
         setLocationRelativeTo(null);
         setContentPane(contentPane);
         setVisible(true);
+        ToolTipManager.sharedInstance().setDismissDelay(80000);
     }
     
     //sortBycomboBox
@@ -267,10 +269,12 @@ public class InventoryListUI extends JFrame {
 
     // Filter
     private void registerFilter() {
-        String placeholder = "Filter (type anything you want...)";
+        String placeholder = "FilterBy Any Keywords...";
         txtFilter = new JTextField(placeholder);
-        txtFilter.setToolTipText("<html><h3 style =\"font-family : Arial; font-style: italic\">please type anything you want!"
-                + "<br/> please type the words using column order</h3></html>");
+        txtFilter.setToolTipText("<html><h2 style =\"font-family : Arial; font-style: italic\">please type anything you want!"
+                + "<br/> The order of Keywords matters"
+                + "<br/> Please type the words following the order of headers"
+                + "<br/> No need to type the whole words</h2></html>");
         txtFilter.setForeground(Color.GRAY);
         txtFilter.setBackground(topBG);
         txtFilter.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
@@ -326,8 +330,11 @@ public class InventoryListUI extends JFrame {
         String placeholder = "SearchBy ID\\Vin\\Make\\Model\\...";
         txtSearch = new JTextField(placeholder);
         txtSearch.setForeground(Color.GRAY);
-        txtSearch.setToolTipText("<html><h3 style =\"font-family : Arial; font-style: italic\">please type anything you want!"
-                + "<br/> Need to type the complete words</h3></html>");
+        txtSearch.setToolTipText("<html><h2 style =\"font-family : Arial; font-style: italic\">please type anything you want!"
+                + "<br/>The keywords order doesn't matter "
+                + "<br/>But need to type the complete words"
+                + "<br/>type like eg: 2013 used chevrolet car"
+                + "<br/>will get the same result as: chervolet 2013 car used</h2></html>");
         txtSearch.setBackground(topBG);
         txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtSearch.setFont(txtFont);
@@ -447,8 +454,8 @@ public class InventoryListUI extends JFrame {
                 continue;
             //Photo
             case 9:
-                column.setMinWidth(150);
-                column.setMaxWidth(150);
+                column.setMinWidth(90);
+                column.setMaxWidth(90);
                 continue;
             //Vin
             case 10:
@@ -457,8 +464,8 @@ public class InventoryListUI extends JFrame {
                 continue;
             //Entertainment
             case 11:
-                column.setMinWidth(400);
-                column.setMaxWidth(400);
+                column.setMinWidth(600);
+                column.setMaxWidth(600);
                 continue;
             //InteriorColor
             case 12:
@@ -693,8 +700,8 @@ public class InventoryListUI extends JFrame {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             //default style
             this.table = table;
-            this.setForeground(Color.BLACK);
-            table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//            this.setForeground(Color.BLACK);
+//            table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             this.setText(value.toString());
             if (row % 2 == 0)
                 setBackground(tableEvenRow);

@@ -1,26 +1,24 @@
 package com.neuSep17.utility;
 
+import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Inventory;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.DealerImpleService;
-import com.neuSep17.service.VehicleImpleService.VehicleImpleService;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class BrowseInventoryUtility {
+public class InventoryBrowseUtility {
     Collection<Vehicle> vehicles = new ArrayList<>();
 
-    public Collection<Vehicle> setObjectsforUtility() throws IOException {
+    public Collection<Vehicle> setObjectsforUtility(String dealer) throws IOException {
         DealerImpleService dealerServiceObject = new DealerImpleService();
-        VehicleImpleService vehicleServiceObject = new VehicleImpleService("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data");
-        Dealer dealerObject = dealerServiceObject.getADealer("gmps-camino");
-        Inventory inventoryObject = vehicleServiceObject.getAllVehicles(dealerObject.getId());
+        VehicleImple vehicleImpleObject = new VehicleImple(new File("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data"));
+        Dealer dealerObject = dealerServiceObject.getADealer(dealer);
+        Inventory inventoryObject = vehicleImpleObject.getInventory(dealerObject.getId().toString()+".txt");
         vehicles = inventoryObject.getVehicles();
         return vehicles;
     }
@@ -76,5 +74,32 @@ public class BrowseInventoryUtility {
 
         return (ArrayList<Vehicle>) filterVehicles;
     }
+
+    public static void sortByYear(ArrayList<Vehicle> list, boolean isAscend) {
+        Collections.sort(list, new Comparator<Vehicle>() {
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                if (isAscend) {
+                    return o1.getYear() - o2.getYear();
+                } else {
+                    return o2.getYear() - o1.getYear();
+                }
+            }
+        });
+    }
+
+    public static void sortByPrice(ArrayList<Vehicle> list, boolean isAscend) {
+        Collections.sort(list, new Comparator<Vehicle>() {
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                if (isAscend) {
+                    return (int) (o1.getPrice() - o2.getPrice());
+                } else {
+                    return (int) (o2.getPrice() - o1.getPrice());
+                }
+            }
+        });
+    }
+
 
 }
