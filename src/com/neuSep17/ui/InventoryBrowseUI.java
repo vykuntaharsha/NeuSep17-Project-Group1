@@ -14,10 +14,10 @@ import java.util.*;
 import java.util.List;
 
 public class InventoryBrowseUI implements ActionListener {
-    InventoryBrowseUtility utilityObject = new InventoryBrowseUtility();
-    Collection<Vehicle> vehicles = utilityObject.setObjectsforUtility();
+    InventoryBrowseUtility utilityObject=new InventoryBrowseUtility();
     InventoryListService inventoryServiceObject = new InventoryListService();
-    ArrayList<Vehicle> vehicleList = new ArrayList<>(vehicles);
+    Collection<Vehicle> vehicles;
+    ArrayList<Vehicle> vehicleList;
 
     final int WIDTH = 1300;
     final int HEIGHT = 700;
@@ -36,7 +36,11 @@ public class InventoryBrowseUI implements ActionListener {
     JPanel searchPanel, filterOptionsPanel, filterResultMainPanel, navigationOptionsPanel, firstImagePanel, secondImagePanel, thirdImagePanel;
     List<JPanel> imagePanelObjectsList;
 
-    public InventoryBrowseUI() throws IOException {
+    public InventoryBrowseUI(String dealerID) throws IOException {
+        InventoryBrowseUtility utilityObject = new InventoryBrowseUtility();
+        vehicles = utilityObject.setObjectsforUtility(dealerID);
+        vehicleList = new ArrayList<>(vehicles);
+
         initializeJFrame();
         initializeJButtons();
         initializeJComboBox();
@@ -73,6 +77,7 @@ public class InventoryBrowseUI implements ActionListener {
         nextPageNavigateButton.setBounds(700, 0, 80, 30);
 
         previousPageNavigateButton.setEnabled(false);
+        nextPageNavigateButton.setEnabled(true);
     }
 
     void initializeJComboBox() {
@@ -246,6 +251,7 @@ public class InventoryBrowseUI implements ActionListener {
             }
         } else if (e.getSource() == filterButton) {
             countOfResultsDisplayed=0;
+            nextPageNavigateButton.setEnabled(true);
             if (filterVehicleList.size() != 0) {
                 filterVehicleList = utilityObject.filterVehicles(filterVehicleList, getFilterValues());
             } else {
@@ -271,6 +277,7 @@ public class InventoryBrowseUI implements ActionListener {
                 e1.printStackTrace();
             }
         } else if (e.getSource() == sortButton) {
+            nextPageNavigateButton.setEnabled(true);
             countOfResultsDisplayed=0;
             removeCurrentResultPanel();
             addFilterResultPanel();
@@ -322,7 +329,8 @@ public class InventoryBrowseUI implements ActionListener {
                 }
             }
         } else if (e.getSource() == previousPageNavigateButton) {
-            startingIndexToDisplay = startingIndexToDisplay - 5;
+            nextPageNavigateButton.setEnabled(true);
+            startingIndexToDisplay = startingIndexToDisplay - 10;
             pageNumber--;
             removeCurrentResultPanel();
             addFilterResultPanel();
@@ -338,10 +346,11 @@ public class InventoryBrowseUI implements ActionListener {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            if (startingIndexToDisplay == 0) {
+            if (startingIndexToDisplay == 5) {
                 previousPageNavigateButton.setEnabled(false);
             }
         } else if (e.getSource() == nextPageNavigateButton) {
+            previousPageNavigateButton.setEnabled(true);
             pageNumber++;
             try {
                 removeCurrentResultPanel();
@@ -403,8 +412,8 @@ public class InventoryBrowseUI implements ActionListener {
 
 
             vehicleIDLabel.setBounds(200, 10, 100, 20);
-            JLabel vehicleCategoryLabel=new JLabel("Category: " + vehiclesToDisplay.get(startIndex).getCategory().toString());
-            vehicleCategoryLabel.setBounds(305,10,100,20);
+            JLabel vehicleCategoryLabel = new JLabel("Category: " + vehiclesToDisplay.get(startIndex).getCategory().toString());
+            vehicleCategoryLabel.setBounds(305, 10, 100, 20);
             JLabel vehicleMakeLabel = new JLabel("Make: " + vehiclesToDisplay.get(startIndex).getMake());
             vehicleMakeLabel.setBounds(200, 40, 200, 20);
             JLabel vehicleTypeLabel = new JLabel("Type: " + vehiclesToDisplay.get(startIndex).getBodyType());
@@ -423,17 +432,12 @@ public class InventoryBrowseUI implements ActionListener {
             startIndex++;
             countOfResultsDisplayed++;
         }
-        if(filterVehicleList.size()!=0){
-            if(countOfResultsDisplayed>filterVehicleList.size()){
+        if (countOfResultsDisplayed >= vehiclesToDisplay.size()) {
                 nextPageNavigateButton.setEnabled(false);
             }
-        }
-        else{
-            if(countOfResultsDisplayed>vehicleList.size()){
-                nextPageNavigateButton.setEnabled(false);
-            }
-        }
     }
+
+
 
 
     private void removeCurrentResultPanel() {
