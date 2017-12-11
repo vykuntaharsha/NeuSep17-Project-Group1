@@ -114,16 +114,20 @@ public class InventoryEditUI extends JFrame {
         photoLabel = new JLabel("Photo");// photo
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (JOptionPane.showConfirmDialog(null, "Save?", "ave",
+                if (JOptionPane.showConfirmDialog(null, "Save?", "Save",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+                    // don't dispose if save failed: Lu Niu
+                    boolean res = false;
                     try {
-                        // save method;
-                        saveVehicle(vehicle);
+                        res = saveVehicle(vehicle);
                     } catch (MalformedURLException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                    dispose();
+                    
+                    if(res) {
+                        dispose();    
+                    }
                 }
             }
         });
