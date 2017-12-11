@@ -1209,7 +1209,7 @@ public class InventoryEditUI extends JFrame {
 
             return true;
         }
-
+        JOptionPane.showMessageDialog(null, "Failed to save, please verify your input.");
         return false;
     }
 }
