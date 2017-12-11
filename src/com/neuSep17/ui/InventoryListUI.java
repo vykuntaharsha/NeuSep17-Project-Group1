@@ -127,28 +127,10 @@ public class InventoryListUI extends JFrame {
      * Create the frame.
      */
     public InventoryListUI(String dealerName) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String f = "data/"+dealerName;
-        File file = new File(f);
-        this.file = file; // team 2: Lu Niu
-        list = InventoryListService.readAndGetVehicles(file);
-        filter = new ArrayList<>();
-        isAscending = true;
-        selectedId = "";
-        newSelectedId = "";
-        contentPane = new JPanel();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        setBounds(100, 100, 1300, 800);
-        contentPane.setLayout(null);
-        setLocationRelativeTo(null);
-        setContentPane(contentPane);
-        setVisible(true);
+//        long startTime=System.currentTimeMillis();
+        init(dealerName);
+//        long endTime=System.currentTimeMillis();
+//        System.out.println("Read Pic 1148, RunTime£º "+(endTime-startTime)+"ms");
 
         registerPanel();
 
@@ -169,6 +151,38 @@ public class InventoryListUI extends JFrame {
         setDrag();
     }
     
+    //init basic
+    private void init(String dealerName) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String f = "data/"+dealerName;
+        File file = new File(f);
+        this.file = file; // team 2: Lu Niu
+        list = InventoryListService.readAndGetVehicles(file);
+//        list.stream().forEach(vehicle -> {
+//            vehicle.getPhoto();
+//        });
+        list.parallelStream().forEach(vehicle -> {
+            vehicle.getPhoto();
+        });
+        filter = new ArrayList<>();
+        isAscending = true;
+        selectedId = "";
+        newSelectedId = "";
+        contentPane = new JPanel();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setBounds(100, 100, 1300, 800);
+        contentPane.setLayout(null);
+        setLocationRelativeTo(null);
+        setContentPane(contentPane);
+        setVisible(true);
+    }
+    
     //sortBycomboBox
     private void registerSortComboBox() {
         lblSortby = new JLabel("SortBy:");
@@ -187,10 +201,10 @@ public class InventoryListUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 sortIndex = ((JComboBox)e.getSource()).getSelectedIndex();
                 if(sortIndex == 0) {
-                    InventoryListService.fillTable(list, table);
+                    InventoryListService.fillTable(filter.size() == 0? list : filter, table);
                 }else {
-                    InventoryListService.sortByHeaders(tmp, isAscending, headers[sortIndex-1]);
-                    InventoryListService.fillTable(tmp, table);
+                    InventoryListService.sortByHeaders(filter.size() == 0? tmp : filter, isAscending, headers[sortIndex-1]);
+                    InventoryListService.fillTable(filter.size() == 0? tmp : filter, table);
                 }
             }
         });
@@ -208,10 +222,10 @@ public class InventoryListUI extends JFrame {
                 isAscending = idx == 0? true : false;
                 
                 if(sortIndex == 0) {
-                    InventoryListService.fillTable(list, table);
+                    InventoryListService.fillTable(filter.size() == 0? list : filter, table);
                 }else {
-                    InventoryListService.sortByHeaders(tmp, isAscending, headers[sortIndex-1]);
-                    InventoryListService.fillTable(tmp, table);
+                    InventoryListService.sortByHeaders(filter.size() == 0? tmp : filter, isAscending, headers[sortIndex-1]);
+                    InventoryListService.fillTable(filter.size() == 0? tmp : filter, table);
                 }
             }
         });
@@ -262,7 +276,7 @@ public class InventoryListUI extends JFrame {
         txtFilter.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtFilter.setFont(txtFont);
         txtFilter.setCaretColor(topFG);
-        txtFilter.setBounds(533, 100, 326, 40);
+        txtFilter.setBounds(533, 100, 360, 40);
         panelTop.add(txtFilter);
         txtFilter.addFocusListener(new FocusListener() {
             @Override
@@ -318,7 +332,7 @@ public class InventoryListUI extends JFrame {
         txtSearch.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
         txtSearch.setFont(txtFont);
         txtSearch.setCaretColor(topFG);
-        txtSearch.setBounds(533, 54, 326, 40);
+        txtSearch.setBounds(533, 54, 360, 40);
         panelTop.add(txtSearch);
         txtSearch.addFocusListener(new FocusListener() {
             @Override
@@ -484,7 +498,7 @@ public class InventoryListUI extends JFrame {
             }
         }
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        
         InventoryListService.fillTable(list, table);
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setReorderingAllowed(false);
@@ -518,7 +532,7 @@ public class InventoryListUI extends JFrame {
     private void registerTitle() {
         labelTitleIcon = new JLabel("");
         labelTitleIcon.setIcon(new ImageIcon(InventoryListUI.class.getResource("asset/InventoryListUIhome.png")));
-        labelTitleIcon.setBounds(25, 15, 438, 129);
+        labelTitleIcon.setBounds(30, 15, 438, 129);
         panelTop.add(labelTitleIcon);
     }
 
@@ -530,7 +544,7 @@ public class InventoryListUI extends JFrame {
         btnAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (getSelectedId().isEmpty() || getSelectedId() == null) { 
+                if (getSelectedId() == null || getSelectedId().isEmpty()) { 
                     InventoryEditUI tempui = new InventoryEditUI(null, that, true);
                 } else {
                     for (Vehicle v : list) {
@@ -560,21 +574,20 @@ public class InventoryListUI extends JFrame {
                     VehicleImple service = new VehicleImple();
                     int clickButton = JOptionPane.showConfirmDialog(null, "Confirm delete ?", "Delete",
                             JOptionPane.YES_NO_OPTION);
+                    Vehicle deleteV = null;
                     if (clickButton == JOptionPane.YES_OPTION) {
-                        Vehicle deleteV = null;
                         
                         // delete selected data
-                        for (Vehicle v : list) {
-                            if (v.getID().equals(getSelectedId())) {
-                                service.deleteVehicle(v.getWebID(), v.getID());
-                                deleteV = v;
+                        for(int i=0;i<list.size();i++){
+                            if(list.get(i).getID().equals(getSelectedId())){
+                                service.deleteVehicle(list.get(i).getWebID(), list.get(i).getID());
+                                list.remove(i);// remove the vehicle from the list object
                             }
                         }
-                        
-                        list.remove(deleteV);
                     }
+                    
                     // refreshTable
-                    refreshTable(null);
+                    refreshTable(null,deleteV);
                 }
             }
         });
@@ -688,11 +701,11 @@ public class InventoryListUI extends JFrame {
             if (row % 2 == 1)
                 setBackground(tableOddRow);
             //link style
-            if (row == this.row && column == this.col && column == 9) {
+           /* if (row == this.row && column == this.col && column == 9) {
                     this.setForeground(Color.RED);
                     table.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     return this;
-            }
+            }*/
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
 
@@ -750,7 +763,8 @@ public class InventoryListUI extends JFrame {
                 return;
             }
             
-            Point p = e.getPoint();
+            //link to web
+           /* Point p = e.getPoint();
             int c = table.columnAtPoint(p);
             if(c != 9){
                 return;
@@ -761,7 +775,7 @@ public class InventoryListUI extends JFrame {
                 Desktop.getDesktop().browse(url.toURI());
             } catch (Exception ex) {
                 Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
 
         @Override

@@ -1204,7 +1204,7 @@ public class InventoryEditUI extends JFrame {
             }
                     
             if (listUI != null) {
-                listUI.refreshTable(newVehicle, preVehicle);
+                listUI.refreshTable(newVehicle, deletedVehicle);
             }
 
             return true;
