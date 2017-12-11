@@ -1,7 +1,13 @@
 package com.neuSep17.dao;
 
 /**
- * created by team 2 (Bin Shi) to manage the application properties
+ * Created by team 2 (Bin Shi) to manage the application properties.
+ * 
+ * Quick Use Guide:
+ * - To hide the debug information during demo:
+ * if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) {
+                            exception.printStackTrace();
+ * }
  */
 import java.io.*;
 import java.time.LocalDate;
@@ -50,7 +56,7 @@ public class PropertyManager {
             out = new FileOutputStream(propertyFile);
             config.store(out, comments);
         } catch (IOException e) {
-            e.printStackTrace();
+            if(getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
         }
     }
     

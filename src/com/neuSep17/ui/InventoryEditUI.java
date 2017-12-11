@@ -117,17 +117,8 @@ public class InventoryEditUI extends JFrame {
                 if (JOptionPane.showConfirmDialog(null, "Save?", "Save",
                         JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     // don't dispose if save failed: Lu Niu
-                    boolean res = false;
-                    try {
-                        res = saveVehicle(vehicle);
-                    } catch (MalformedURLException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    
-                    if(res) {
-                        dispose();    
-                    }
+                    // rewrite the code by Bin Shi
+                    if(saveVehicle(vehicle)) dispose();
                 }
             }
         });
@@ -335,6 +326,10 @@ public class InventoryEditUI extends JFrame {
             type.setTrue();
             price.getInputTextField().setText("");
             price.setTrue();
+            
+            //clear the photo by Bin Shi
+            photoLabel.setIcon(null);
+            photoLabel.setText("No Photo");
         }
 
     }
@@ -464,7 +459,8 @@ public class InventoryEditUI extends JFrame {
         photoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String input = JOptionPane.showInputDialog(photoLabel, "Enter the URL of the photo:", null);
+                String input = JOptionPane.showInputDialog(photoLabel,"Enter the URL of the new photo:",
+                        vehicle.getPhotoURL().toString());
                 if (input != null && !input.isEmpty()) {
                     try {
                         URL url = new URL(input.trim());
@@ -1127,7 +1123,7 @@ public class InventoryEditUI extends JFrame {
     private void loadPhoto(URL photoURL) {
         boolean noPhoto = true;
         if (photoURL != null) {
-            Image image = vehicle.getPhoto();
+            Image image = PictureManager.getVehiclePhoto(photoURL);
             if (image != null) {
                 ImageIcon icon = new ImageIcon(image);
                 if (icon != null){
@@ -1140,7 +1136,7 @@ public class InventoryEditUI extends JFrame {
         else photoLabel.setText(photoURL.toString());
     }
   
-    public boolean saveVehicle(Vehicle preVehicle) throws MalformedURLException {
+    public boolean saveVehicle(Vehicle preVehicle) {
         this.validateTextFields();
         if (canSave()) {
             Vehicle newVehicle = new Vehicle();
@@ -1155,16 +1151,22 @@ public class InventoryEditUI extends JFrame {
             newVehicle.setTrim(this.trim.getInputTextField().getText());
             newVehicle.setBodyType(this.type.getInputTextField().getText());
             newVehicle.setPrice(Float.parseFloat(this.price.getInputTextField().getText()));
-            URL url;
+            
+            URL url = null;
             try {
-                // This will throw exception in case of no photo.
-                url = new URL(photoLabel.getText());
+                // fix the null exception by using default photo (Bin Shi)
+                url = new URL("https://vignette.wikia.nocookie.net/arthur/images/a/a7/No_Image.jpg");//default no photo
+                if(!photoLabel.getText().equals("No Photo")){
+                    url = new URL(photoLabel.getText());
+                }
             } catch (MalformedURLException e) {
-                e.printStackTrace();
-                url = new URL("https://vignette.wikia.nocookie.net/arthur/images/a/a7/No_Image.jpg");
+                System.out.println("Cannot set vehicle's photo URL, so use teh default one.");
+                if (PropertyManager.getProperty("debug").equalsIgnoreCase("true"))
+                    e.printStackTrace();
+            } finally {
+                newVehicle.setPhotoURL(url);
             }
             
-            newVehicle.setPhotoURL(url);
             newVehicle.setSortingField("sF");
             if(preVehicle != null) {
                 newVehicle.setEntertainment(preVehicle.getEntertainment());
