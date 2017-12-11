@@ -244,7 +244,7 @@ public class IncentiveService {
             dp[0] = true;
             for(int i = 1; i <= str.length(); i++){
                 for (int j = 0; j < i; j++){
-                    if(dp[i] && dic.contains(str.substring(j,i))){
+                    if(dic.contains(str.substring(j,i))){
                         dp[i] = true;
                     }
                 }
