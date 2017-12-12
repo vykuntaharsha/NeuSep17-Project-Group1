@@ -609,7 +609,7 @@ class VehicleDetailUI extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 // TODO Auto-generated method stub
-                dispose();
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
 
             @Override
