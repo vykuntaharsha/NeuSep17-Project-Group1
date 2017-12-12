@@ -37,7 +37,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import com.neuSep17.dao.IncentiveImple;
 import com.neuSep17.dao.VehicleImple;
+import com.neuSep17.dto.Incentive;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.InventoryListService;
 
@@ -72,6 +74,8 @@ public class InventoryListUI extends JFrame {
 
     private ArrayList<Vehicle> list;
     private ArrayList<Vehicle> filter;
+    private ArrayList<Incentive> incentiveList;
+    
     private JTable table;
 
     private JButton btnAdd;
@@ -100,7 +104,7 @@ public class InventoryListUI extends JFrame {
     private final Font txtFont = new Font("Segoe UI Historic", Font.PLAIN, 22);
     private final Font tableHeaderFont = new Font("Segoe UI Historic", Font.PLAIN, 15);
 
-    private final String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price", "Photo","Vin","Entertainment"
+    private final String[] headers = { "Id", "WebId", "Category", "Year", "Make", "Model", "Trim", "Bodytype", "Price","Discount","Photo","Vin","Entertainment"
             ,"InteriorColor","ExteriorColor","Fueltype","Engine","Transmission","Battery","OptionalFeatures"};
     
     private JComboBox<String> sortComboBox;
@@ -128,10 +132,7 @@ public class InventoryListUI extends JFrame {
      * Create the frame.
      */
     public InventoryListUI(String dealerName) {
-//        long startTime=System.currentTimeMillis();
         init(dealerName);
-//        long endTime=System.currentTimeMillis();
-//        System.out.println("Read Pic 1148, RunTime£º "+(endTime-startTime)+"ms");
 
         registerPanel();
 
@@ -159,7 +160,6 @@ public class InventoryListUI extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         String f = "data/"+dealerName;
         File file = new File(f);
         this.file = file; // team 2: Lu Niu
@@ -170,6 +170,7 @@ public class InventoryListUI extends JFrame {
         list.parallelStream().forEach(vehicle -> {
             vehicle.getPhoto();
         });
+        incentiveList = getIncentives(dealerName);
         filter = new ArrayList<>();
         isAscending = true;
         selectedId = "";
@@ -183,6 +184,11 @@ public class InventoryListUI extends JFrame {
         setContentPane(contentPane);
         setVisible(true);
         ToolTipManager.sharedInstance().setDismissDelay(80000);
+    }
+    
+    private ArrayList<Incentive> getIncentives(String dealerID) {
+        IncentiveImple incentiveImple = new IncentiveImple();
+        return incentiveImple.getIncentivesForDealer(dealerID);
     }
     
     //sortBycomboBox
@@ -203,10 +209,10 @@ public class InventoryListUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 sortIndex = ((JComboBox)e.getSource()).getSelectedIndex();
                 if(sortIndex == 0) {
-                    InventoryListService.fillTable(filter.size() == 0? list : filter, table);
+                    InventoryListService.fillTable(filter.size() == 0? list : filter,incentiveList, table);
                 }else {
                     InventoryListService.sortByHeaders(filter.size() == 0? tmp : filter, isAscending, headers[sortIndex-1]);
-                    InventoryListService.fillTable(filter.size() == 0? tmp : filter, table);
+                    InventoryListService.fillTable(filter.size() == 0? tmp : filter,incentiveList, table);
                 }
             }
         });
@@ -224,10 +230,10 @@ public class InventoryListUI extends JFrame {
                 isAscending = idx == 0? true : false;
                 
                 if(sortIndex == 0) {
-                    InventoryListService.fillTable(filter.size() == 0? list : filter, table);
+                    InventoryListService.fillTable(filter.size() == 0? list : filter,incentiveList, table);
                 }else {
                     InventoryListService.sortByHeaders(filter.size() == 0? tmp : filter, isAscending, headers[sortIndex-1]);
-                    InventoryListService.fillTable(filter.size() == 0? tmp : filter, table);
+                    InventoryListService.fillTable(filter.size() == 0? tmp : filter,incentiveList, table);
                 }
             }
         });
@@ -296,7 +302,7 @@ public class InventoryListUI extends JFrame {
                 if (txtFilter.getText().isEmpty()) {
                     txtFilter.setForeground(Color.GRAY);
                     txtFilter.setText(placeholder);
-                    InventoryListService.fillTable(list, table);
+                    InventoryListService.fillTable(list,incentiveList, table);
                 }
             }
         });
@@ -320,7 +326,7 @@ public class InventoryListUI extends JFrame {
 
             public void warn() {
                 filter = InventoryListService.filter(filter, list, txtFilter);
-                InventoryListService.fillTable(filter, table);
+                InventoryListService.fillTable(filter, incentiveList,table);
             }
         });
     }
@@ -356,7 +362,7 @@ public class InventoryListUI extends JFrame {
                 if (txtSearch.getText().isEmpty()) {
                     txtSearch.setForeground(Color.GRAY);
                     txtSearch.setText(placeholder);
-                    InventoryListService.fillTable(list, table);
+                    InventoryListService.fillTable(list,incentiveList, table);
                 }
             }
         });
@@ -380,7 +386,7 @@ public class InventoryListUI extends JFrame {
 
             public void warn() {
                 filter = InventoryListService.search(filter, list, txtSearch);
-                InventoryListService.fillTable(filter, table);
+                InventoryListService.fillTable(filter, incentiveList, table);
             }
         });
     }
@@ -452,53 +458,58 @@ public class InventoryListUI extends JFrame {
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
-            //Photo
+            //Discount:
             case 9:
+                column.setMinWidth(300);
+                column.setMaxWidth(300);
+                continue;
+            //Photo
+            case 10:
                 column.setMinWidth(90);
                 column.setMaxWidth(90);
                 continue;
             //Vin
-            case 10:
+            case 11:
                 column.setMinWidth(150);
                 column.setMaxWidth(150);
                 continue;
             //Entertainment
-            case 11:
+            case 12:
                 column.setMinWidth(600);
                 column.setMaxWidth(600);
                 continue;
             //InteriorColor
-            case 12:
-                column.setMinWidth(150);
-                column.setMaxWidth(150);
-                continue;
-            //ExteriorColor
             case 13:
                 column.setMinWidth(150);
                 column.setMaxWidth(150);
                 continue;
-            //Fueltype
+            //ExteriorColor
             case 14:
+                column.setMinWidth(150);
+                column.setMaxWidth(150);
+                continue;
+            //Fueltype
+            case 15:
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
             //Engine
-            case 15:
-                column.setMinWidth(250);
-                column.setMaxWidth(250);
-                continue;
-            //Transmission
             case 16:
                 column.setMinWidth(250);
                 column.setMaxWidth(250);
                 continue;
-            //Battery
+            //Transmission
             case 17:
+                column.setMinWidth(250);
+                column.setMaxWidth(250);
+                continue;
+            //Battery
+            case 18:
                 column.setMinWidth(100);
                 column.setMaxWidth(100);
                 continue;
             //OptionalFeatures
-            case 18:
+            case 19:
                 column.setMinWidth(350);
                 column.setMaxWidth(350);
                 continue;
@@ -506,7 +517,7 @@ public class InventoryListUI extends JFrame {
         }
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        InventoryListService.fillTable(list, table);
+        InventoryListService.fillTable(list,incentiveList, table);
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setReorderingAllowed(false);
         tableHeader.setBackground(tableHeaderColor);
@@ -708,11 +719,11 @@ public class InventoryListUI extends JFrame {
             if (row % 2 == 1)
                 setBackground(tableOddRow);
             //link style
-           /* if (row == this.row && column == this.col && column == 9) {
-                    this.setForeground(Color.RED);
-                    table.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                    return this;
-            }*/
+//           if (row == this.row && column == this.col && column == 9) {
+//                    this.setForeground(Color.RED);
+//                    table.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//                    return this;
+//            }
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
 
@@ -771,18 +782,18 @@ public class InventoryListUI extends JFrame {
             }
             
             //link to web
-           /* Point p = e.getPoint();
-            int c = table.columnAtPoint(p);
-            if(c != 9){
-                return;
-            }
-            try {
-                String s = table.getValueAt(selectedRow, c).toString();
-                URL url = new URL(s.split("\"")[1]);
-                Desktop.getDesktop().browse(url.toURI());
-            } catch (Exception ex) {
-                Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+//           Point p = e.getPoint();
+//            int c = table.columnAtPoint(p);
+//            if(c != 9){
+//                return;
+//            }
+//            try {
+//                String s = table.getValueAt(selectedRow, c).toString();
+//                URL url = new URL(s.split("\"")[1]);
+//                Desktop.getDesktop().browse(url.toURI());
+//            } catch (Exception ex) {
+//                Logger.getLogger(LinkCellRenderer.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
 
         @Override
@@ -818,6 +829,6 @@ public class InventoryListUI extends JFrame {
             list.remove(deletedVehicle);
         }
         
-        InventoryListService.fillTable(list, table);
+        InventoryListService.fillTable(list, incentiveList, table);
     }
 }
