@@ -1,6 +1,8 @@
 package com.neuSep17.validation;
 
+import javax.swing.*;
 import java.awt.event.ItemEvent;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,12 +34,20 @@ public class IncentiveScreenValidation
     
     public String ValidatediscountText(String discountText)
     {
-    	if(IsNullOrEmpty(discountText))
-    		return "Discount : "+empty;
-    	else if(Pattern.matches("[0-9]{1,4}",discountText))
-    		return "true";
-    	else
-    		return "Discount : should contain only numbers and maximum value is 9999$.\n";
+		if(IsNullOrEmpty(discountText)) {
+			return "Discount : " + empty;
+		}
+
+    	try {
+			double discount = Double.valueOf(discountText);
+
+			if(discount < 0 || discount > 9999) {
+				return "Discount : min value is 0 and maximum value is 9999$";
+			}
+			return "true";
+		} catch (Exception e) {
+			return "Discount : should contain only numbers.\n";
+		}
     }
     
     public String ValidatedescriptionText(String descriptionText)
