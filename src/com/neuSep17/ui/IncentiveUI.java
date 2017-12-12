@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 
 public class IncentiveUI {
 
-    int screenWidth;
-    int screenHeight;
+    protected int screenWidth;
+    protected int screenHeight;
 
     public IncentiveUI() {
         Toolkit kit = Toolkit.getDefaultToolkit();
@@ -91,8 +91,7 @@ public class IncentiveUI {
         String rootPath = "";
         try {
             rootPath = Paths.get("").toAbsolutePath().toString();
-//            rootPath+= File.separator+"NeuSep17-Project-Group1-master"+File.separator+"picture"+File.separator+path;
-            rootPath += File.separator + "picture" + File.separator + path;
+            rootPath+= File.separator+"NeuSep17-Project-Group1-master"+ File.separator+"data" + File.separator+path;
         } catch (Exception e) {
         }
         return new ImageIcon(rootPath);

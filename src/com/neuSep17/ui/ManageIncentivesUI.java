@@ -34,8 +34,8 @@ public class ManageIncentivesUI extends IncentiveUI {
     private JLabel[] imageLabel;
     private JButton searchButton;
     private int length;
-    public ArrayList<Incentive> incentives;//to save incentives read from file
-    public ArrayList<Incentive> Allincentives;
+    private ArrayList<Incentive> incentives;//to save incentives read from file
+    private ArrayList<Incentive> Allincentives;
     private static String dealerid;
     private JComboBox jsort;
     private JButton searchby;
@@ -70,6 +70,17 @@ public class ManageIncentivesUI extends IncentiveUI {
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setBackground(Color.lightGray);
         mainFrame.setLayout(new BorderLayout());
+    }
+
+    private void refreshScreen() {
+        listPanel.removeAll();
+        listPanel.revalidate();
+        listPanel.repaint();
+        IncentiveImple iImple = new IncentiveImple();
+        incentives = iImple.getIncentivesForDealer(dealerid);
+        Allincentives = incentives;
+        displayIncentives(incentives);
+        listPanel.setVisible(true);
     }
 
     public void createComponents() {
@@ -122,7 +133,7 @@ public class ManageIncentivesUI extends IncentiveUI {
         length = incentives.size();
         for (int i = 0; i < length; i++) {
             jp[i] = new JPanel();
-            ii[i] = createImageIcon("C:\\Users\\diksh\\Desktop\\NeuSep17-Project-Group1-master-src\\NeuSep17-Project-Group1-master\\picture\\flame.jpg");
+            ii[i] = createImageIcon("flame.jpg");
             imageLabel[i] = new JLabel(ii[i]);
             imageLabel[i].setBounds(0, 0, 24, 31);
             jp[i].add(imageLabel[i], new Integer(Integer.MIN_VALUE));
@@ -153,6 +164,7 @@ public class ManageIncentivesUI extends IncentiveUI {
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
+                    refreshScreen();
                 }
             });
 
@@ -161,7 +173,15 @@ public class ManageIncentivesUI extends IncentiveUI {
                     String num = e.getActionCommand();
                     int index = Integer.parseInt(num);
                     String incentiveId = incentives.get(index).getID();
-                    IncentiveService.deleteAnIncentive(incentiveId);
+                    try {
+                        IncentiveService.deleteAnIncentive(incentiveId);
+                        JOptionPane.showMessageDialog(null,
+                                "Incentive: "+incentiveId+" deleted successfully.");
+                    } catch (Exception e1) {
+                        JOptionPane.showMessageDialog(null,
+                                "Failed to delete incentive: "+incentiveId);
+                    }
+                    refreshScreen();
                 }
             });
 
