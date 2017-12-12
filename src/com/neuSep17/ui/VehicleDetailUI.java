@@ -350,7 +350,7 @@ class VehicleDetailUI extends JFrame {
 	     System.out.println(Calendar.getInstance().getTime());
 	     Date startDate = null;
 	     Date endDate = null;
-	     DateFormat df = new SimpleDateFormat("yyyy-mm-dd"); 
+	     DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
 	     try {
 	         startDate = df.parse(i.getStartDate());
 	         endDate = df.parse(i.getEndDate());
@@ -377,6 +377,30 @@ class VehicleDetailUI extends JFrame {
 		    else if(value.equalsIgnoreCase(String.valueOf(vehicle.getYear())))
 		    {
 			FeatureCounter++;
+		    }
+		    else if(value.equalsIgnoreCase(String.valueOf(vehicle.getCategory())))
+		    {
+		    FeatureCounter++;
+		    }
+		    else if(value.equalsIgnoreCase(String.valueOf(vehicle.getBodyType())))
+            	    {
+		          FeatureCounter++;
+                    }
+		    else if(value.equalsIgnoreCase(String.valueOf(vehicle.getPrice())))
+            	   {
+                  FeatureCounter++;
+                   }
+		    else if(value.equalsIgnoreCase(String.valueOf(vehicle.getTrim())))
+            {
+                  FeatureCounter++;
+            }
+		    else if(value.contains(vehicle.getExteriorColor())||value.contains(vehicle.getInteriorColor()))
+            {
+                  FeatureCounter++;
+            }
+		    else if(value.equalsIgnoreCase("ALL"))
+		    {
+		     FeatureCounter++;
 		    }
 		    System.out.println(FeatureCounter);
 		}
