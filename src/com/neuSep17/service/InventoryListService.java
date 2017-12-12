@@ -172,10 +172,12 @@ public class InventoryListService {
                     else break;
                 }
                 if(i == item.size()) {
+                    vehicle.setDiscount(incentive.getCashValue());
                     return "From  "+ incentive.getStartDate()+"  To  "+incentive.getEndDate()+"   -"+incentive.getCashValue();
                 }
             }
         }
+        vehicle.setDiscount(0);
         return "No Discount";
     }
 
@@ -201,6 +203,8 @@ public class InventoryListService {
                         return o1.getTrim().compareTo(o2.getTrim());
                     case "Bodytype":
                         return o1.getBodyType().compareTo(o2.getBodyType());
+                    case "Discount":
+                        return (int)o1.getDiscount()-(int)o2.getDiscount();
                     case "Price":
                         return (int) o1.getPrice() - (int) o2.getPrice();
                     case "Photo":
@@ -244,6 +248,8 @@ public class InventoryListService {
                         return o2.getTrim().compareTo(o1.getTrim());
                     case "Bodytype":
                         return o2.getBodyType().compareTo(o1.getBodyType());
+                    case "Discount":
+                        return (int)o2.getDiscount()-(int)o1.getDiscount();
                     case "Price":
                         return (int) o2.getPrice() - (int) o1.getPrice();
                     case "Photo":
