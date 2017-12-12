@@ -429,13 +429,15 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         dialogPane = new JPanel();
         contentPanel = new JPanel();
 
+        String label = "Add";
         if(str.equals("edit")) {
+            label = "Edit";
             idLabel = ui.createLabel("ID");
             idTextField = ui.createText("");
             idTextField.setEditable(false);
         }
 
-        addIncentiveLabel = ui.createLabel("Edit Incentives");
+        addIncentiveLabel = ui.createLabel(label + " Incentive");
         applyToInventoryLabel = ui.createLabel("Apply To Inventory");
 
         titleLabel = ui.createLabel("Title");
@@ -1221,7 +1223,7 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         if (response == 0) {
             try {
 //                deleteAnIncentive(incentID);
-                JOptionPane.showMessageDialog(null, "Deleted successfully!", title, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Delete successfully!", title, JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Cannot delete incentive from the file.", title, JOptionPane.ERROR_MESSAGE);
