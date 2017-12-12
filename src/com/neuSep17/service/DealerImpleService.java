@@ -26,7 +26,7 @@ public class DealerImpleService  {
 
 	public DealerImpleService() throws FileNotFoundException, IOException{
 		dealerImple = new DealerImple();
-		dealerValidation = new DealerValidation(new File("data\\dealers"));
+		dealerValidation = new DealerValidation(new File("data" + File.separator+"dealers")));
 	}
 
 	public ArrayList<Dealer> getDealers(){
