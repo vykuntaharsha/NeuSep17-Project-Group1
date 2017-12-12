@@ -236,6 +236,3 @@ public class DealerApplication extends IncentiveUI {
         return picLabel1;
     }
 }
-
-
-
