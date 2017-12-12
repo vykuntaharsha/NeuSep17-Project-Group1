@@ -1,5 +1,4 @@
 package com.neuSep17.ui;
-
 import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.DealerImpleService;
@@ -43,7 +42,14 @@ public class InventoryBrowseUI implements ActionListener {
     List<JPanel> imagePanelObjectsList;
     List<JButton> vehicleIDButtonList=new ArrayList<>();
 
+
+
     public InventoryBrowseUI(String dealerID) throws IOException {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         dealer=dealerID;
         InventoryBrowseUtility utilityObject = new InventoryBrowseUtility();
         vehicles = utilityObject.setObjectsforUtility(dealerID);
@@ -383,8 +389,9 @@ public class InventoryBrowseUI implements ActionListener {
         } else if (e.getSource() == vehicleIDButtonList.get(0) || e.getSource() == vehicleIDButtonList.get(1) || e.getSource() == vehicleIDButtonList.get(2)
                 || e.getSource() == vehicleIDButtonList.get(3) || e.getSource() == vehicleIDButtonList.get(4)){
                 JButton imageClicked=(JButton)e.getSource();
+
                 VehicleImple vehicleImpleObject=new VehicleImple(new File("data"));
-            System.out.println(imageClicked.getText());
+                 System.out.println(imageClicked.getText());
                      Vehicle vehicleObject=vehicleImpleObject.getAVehicle(dealer,imageClicked.getText());
                      System.out.println(vehicleObject.toString());
             try {
@@ -417,18 +424,14 @@ public class InventoryBrowseUI implements ActionListener {
     }
 
     public void display(int startIndex, ArrayList<Vehicle> vehiclesToDisplay, List<JPanel> imagePanelObjectsList) throws IOException {
+        vehicleIDButtonList=new ArrayList<>();
         int counter = 0;
         while (counter < 5 && startIndex < vehiclesToDisplay.size()) {
-            try {
-                Image image = ImageIO.read(vehiclesToDisplay.get(startIndex).getPhotoURL().openStream());
-                JLabel imageLabel = new JLabel(new ImageIcon(image));
-                imageLabel.setBounds(95, 10, 100, 45);
-                imagePanelObjectsList.get(counter).add(imageLabel);
-            } catch (FileNotFoundException fe) {
-                JButton imageButton = new JButton("NO IMAGE");
-                imageButton.setBounds(95, 10, 100, 50);
-                imagePanelObjectsList.get(counter).add(imageButton);
-            }
+           // Image image =  ImageIO.read(vehiclesToDisplay.get(startIndex).getPhotoURL().openStream());
+              Image image=vehiclesToDisplay.get(startIndex).getPhoto();
+            JLabel imageLabel = new JLabel(new ImageIcon(image));
+            imageLabel.setBounds(95, 10, 100, 45);
+            imagePanelObjectsList.get(counter).add(imageLabel);
             JButton vehicleIDButton = new JButton(vehiclesToDisplay.get(startIndex).getID());
             vehicleIDButton.addActionListener(this);
             vehicleIDButton.setBounds(200, 10, 150, 20);
@@ -490,3 +493,4 @@ public class InventoryBrowseUI implements ActionListener {
     }
 
 }
+
