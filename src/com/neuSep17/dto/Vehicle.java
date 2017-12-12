@@ -34,8 +34,9 @@ public class Vehicle implements Comparable<Vehicle> {
     private String battery;
     private String optionalFeatures;
 
-
-
+    //add discount filed for conveniencly used by InventoryList;
+    private double discount;
+    
     private String sortingField;
        
         
@@ -242,5 +243,14 @@ public class Vehicle implements Comparable<Vehicle> {
         		}
         	}
         	return valueToCompare;
-        }    
+        } 
+        
+    //Add Discount Info for InventoryList
+    public double getDiscount() {
+        return discount;
+    }
+    
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
 }

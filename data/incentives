@@ -1,6 +1,7 @@
 id~dealerId~title~startDate~endDate~description~cashValue~discountCriteria
-001~gmps-bresee~Thanksgiving~2017-02-02~2018-01-12~big deal for toyota~1000.00~toyota+camry
-005~gmps-bresee~Labor Day~2012-08-02~2018-08-31~big deal for Audi~1100.00~Toyota+Corolla+2015
+001~gmps-bresee~Thanksgiving~2017-02-02~2018-01-12~big deal for toyota~1000.00~Toyata+camry
+005~gmps-bresee~Labor Day~2012-08-02~2018-08-31~big deal for Audi~1100.00~Audi+Corolla+2015
 002~gmps-bresee~Thanksgiving~2016-05-01~2019-08-15~big deal for toyota~4000.00~Toyota+Corolla+2015
 003~gmps-brown-wood~Spring~2016-03-03~2018-12-22~big deal for Buick~1400.00~Buick+2017
-006~gmps-bresee~Labor Day~2017-08-01~2019-08-30~big deal for Audi~1100.00~Toyota+Corolla+2015
+Ou8sJL~null~thanksgiving~2017-09-01~2017-12-23~sale~444.00~2017+suv+chevrolet+34567+12345+New+All+All+All
+004~gmps-covert-country~Spring~2016-03-03~2018-12-22~big deal for Buick~1400.00~chevrolet+new
