@@ -23,6 +23,8 @@ public class PictureManager {
     //root direction of the picture files
     private static final String PICTURE_DIR = "picture";
     private static final boolean DEBUG = false;
+    private static URL defaultPhotoURL;
+    private static BufferedImage defaultPhoto;
 
     //replaced by the getPhoto() in the Vehicle class
     @Deprecated
@@ -114,16 +116,31 @@ public class PictureManager {
             }
         }
     }
-    
-    public static void main(String[] args){
-        URL url=null;
-        try {
-            url = new URL("http://inventory-dmg.assets-cdk.com/chrome_jpgs/2016/15879x90.jpg");
-//            url = new URL("http://inventory-dmg.assets-cdk.com/5/6/7/13918653765x90.jpg");
-        } catch (MalformedURLException e) {
-            if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) e.printStackTrace();
+
+    /**
+     * Get a URL instance from the property file. To set the default value, just
+     * update the default-photo value in the config/global.properties
+     * 
+     * @return
+     */
+    public static URL getDefaultPhotoURL() {
+        if(defaultPhotoURL==null){
+            String photoString = PropertyManager.getProperty("default-photo");
+            try {
+                defaultPhotoURL = new URL(photoString);
+            } catch (MalformedURLException e) {
+                System.out.println("Please set property 'default-photo' to a valid value in the config/global.properties file");
+                if(PropertyManager.getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
+            }
         }
-        PictureManager.getVehiclePhoto(url);
+        return defaultPhotoURL;
+    }
+
+    public static BufferedImage getDefaultPhoto() {
+        if(defaultPhoto==null){
+            defaultPhoto = getVehiclePhoto(getDefaultPhotoURL());
+        }
+        return defaultPhoto;
     }
     
 }
