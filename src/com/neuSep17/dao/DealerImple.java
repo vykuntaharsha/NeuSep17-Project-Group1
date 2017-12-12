@@ -18,7 +18,7 @@ public class DealerImple implements IDealerManager {
 
 
 	public DealerImple() throws IOException {
-		DealerFileReading reading = new DealerFileReading(new File("data/dealers"));
+		DealerFileReading reading = new DealerFileReading(new File("data" + File.separator +"dealers"));
 		map = reading.loading();
 	}
 	@Override
@@ -58,7 +58,7 @@ public class DealerImple implements IDealerManager {
 						+ "\t" + dealer.getEmailId() + "\t" + dealer.getContactNumber();
 		DealerFileWriting writing = null;
 		try {
-			writing = new DealerFileWriting(new File("data/dealers"), true);
+			writing = new DealerFileWriting(new File("data" + File.separator + "dealers"), true);
 			writing.getBufferedWriter().write(result);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -89,7 +89,7 @@ public class DealerImple implements IDealerManager {
 
 	private void saveFile() {
 		try {
-			DealerFileWriting writing = new DealerFileWriting(new File("data/dealers"), false);
+			DealerFileWriting writing = new DealerFileWriting(new File("data" + File.separator + "dealers"), false);
 			writing.saveToFile(map);
 		} catch (IOException e) {
 			e.printStackTrace();
