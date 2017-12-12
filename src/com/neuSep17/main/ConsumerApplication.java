@@ -28,6 +28,11 @@ public class ConsumerApplication extends IncentiveUI {
     private JPanel controlPanel;
     private JComboBox<Dealer> chooseDealer;
 
+    private int counter = 0;
+    private ImageIcon[] images = new ImageIcon[4];
+    private JLabel label;
+
+
     public ConsumerApplication() {
         super();
     }
@@ -66,22 +71,24 @@ public class ConsumerApplication extends IncentiveUI {
 
         controlPanel.add(outer);
         mainFrame.setVisible(true);
+        Timer timer = new Timer(2000, new TimerListener());
+        timer.start();
     }
 
     private void prepareGUI() throws IOException {
         mainFrame = createFrame("Welcome User");
-        mainFrame.setLayout(new GridLayout(3, 2));
+        mainFrame.setLayout(new GridLayout(2, 2));
 
         JPanel imageNestedPanel = new JPanel();
         imageNestedPanel.setLayout(new GridLayout(2,1));
 
-        JLabel imageLabel = pictures();
+        label = pictures();
 
         headerLabel = createLabel("Welcome to your dream car site!", JLabel.CENTER);
         headerLabel.setHorizontalAlignment(JLabel.CENTER);
         headerLabel.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 100));
 
-        imageNestedPanel.add(imageLabel);
+        imageNestedPanel.add(label);
         imageNestedPanel.add(headerLabel);
 
         distanceLabel = createLabel("", JLabel.CENTER);
@@ -91,7 +98,12 @@ public class ConsumerApplication extends IncentiveUI {
 
         mainFrame.add(imageNestedPanel);
         mainFrame.add(controlPanel);
+
         mainFrame.setVisible(true);
+
+        for(int i=0; i<images.length; i++) {
+            images[i] = createImageIcon("ConsumerHeader"+(i+1)+".jpg");
+        }
     }
 
     private JButton getSubmitButton() {
@@ -168,7 +180,22 @@ public class ConsumerApplication extends IncentiveUI {
     }
 
     private JLabel pictures() throws IOException{
-        JLabel picLabel = createPicture("ConsumerHeaderImage.png");
+//        JLabel picLabel = createPicture("C:\\Users\\diksh\\Desktop\\NeuSep17-Project-Group1-master-monday\\NeuSep17-Project-Group1-master\\data\\ConsumerHeader3.jpg");
+        JLabel picLabel = createPicture("ConsumerHeader4.jpg");
+        picLabel.setSize(new Dimension(screenWidth, screenHeight/3));
+        picLabel.setBounds(screenWidth, screenHeight/3, screenWidth, screenHeight/3);
         return picLabel;
+    }
+
+    private class TimerListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (counter == images.length) {
+                counter = 0;
+            }
+            label.setIcon(images[counter]);
+            counter++;
+        }
     }
 }
