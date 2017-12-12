@@ -383,9 +383,9 @@ public class InventoryBrowseUI implements ActionListener {
         } else if (e.getSource() == vehicleIDButtonList.get(0) || e.getSource() == vehicleIDButtonList.get(1) || e.getSource() == vehicleIDButtonList.get(2)
                 || e.getSource() == vehicleIDButtonList.get(3) || e.getSource() == vehicleIDButtonList.get(4)){
                 JButton imageClicked=(JButton)e.getSource();
-                VehicleImple vehicleImpleObject=new VehicleImple(new File("E:\\IdeaProjects\\JavaFinalProject\\src\\com\\neuSep17\\data"));
+                VehicleImple vehicleImpleObject=new VehicleImple(new File("data"));
             System.out.println(imageClicked.getText());
-                     Vehicle vehicleObject=vehicleImpleObject.getAVehicle(dealer+".txt",imageClicked.getText());
+                     Vehicle vehicleObject=vehicleImpleObject.getAVehicle(dealer,imageClicked.getText());
                      System.out.println(vehicleObject.toString());
             try {
                 DealerImpleService dealerImpleServiceObject=new DealerImpleService();
