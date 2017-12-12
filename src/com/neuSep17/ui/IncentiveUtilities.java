@@ -11,9 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Random;
@@ -23,13 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 
@@ -332,6 +324,8 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
     private JLabel idLabel;
     private JTextField idTextField;
 
+    private IncentiveUtilities incentiveUtilities;
+
     Font small = new Font("Arial",Font.PLAIN, 14);
     Font big = new Font("Arial", Font.BOLD, 16);
     Font comboBoxFont = new Font("Arial", Font.PLAIN, 12);
@@ -371,6 +365,7 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
     //EditIncentiveScreen
     public void EditIncentives(IncentiveUtilities i) {
+        incentiveUtilities = i;
         createComponents("edit");
 
         //======== this ========
@@ -484,6 +479,15 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
         discountTextField = ui.createText("");
         discountTextField.setToolTipText("Maximum discount can be 9999$");
+        discountTextField.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent e){
+                char ch = e.getKeyChar();
+                if(Character.isAlphabetic(ch)){
+                    JOptionPane.showMessageDialog(null, "Only numbers are allowed!");
+                    e.consume();
+                }
+            }
+        });
 
         trimLabel = ui.createLabel("Trim");
         comboBox1 = ui.createComboBox(new String[] {"All","High","Middle","Low"});
@@ -520,7 +524,7 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
                         incentiveUtilities.getCashValue(), incentiveUtilities.getDiscountCriteria()
                 );
                 IncentiveService.updateAnIncentive(incentive);
-            }else if(str.equals("add")) {
+            } else if(str.equals("add")) {
                 IncentiveUtilities incentiveUtilities = getTextFromAddScreen();
                 Incentive incentive = new Incentive(
                         incentiveUtilities.getID(), incentiveUtilities.getDealerID(), incentiveUtilities.getTitle(),
@@ -529,19 +533,17 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
                 );
                 IncentiveService.addAnIncentive(incentive);
             }
-
+            WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+            setVisible(false);
+            dispose();
+            JOptionPane.showMessageDialog(null,
+                    "Incentive for dealer: "+incentiveUtilities.getDealerID() +" "+str+"ed successfully.");
+            incentiveUtilities = null;
         }catch(Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error: Unable to apply!", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
-
-    	/* For Balla's function
-        IncentiveScreen is = new IncentiveScreen();
-        */
-        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
-        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
-        setVisible(false);
-        dispose();
     }
 
     //get String from textFields and comboBoxs in editScreen
@@ -578,15 +580,15 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
         //get description
         String descriptionText = descriptionTextField.getText();
-        if(!isTrue(v.ValidatedescriptionText(descriptionText))) {
-            errorMessage.append(v.ValidatedescriptionText(descriptionText));
-        }
+//        if(!isTrue(v.ValidatedescriptionText(descriptionText))) {
+//            errorMessage.append(v.ValidatedescriptionText(descriptionText));
+//        }
 
         //get disclaimer
         String disclaimerText = disclaimerTextField.getText();
-        if(!isTrue(v.ValidateDisclaimer(disclaimerText))) {
-            errorMessage.append(v.ValidateDisclaimer(disclaimerText));
-        }
+//        if(!isTrue(v.ValidateDisclaimer(disclaimerText))) {
+//            errorMessage.append(v.ValidateDisclaimer(disclaimerText));
+//        }
 
         //get year
         String yearText = yearTextField.getText();
@@ -596,15 +598,15 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
         //get make
         String makeText = makeTextField.getText();
-        if(!isTrue(v.ValidatemakeText(makeText))) {
-            errorMessage.append(v.ValidatemakeText(makeText));
-        }
+//        if(!isTrue(v.ValidatemakeText(makeText))) {
+//            errorMessage.append(v.ValidatemakeText(makeText));
+//        }
 
         //get model
         String modelText = modelTextField.getText();
-        if(!isTrue(v.ValidatemodelText(modelText))) {
-            errorMessage.append(v.ValidatemodelText(modelText));
-        }
+//        if(!isTrue(v.ValidatemodelText(modelText))) {
+//            errorMessage.append(v.ValidatemodelText(modelText));
+//        }
 
         //get price
         String priceText = priceTextField.getText();
@@ -637,7 +639,7 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
             //if valid, set all
 
             i.setID(idText);
-//        	i.setDealerId(d.getDealerId);// dealerid is in dealerScreen
+            i.setDealerID(incentiveUtilities.getDealerID());
             i.setTitle(titleText);
             i.setStartDate(startDateText);
             i.setEndDate(endDateText);
@@ -1219,7 +1221,7 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         if (response == 0) {
             try {
 //                deleteAnIncentive(incentID);
-                JOptionPane.showMessageDialog(null, "Delete successfully!", title, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Deleted successfully!", title, JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Cannot delete incentive from the file.", title, JOptionPane.ERROR_MESSAGE);
@@ -1247,5 +1249,18 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 //	    a.EditIncentives(a);
     }
 	*/
+
+    class MyInputVerifier extends InputVerifier {
+        @Override
+        public boolean verify(JComponent input) {
+            String text = ((JTextField) input).getText();
+            try {
+                Double value = new Double(text);
+                return (value > 0 && value < 9999);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+    }
 }
 
