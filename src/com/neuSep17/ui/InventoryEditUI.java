@@ -63,10 +63,6 @@ public class InventoryEditUI extends JFrame {
         public JLabel getAlertLabel() {
             return alertLabel;
         }
-
-        public JLabel getPhoto() {
-            return fieldLabel;
-        }
     }
 
     public InventoryEditUI() {//code-review-bin: we may still need the vehicle list as the input
@@ -157,7 +153,9 @@ public class InventoryEditUI extends JFrame {
         JTextField lineGraph = new JTextField();
 
         // photo by Bin Shi
-        photoLabel.setBounds(315, 50, 100, 100);
+        photoLabel.setBounds(315, 50, 128, 128);
+//        photoLabel.setHorizontalTextPosition(JLabel.CENTER);
+//        photoLabel.setVerticalTextPosition(JLabel.BOTTOM);
         photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         photoLabel.setBackground(Color.lightGray);
         photoLabel.setToolTipText("Click to Change");
@@ -460,18 +458,19 @@ public class InventoryEditUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String input = JOptionPane.showInputDialog(photoLabel,"Enter the URL of the new photo:",
-                        vehicle.getPhotoURL().toString());
+                        vehicle.getPhotoURL()==null?"":vehicle.getPhotoURL().toString());
+                
+                URL url = null;
                 if (input != null && !input.isEmpty()) {
                     try {
-                        URL url = new URL(input.trim());
-                        loadPhoto(url);
+                        url = new URL(input.trim());
                     } catch (MalformedURLException e1) {
                         System.out.println("Entered invalid URL:"+input);
-                        if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) {
+                        if(PropertyManager.getProperty("debug").equalsIgnoreCase("true")) 
                             e1.printStackTrace();
-                        }
                     }
                 }
+                displayPhoto(url);
             }
         });
 
@@ -1115,25 +1114,21 @@ public class InventoryEditUI extends JFrame {
 
         //later load photo to avoid blocking UI by Bin Shi
         SwingUtilities.invokeLater(() -> {
-            loadPhoto(vehicle.getPhotoURL());
+            displayPhoto(vehicle.getPhotoURL());
         });
     }
     
-    // load the photo by Bin Shi
-    private void loadPhoto(URL photoURL) {
-        boolean noPhoto = true;
-        if (photoURL != null) {
-            Image image = PictureManager.getVehiclePhoto(photoURL);
-            if (image != null) {
-                ImageIcon icon = new ImageIcon(image);
-                if (icon != null){
-                    photoLabel.setIcon(icon);
-                    noPhoto = false;
-                }
-            }
+    // display the photo by Bin Shi
+    private void displayPhoto(URL photoURL) {
+        // add !PictureManager.getDefaultPhotoURL().equals(photoURL) to not display default photo
+        if (photoURL == null || PictureManager.getVehiclePhoto(photoURL) == null) {
+            photoLabel.setIcon(null);
+            photoLabel.setText("No Photo");
+            return;
         }
-        if(noPhoto) photoLabel.setText("No Photo");
-        else photoLabel.setText(photoURL.toString());
+        ImageIcon icon = new ImageIcon(PictureManager.getVehiclePhoto(photoURL));
+        photoLabel.setIcon(icon);
+        photoLabel.setText(photoURL.toString());
     }
   
     public boolean saveVehicle(Vehicle preVehicle) {
@@ -1154,16 +1149,16 @@ public class InventoryEditUI extends JFrame {
             
             URL url = null;
             try {
-                // fix the null exception by using default photo (Bin Shi)
-                url = new URL("https://vignette.wikia.nocookie.net/arthur/images/a/a7/No_Image.jpg");//default no photo
-                if(!photoLabel.getText().equals("No Photo")){
+                if(photoLabel.getText()!=null && !photoLabel.getText().endsWith("Photo")){
                     url = new URL(photoLabel.getText());
                 }
             } catch (MalformedURLException e) {
-                System.out.println("Cannot set vehicle's photo URL, so use teh default one.");
-                if (PropertyManager.getProperty("debug").equalsIgnoreCase("true"))
-                    e.printStackTrace();
+                System.out.println("Cannot set vehicle's photo URL, so use the default one.");
+                if (PropertyManager.getProperty("debug").equalsIgnoreCase("true")) {e.printStackTrace();}
             } finally {
+                if(url==null){
+                    url=PictureManager.getDefaultPhotoURL(); // use the default URL
+                }
                 newVehicle.setPhotoURL(url);
             }
             
