@@ -10,6 +10,7 @@ public class IncentiveUI {
 
     protected int screenWidth;
     protected int screenHeight;
+    
 
     public IncentiveUI() {
         Toolkit kit = Toolkit.getDefaultToolkit();
@@ -36,14 +37,14 @@ public class IncentiveUI {
         int windowWidth = dialog.getWidth();                     //get the width of the window
         int windowHeight = dialog.getHeight();                   //get the height
 
-        dialog.setLocation(screenWidth/2-windowWidth/2, screenHeight/2-windowHeight/2);//display the frame in the center of the screen
+        dialog.setLocation(screenWidth, screenHeight);//display the frame in the center of the screen
     }
 
     public void displayCenter(JFrame frame) {
         int windowWidth = frame.getWidth();                     //get the width of the window
         int windowHeight = frame.getHeight();                   //get the height
 
-        frame.setLocation(screenWidth/2-windowWidth/2, screenHeight/2-windowHeight/2);//display the frame in the center of the screen
+        frame.setLocation(screenWidth, screenHeight);//display the frame in the center of the screen
     }
 
     public JFrame createFrame(String title) {
@@ -51,7 +52,7 @@ public class IncentiveUI {
         frame.setTitle(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setBackground(Color.GRAY);
-        frame.setSize(screenWidth*3/4,screenHeight*3/4);
+        frame.setSize(screenWidth,screenHeight);
         displayCenter(frame);
         return frame;
     }
@@ -83,7 +84,7 @@ public class IncentiveUI {
 
     public JTextField createText(String text){
         JTextField textField = new JTextField(text);
-        textField.setSize(screenWidth/200,screenHeight*2/100);
+        textField.setSize(screenWidth/200,screenHeight/100);
         return textField;
     }
 
