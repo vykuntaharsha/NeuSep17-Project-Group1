@@ -17,7 +17,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.text.DateFormat;
@@ -27,7 +26,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.table.DefaultTableModel;
@@ -394,7 +392,7 @@ class VehicleDetailUI extends JFrame {
             {
                   FeatureCounter++;
             }
-		    else if(value.contains(vehicle.getExteriorColor())||value.contains(vehicle.getInteriorColor()))
+		    else if(vehicle.getExteriorColor().contains(value)||vehicle.getInteriorColor().contains(value))
             {
                   FeatureCounter++;
             }
@@ -402,7 +400,7 @@ class VehicleDetailUI extends JFrame {
 		    {
 		     FeatureCounter++;
 		    }
-		    System.out.println(FeatureCounter);
+		    System.out.println(FeatureCounter +" "+ vehicle.getExteriorColor().contains(value));
 		}
 		if(FeatureCounter == criteria.size())
 		  {
@@ -413,7 +411,7 @@ class VehicleDetailUI extends JFrame {
 	return discountedPrice;
 	
     }
-      
+    
     private Vehicle [] getSimilarVehicles() {
 	// TODO Auto-generated method stub
 	Inventory inv = vimpl.getInventory(dealer.getId());
@@ -479,21 +477,22 @@ class VehicleDetailUI extends JFrame {
        int numOfSelectedVehicle = 0;
        for(i = 0 ; i < vehi.length;i++)
        {
-	 im = vehi[i].getPhoto();
-	 if(im==null)
-	 {
-	    continue;
-	 }
-	 selectedVehicle[numOfSelectedVehicle] = vehi[i];
-	 numOfSelectedVehicle++;
-	 if(numOfSelectedVehicle==4)
-	     break;
+           im = vehi[i].getPhoto();
+           if(im==null)
+           {
+               continue;
+           }
+           selectedVehicle[numOfSelectedVehicle] = vehi[i];
+           numOfSelectedVehicle++;
+           if(numOfSelectedVehicle==4)
+               break;
        }
        for(m=0;m<4;m++)
        {
 	        similarVehiclePics[m] = new JLabel();
-       		similarVehiclePics[m].setIcon(new ImageIcon(new ImageIcon(selectedVehicle[m].getPhotoURL()).getImage().getScaledInstance(242, 138, Image.SCALE_DEFAULT)));
-       		similarVehicleNames[m] = new JLabel(selectedVehicle[m].getMake()+" "+selectedVehicle[m].getModel()+" "+selectedVehicle[m].getYear()+" "+selectedVehicle[m].getCategory());
+       		//similarVehiclePics[m].setIcon(new ImageIcon(new ImageIcon(selectedVehicle[m].getPhotoURL()).getImage().getScaledInstance(242, 138, Image.SCALE_DEFAULT)));
+	        similarVehiclePics[m].setIcon(new ImageIcon(selectedVehicle[m].getPhoto().getScaledInstance(242, 138, Image.SCALE_DEFAULT)));
+	        similarVehicleNames[m] = new JLabel(selectedVehicle[m].getMake()+" "+selectedVehicle[m].getModel()+" "+selectedVehicle[m].getYear()+" "+selectedVehicle[m].getCategory());
        		similarVehicleNames[m].setHorizontalAlignment(SwingConstants.CENTER);
                 Vehicle v = selectedVehicle[m];
                 similarVehiclePics[m].addMouseListener(new MouseAdapter() {
@@ -569,22 +568,25 @@ class VehicleDetailUI extends JFrame {
 
                 //Image image = Toolkit.getDefaultToolkit().getImage(vehicle.getPhotoURL());
                 BufferedImage image = null;
-		try {
-		    image = ImageIO.read(vehicle.getPhotoURL());
-		} catch (Exception e1) {
-		      try {
-			image = ImageIO.read(new File("data/No_Image_Available.jpg"));
-		    } catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+		    //image = ImageIO.read(vehicle.getPhotoURL());
+		    image = (BufferedImage) vehicle.getPhoto();
+		    System.out.println(image);
+		    if(image==null)
+		    {
+		        try {
+		            image = ImageIO.read(new File("data/No_Image_Available.jpg"));
+		            } 
+		            catch (IOException e2) {
+		                e2.printStackTrace();
+		            }
 		    }
-		}
                 ImageIcon icon = new ImageIcon(image);
                 photoLabel.setImage(image);
                 icon=new ImageIcon(icon.getImage().getScaledInstance(photoLabel.getWidth(),photoLabel.getHeight(), Image.SCALE_DEFAULT));
                 photoLabel.setIcon(icon);
                 photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            }
+		
+          }
 
             @Override
             public void windowIconified(WindowEvent e) {
@@ -607,7 +609,7 @@ class VehicleDetailUI extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 // TODO Auto-generated method stub
-                System.exit(0);//
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
 
             @Override
@@ -622,31 +624,61 @@ class VehicleDetailUI extends JFrame {
 
             }
         });
-        FileInputStream file;
 	try {
-	    file = new FileInputStream("data/carstartgarage.wav");
-	    BufferedInputStream bf = new BufferedInputStream(file);
-	    	AudioInputStream audioIn = AudioSystem.getAudioInputStream(bf);
-	    	Clip clip = AudioSystem.getClip();
-	    	clip.open(audioIn);
-	    	clip.start();
+	    Thread t1 = new Thread(new Runnable() {
+	         public void run() {
+	              // code goes here.
+	             try {
+	                 FileInputStream file = new FileInputStream("data/carstartgarage.wav");
+                
+	             BufferedInputStream bf = new BufferedInputStream(file);
+	                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(bf);
+	                 Clip clip = AudioSystem.getClip();
+	                 clip.open(audioIn);
+	                 clip.start();
+	             } catch (Exception e) {
+	                    // TODO Auto-generated catch block
+	                    e.printStackTrace();
+	                }
+	         }
+	    });  
+	    t1.start();
 	    
-		Thread.sleep(3000);
+		//Thread.sleep(3000);
 	    
 	    
-	    clip.close();
-	    audioIn.close();
-	    bf.close();
-	    file.close();
+//	    clip.close();
+//	    audioIn.close();
+//	    bf.close();
+//	    file.close();
 	    if(isDealAvailable)
 	    {
-        	    file = new FileInputStream("data/youhaveadeal.wav");
-        	    
-        	    bf = new BufferedInputStream(file);
-        	    audioIn = AudioSystem.getAudioInputStream(bf);
-        	    clip = AudioSystem.getClip();
-        	    clip.open(audioIn);
-        	    clip.start();
+	        Thread t2 = new Thread(new Runnable() {
+	             public void run() {
+	                  // code goes here.
+	                 try {
+	                     Thread.sleep(3000);
+	                     FileInputStream file = new FileInputStream("data/youhaveadeal.wav");
+	                
+	                 BufferedInputStream bf = new BufferedInputStream(file);
+	                     AudioInputStream audioIn = AudioSystem.getAudioInputStream(bf);
+	                     Clip clip = AudioSystem.getClip();
+	                     clip.open(audioIn);
+	                     clip.start();
+	                 } catch (Exception e) {
+	                        // TODO Auto-generated catch block
+	                        e.printStackTrace();
+	                    }
+	             }
+	        });  
+	        t2.start();
+//	        file = new FileInputStream("data/youhaveadeal.wav");
+//        	    
+//        	    bf = new BufferedInputStream(file);
+//        	    audioIn = AudioSystem.getAudioInputStream(bf);
+//        	    clip = AudioSystem.getClip();
+//        	    clip.open(audioIn);
+//        	    clip.start();
 	    }
 	    
 	    
@@ -658,4 +690,6 @@ class VehicleDetailUI extends JFrame {
     	
     }
 }
+
+
 
