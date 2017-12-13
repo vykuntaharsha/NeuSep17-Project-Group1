@@ -19,13 +19,17 @@ public class PropertyManager {
     
     static {
         try {
+            if(!propertyFile.exists()){
+                propertyFile.getParentFile().mkdirs();
+                propertyFile.createNewFile();
+            }
             config.load(new FileInputStream(propertyFile));
         } catch (FileNotFoundException e) {
             System.out.println("Cannot find the perperty file " + propertyFile.getAbsolutePath());
-            e.printStackTrace();
+            debug(e);
         } catch (IOException e) {
             System.out.println("Cannot read the perperty file " + propertyFile.getAbsolutePath());
-            e.printStackTrace();
+            debug(e);
         }
     }
     
@@ -58,17 +62,21 @@ public class PropertyManager {
             out = new FileOutputStream(propertyFile);
             config.store(out, comments);
         } catch (IOException e) {
-            if(getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
+            debug(e);
         }
     }
     
 
     private PropertyManager(){};
     
-    public static void main(String[] args) {
-        for(String name: stringPropertyNames()){
-            System.out.println(name + ":"+getProperty(name));
-        }
+    private static void debug(Exception e){
+        if(getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
     }
-
+    
+    //test code
+    public static void main(String[] args) {
+        setProperty("name","");
+        System.out.println(getProperty("name"));
+        System.out.println(getProperty("name").isEmpty());
+    }
 }
