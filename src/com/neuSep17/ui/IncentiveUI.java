@@ -91,7 +91,7 @@ public class IncentiveUI {
         String rootPath = "";
         try {
             rootPath = Paths.get("").toAbsolutePath().toString();
-            rootPath+= File.separator+"NeuSep17-Project-Group1-master"+ File.separator+"data" + File.separator+path;
+            rootPath+= File.separator+"data" + File.separator+path;
         } catch (Exception e) {
         }
         return new ImageIcon(rootPath);
