@@ -52,7 +52,6 @@ public class PictureManager {
         if (photoURL == null) return null;
         
         String fileName = photoNames.getProperty(photoURL.getFile().toString());
-        System.out.println("#####"+fileName);
         if (fileName == null) {
             return loadImageFromURL(photoURL);
         } else {
@@ -86,10 +85,10 @@ public class PictureManager {
     }
 
     private static BufferedImage loadImageFromDisk(String imageFileName) {
-        if(imageFileName.equalsIgnoreCase("null")) return null;
+        if(imageFileName==null || imageFileName.isEmpty() || imageFileName.equalsIgnoreCase("null")) return null;
         BufferedImage image = null;
         try {
-            File imageFile = new File(imageFileName);
+            File imageFile = new File(PICTURE_DIR, imageFileName);
             image = ImageIO.read(imageFile);
         } catch (IOException e) {
             System.out.println("Cannot read the image from disk.");

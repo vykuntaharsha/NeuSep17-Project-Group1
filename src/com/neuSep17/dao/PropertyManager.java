@@ -38,7 +38,9 @@ public class PropertyManager {
     }
     
     public static Object setProperty(String key, String value) {
-        return config.setProperty(key, value);
+        Object previous = config.setProperty(key, value);
+        store();
+        return previous;
     }
     
     public static Set<String> stringPropertyNames(){
