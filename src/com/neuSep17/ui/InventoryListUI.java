@@ -247,9 +247,10 @@ public class InventoryListUI extends JFrame {
         panelTop.add(sortOrdercomboBox);
     }
 
-    // close
+    // close the window
     private void exit() {
-        System.exit(0);
+        //only exit this window not the application
+        dispose();
     }
 
     // minimize
