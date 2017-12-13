@@ -38,6 +38,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import com.neuSep17.dao.IncentiveImple;
+import com.neuSep17.dao.PictureManager;
 import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Incentive;
 import com.neuSep17.dto.Vehicle;
@@ -167,9 +168,14 @@ public class InventoryListUI extends JFrame {
 //        list.stream().forEach(vehicle -> {
 //            vehicle.getPhoto();
 //        });
+        /* commented by Bin Shi to optimize the loading speed
         list.parallelStream().forEach(vehicle -> {
             vehicle.getPhoto();
         });
+        */
+        
+        PictureManager.initDealerPhotoLibrary(dealerName, list);
+        
         incentiveList = getIncentives(dealerName);
         filter = new ArrayList<>();
         isAscending = true;
