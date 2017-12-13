@@ -603,15 +603,15 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
         //get price
         String priceText = priceTextField.getText();
-        if(!isTrue(v.ValidatepriceText(priceText))) {
-            errorMessage.append(v.ValidatepriceText(priceText));
-        }
+//        if(!isTrue(v.ValidatepriceText(priceText))) {
+//            errorMessage.append(v.ValidatepriceText(priceText));
+//        }
 
         //get mileage
         String mileageText = mileageTextField.getText();
-        if(!isTrue(v.ValidatemilleageText(mileageText))) {
-            errorMessage.append(v.ValidatemilleageText(mileageText));
-        }
+//        if(!isTrue(v.ValidatemilleageText(mileageText))) {
+//            errorMessage.append(v.ValidatemilleageText(mileageText));
+//        }
 
         //get category
         String categoryBox = (String) categoryComboBox.getSelectedItem();
@@ -1276,4 +1276,3 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         public void handleEvent(int evt);
     }
 }
-
