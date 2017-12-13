@@ -84,9 +84,9 @@ public class ConsumerApplication extends IncentiveUI {
 
         label = pictures();
 
-        headerLabel = createLabel("Welcome to your dream car site!", JLabel.CENTER);
+        headerLabel = createLabel("WELCOME TO YOUR DREAM CAR SITE!", JLabel.CENTER);
         headerLabel.setHorizontalAlignment(JLabel.CENTER);
-        headerLabel.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 100));
+        headerLabel.setFont(new Font("Times New Roman", Font.PLAIN, 50));
 
         imageNestedPanel.add(label);
         imageNestedPanel.add(headerLabel);

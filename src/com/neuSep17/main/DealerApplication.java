@@ -66,7 +66,12 @@ public class DealerApplication extends IncentiveUI {
 
     private void prepareGUI() throws IOException {
         mainFrame = new JFrame("Welcome Dealer !");
-        mainFrame.setSize(2500,2000);
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        screenWidth = screenSize.width;
+        screenHeight = screenSize.height;
+        mainFrame.setSize(2000,2000);
+        mainFrame.setVisible(true);
         mainFrame.setLayout(new GridLayout(3, 1));
 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -224,14 +229,15 @@ public class DealerApplication extends IncentiveUI {
 
     private JLabel pictures() throws IOException{
         JLabel picLabel = createPicture("DealerHeaderImage1.png");
-        picLabel.setSize(new Dimension(7000, 4000));
-
+        picLabel.setSize(new Dimension(screenWidth, screenHeight/3));
+        picLabel.setBounds(screenWidth, screenHeight/3, screenWidth, screenHeight/3);
         return picLabel;
     }
 
     private JLabel pictures1() throws IOException{
         JLabel picLabel1 = createPicture("DealerHeaderImage2.png");
-        picLabel1.setSize(new Dimension(5000, 3000));
+        picLabel1.setSize(new Dimension(screenWidth, screenHeight/3));
+        picLabel1.setBounds(screenWidth, screenHeight/3, screenWidth, screenHeight/3);
 
         return picLabel1;
     }
