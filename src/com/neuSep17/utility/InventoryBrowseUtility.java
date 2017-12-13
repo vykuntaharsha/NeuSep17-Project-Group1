@@ -5,13 +5,16 @@ import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Inventory;
 import com.neuSep17.dto.Vehicle;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class InventoryBrowseUtility {
+    public static final String[] SORT_TYPE = {"NONE", "PRICE HIGH TO LOW", "PRICE LOW TO HIGH", "YEAR LOW TO HIGH", "YEAR HIGH TO LOW"};
     Collection<Vehicle> vehicles = new ArrayList<>();
+
 
     public Collection<Vehicle> setObjectsforUtility(String dealer) throws IOException {
         DealerImple dealerImpleObject = new DealerImple();
@@ -21,6 +24,7 @@ public class InventoryBrowseUtility {
         vehicles = inventoryObject.getVehicles();
         return vehicles;
     }
+
     public ArrayList<Vehicle> filterVehicles(ArrayList<Vehicle> vehicles, HashMap<String, String> filter) {
         ArrayList<Vehicle> filterVehicles = new ArrayList<Vehicle>();
         filterVehicles.addAll(vehicles);
@@ -34,6 +38,36 @@ public class InventoryBrowseUtility {
         return filterVehicles;
     }
 
+    public String[] findUniqueVehiclePropertyValues(Collection<Vehicle> vehicles, String property) {
+        Set<String> vehiclePropertySet = new HashSet<>();
+        vehiclePropertySet.add("NONE");
+        for (Vehicle v : vehicles) {
+            if (property.equals("make") && v.getMake() != "") {
+                vehiclePropertySet.add(v.getMake().toUpperCase());
+            } else if (property.equals("type") && v.getBodyType().length() != 0) {
+                vehiclePropertySet.add(v.getBodyType().toUpperCase());
+            } else if (property.equals("year") && v.getBodyType() != "") {
+                vehiclePropertySet.add(Integer.toString(v.getYear()));
+            } else if (property.equals("category") && v.getCategory().toString() != "") {
+                vehiclePropertySet.add(v.getCategory().toString());
+            }
+            else if (property.equals(("price"))) {
+                if(v.getPrice() >= 0 && v.getPrice() < 10000 ) {
+                    vehiclePropertySet.add("0-10000");
+                }else if (v.getPrice() > 10000 && v.getPrice() < 20000) {
+                    vehiclePropertySet.add("10000-20000");
+                }
+                else if (v.getPrice() > 20000 && v.getPrice() < 30000) {
+                    vehiclePropertySet.add("20000-30000");
+                }
+                else{
+                    vehiclePropertySet.add("above 40000");
+                }
+            }
+        }
+        return vehiclePropertySet.toArray(new String[vehiclePropertySet.size()]);
+
+    }
 
     public ArrayList<Vehicle> filterVehicle(ArrayList<Vehicle> vehicles, String condition, String value) {
         List<Vehicle> filterVehicles = new ArrayList<Vehicle>();
@@ -73,7 +107,7 @@ public class InventoryBrowseUtility {
         return (ArrayList<Vehicle>) filterVehicles;
     }
 
-    public static void sortByYear(ArrayList<Vehicle> list, boolean isAscend) {
+    public void sortByYear(ArrayList<Vehicle> list, boolean isAscend) {
         Collections.sort(list, new Comparator<Vehicle>() {
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
@@ -86,7 +120,7 @@ public class InventoryBrowseUtility {
         });
     }
 
-    public static void sortByPrice(ArrayList<Vehicle> list, boolean isAscend) {
+    public void sortByPrice(ArrayList<Vehicle> list, boolean isAscend) {
         Collections.sort(list, new Comparator<Vehicle>() {
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
@@ -98,6 +132,5 @@ public class InventoryBrowseUtility {
             }
         });
     }
-
 
 }

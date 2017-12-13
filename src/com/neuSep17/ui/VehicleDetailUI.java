@@ -68,6 +68,7 @@ class VehicleDetailUI extends JFrame {
     private Vehicle[] selectedVehicle = new Vehicle[4];
 
     public VehicleDetailUI(Vehicle v, Dealer dealer) throws IOException {
+	System.out.println("Working inside vehicle");
     	setType(Type.POPUP);
     	setBackground(new Color(255, 255, 255));
         this.vehicle = v;

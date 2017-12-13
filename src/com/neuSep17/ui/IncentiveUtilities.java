@@ -13,12 +13,9 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.lang.reflect.Field;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
@@ -216,6 +213,8 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
     private String types;
     private String trim;
 
+    private List<MyEventListener> eventListeners = new ArrayList<>();
+
     //to generate id
     private final String allChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -326,36 +325,32 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
     private IncentiveUtilities incentiveUtilities;
 
-    Font small = new Font("Arial",Font.PLAIN, 14);
-    Font big = new Font("Arial", Font.BOLD, 16);
-    Font comboBoxFont = new Font("Arial", Font.PLAIN, 12);
+    private String dealerId;
+
+    Font small = new Font("Arial",Font.PLAIN, ui.screenWidth/100);
+    Font big = new Font("Arial", Font.BOLD, ui.screenWidth/100);
+    Font comboBoxFont = new Font("Arial", Font.PLAIN, ui.screenWidth/100);
 
     //addIncentiveScreen
-    public void addIncentives() {
+    public void addIncentives(String dealerID) {
 
+        this.dealerID = dealerID;
         createComponents("add");
 
-        //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        //======== dialogPane ========
-        {
-            dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setLayout(new BorderLayout());
+        dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
+        dialogPane.setLayout(new BorderLayout());
 
-            //======== contentPanel ========
-            {
-                setFont("add");
-                addComponentsAndSetLayoutInAddScreen();
-                setButtonBar();
-            }
-            addPanelAToB(contentPanel, dialogPane, BorderLayout.CENTER);
-            dialogPane.add(contentPanel, BorderLayout.CENTER);
+        setFont("add");
+        addComponentsAndSetLayoutInAddScreen();
+        setButtonBar();
+        addPanelAToB(contentPanel, dialogPane, BorderLayout.CENTER);
+        dialogPane.add(contentPanel, BorderLayout.CENTER);
 
-            addPanelAToB(buttonBar, dialogPane, BorderLayout.SOUTH);
-            dialogPane.add(buttonBar, BorderLayout.SOUTH);
-        }
+        addPanelAToB(buttonBar, dialogPane, BorderLayout.SOUTH);
+        dialogPane.add(buttonBar, BorderLayout.SOUTH);
         contentPane.add(dialogPane, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(getOwner());
@@ -366,36 +361,30 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
     //EditIncentiveScreen
     public void EditIncentives(IncentiveUtilities i) {
         incentiveUtilities = i;
+
         createComponents("edit");
 
-        //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
+        dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
+        dialogPane.setLayout(new BorderLayout());
 
-        //======== dialogPane ========
-        {
-            dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setLayout(new BorderLayout());
+        setFont("edit");
+        addComponentsAndSetLayoutInEditScreen();
+        setButtonBar();
+        showIncentive(i);
+        addPanelAToB(contentPanel, dialogPane, BorderLayout.CENTER);
+        //dialogPane.add(contentPanel, BorderLayout.CENTER);
 
-            //======== contentPanel ========
-            {
-                setFont("edit");
-                addComponentsAndSetLayoutInEditScreen();
-                setButtonBar();
-                showIncentive(i);
-            }
-            addPanelAToB(contentPanel, dialogPane, BorderLayout.CENTER);
-            //dialogPane.add(contentPanel, BorderLayout.CENTER);
-
-            addPanelAToB(buttonBar, dialogPane, BorderLayout.SOUTH);
-            //dialogPane.add(buttonBar, BorderLayout.SOUTH);
-        }
+        addPanelAToB(buttonBar, dialogPane, BorderLayout.SOUTH);
+        //dialogPane.add(buttonBar, BorderLayout.SOUTH);
         contentPane.add(dialogPane, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(getOwner());
 
         makeItVisible();
     }
+
     //display the incentive which you are going to edit in editScreen
     private void showIncentive(IncentiveUtilities i) {
         idTextField.setEditable(true);
@@ -519,9 +508,9 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
     private void applyButtonClicked(MouseEvent e, String str) {
         try {
             if(str.equals("edit")) {
-    			IncentiveUtilities incentiveUtilities = getTextFromEditScreen();
-    			Incentive incentive = new Incentive(
-    			        incentiveUtilities.getID(), incentiveUtilities.getDealerID(), incentiveUtilities.getTitle(),
+                IncentiveUtilities incentiveUtilities = getTextFromEditScreen();
+                Incentive incentive = new Incentive(
+                        incentiveUtilities.getID(), incentiveUtilities.getDealerID(), incentiveUtilities.getTitle(),
                         incentiveUtilities.getStartDate(), incentiveUtilities.getEndDate(), incentiveUtilities.getDescription(),
                         incentiveUtilities.getCashValue(), incentiveUtilities.getDiscountCriteria()
                 );
@@ -533,6 +522,7 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
                         incentiveUtilities.getStartDate(), incentiveUtilities.getEndDate(), incentiveUtilities.getDescription(),
                         incentiveUtilities.getCashValue(), incentiveUtilities.getDiscountCriteria()
                 );
+                this.incentiveUtilities = incentiveUtilities;
                 IncentiveService.addAnIncentive(incentive);
             }
             WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
@@ -540,12 +530,13 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
             setVisible(false);
             dispose();
             JOptionPane.showMessageDialog(null,
-                    "Incentive for dealer: "+incentiveUtilities.getDealerID() +" "+str+"ed successfully.");
+                    "Incentive: "+incentiveUtilities.getID()+" for dealer: "+incentiveUtilities.getDealerID() +" "+str+"ed successfully.");
             incentiveUtilities = null;
         }catch(Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error: Unable to apply!", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
+        dispatchMyEvent(1);
     }
 
     //get String from textFields and comboBoxs in editScreen
@@ -612,15 +603,15 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
         //get price
         String priceText = priceTextField.getText();
-        if(!isTrue(v.ValidatepriceText(priceText))) {
-            errorMessage.append(v.ValidatepriceText(priceText));
-        }
+//        if(!isTrue(v.ValidatepriceText(priceText))) {
+//            errorMessage.append(v.ValidatepriceText(priceText));
+//        }
 
         //get mileage
         String mileageText = mileageTextField.getText();
-        if(!isTrue(v.ValidatemilleageText(mileageText))) {
-            errorMessage.append(v.ValidatemilleageText(mileageText));
-        }
+//        if(!isTrue(v.ValidatemilleageText(mileageText))) {
+//            errorMessage.append(v.ValidatemilleageText(mileageText));
+//        }
 
         //get category
         String categoryBox = (String) categoryComboBox.getSelectedItem();
@@ -751,8 +742,8 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         } else {
             //if valid, set all
 
-            i.setID(i.generateString(6));
-//        	i.setDealerId(d.getDealerId);
+            i.setID(String.valueOf(i.hashCode()));
+            i.setDealerID(dealerID);
             i.setTitle(titleText);
             i.setStartDate(startDateText);
             i.setEndDate(endDateText);
@@ -823,43 +814,43 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
 
         applyToInventoryLabel.setFont(big);
 
-        categoryLabel.setFont(big);
+        categoryLabel.setFont(small);
 
         categoryComboBox.setFont(comboBoxFont);
 
-        label1.setFont(big);
+        label1.setFont(small);
 
-        yearLabel.setFont(big);
+        yearLabel.setFont(small);
 
         startDateLabel.setFont(small);
 
-        makeLabel.setFont(big);
+        makeLabel.setFont(small);
 
-        modelLabel.setFont(big);
+        modelLabel.setFont(small);
 
         endDateLabel.setFont(small);
 
-        priceLabel.setFont(big);
+        priceLabel.setFont(small);
 
-        mileageLabel.setFont(big);
+        mileageLabel.setFont(small);
 
-        colorLabel.setFont(big);
+        colorLabel.setFont(small);
 
         colorComboBox.setFont(comboBoxFont);
 
-        discountLabel.setFont(big);
+        discountLabel.setFont(small);
 
-        typeLabel.setFont(big);
+        typeLabel.setFont(small);
 
         typeComboBox.setFont(comboBoxFont);
 
-        trimLabel.setFont(big);
+        trimLabel.setFont(small);
 
         comboBox1.setFont(comboBoxFont);
 
-        descriptionLabel.setFont(big);
+        descriptionLabel.setFont(small);
 
-        label2.setFont(big);
+        label2.setFont(small);
 
         applyButton.setFont(small);
     }
@@ -1264,5 +1255,24 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
             }
         }
     }
-}
 
+    public void addListener(MyEventListener myEventListener) {
+        if(!eventListeners.contains(myEventListener)) {
+            eventListeners.add(myEventListener);
+        }
+    }
+
+    public void removeListener(MyEventListener myEventListener) {
+        eventListeners.remove(myEventListener);
+    }
+
+    public void dispatchMyEvent(int evt) {
+        for(MyEventListener myEventListener: eventListeners) {
+            myEventListener.handleEvent(evt);
+        }
+    }
+
+    interface MyEventListener extends EventListener {
+        public void handleEvent(int evt);
+    }
+}
