@@ -154,8 +154,8 @@ public class InventoryEditUI extends JFrame {
 
         // photo by Bin Shi
         photoLabel.setBounds(315, 50, 128, 128);
-//        photoLabel.setHorizontalTextPosition(JLabel.CENTER);
-//        photoLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        photoLabel.setHorizontalTextPosition(JLabel.CENTER);
+        photoLabel.setVerticalTextPosition(JLabel.BOTTOM);
         photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         photoLabel.setBackground(Color.lightGray);
         photoLabel.setToolTipText("Click to Change");
@@ -458,7 +458,7 @@ public class InventoryEditUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String input = JOptionPane.showInputDialog(photoLabel,"Enter the URL of the new photo:",
-                        vehicle.getPhotoURL()==null?"":vehicle.getPhotoURL().toString());
+                       vehicle==null||vehicle.getPhotoURL()==null?"":vehicle.getPhotoURL().toString());
                 
                 URL url = null;
                 if (input != null && !input.isEmpty()) {
