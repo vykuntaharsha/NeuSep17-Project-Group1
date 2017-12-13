@@ -1,6 +1,6 @@
 # Function Description
 
-This function is to get the vehicle picture from a URL string of the vehicle object, which could be either cached in the local file system or fetched from the remote if it is not existed locally.
+This function is to get the vehicle picture from a URL string of the vehicle object, which could be either cached in the local file system or fetched from the remote if it is valid and not existed locally.
 
 The methods signatures are as below in the `vehicle.java` file.
 
@@ -18,9 +18,10 @@ And the main implementation is in `src/com/neuSep17/dao/PictureManager.java`
 
 ## Display Photo
 
-1. If the picture does not exists in the local disk, read it from the internet, and cache it to the disk.
+1. If the this URL has never been checked (cannot find a entry in the URL:photoName dicitionary), try to load this photo from the internet, save it to local disk, and update the dictionary as well.
+   - set the photoName to empty string if this URL does not have valid photo
+   - otherwise, set it to the actual photo name in the disk
 2. Otherwise, read the file from the local disk, and return an BufferedImage instance.
-   In the meanwhile, it will cache the photo to the local disk for the future use.
 
 ## Update Photo URL
 
@@ -31,7 +32,15 @@ And the main implementation is in `src/com/neuSep17/dao/PictureManager.java`
 # Optimization
 
 * Later photo loading. Use `SwingUtilities.invokeLater()` method to display a picture at a later time to avoid blocking UI loading.
-* Use Java 8's paralle stream feature to initialize the photo libaray. (Reduce the first loadin time from 10min to xxx. )
+
+* **Use Java 8's paralle stream feature to initialize the photo libaray (15x speed boost: from 10min to about 40 seconds. )** 
+  Note: 
+
+  - Code `vehicles.parallelStream().forEach(v-> loadImageFromURL(v.getPhotoURL(), false));`
+
+
+  - This test based on data file `gmps-covert-country`, 304  of 1224 URLs has photo (~2-4K).
+
 * Read the property `INIT_PICTURE_LIBARAY` from the configuration file.
 
 # Source Code
@@ -41,4 +50,9 @@ src/com/neuSep17/dao/PictureManagement.java
 src/com/neuSep17/ui/InventoryEditUI.java
 
 # Change History
+
+2017-11-30 Draft.
+
+2017-12-05 Fixed some bugs and now it is release.
+
 2017-12-12. The loading time for 1368 records took about 50 seconds, more than 95% are empty pictures. So try to use a hash map to make it quick.
