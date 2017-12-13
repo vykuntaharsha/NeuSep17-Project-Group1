@@ -1,5 +1,6 @@
 package com.neuSep17.ui;
 
+import com.neuSep17.dao.PictureManager;
 import com.neuSep17.dao.VehicleImple;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.service.DealerImpleService;
@@ -281,7 +282,7 @@ public class InventoryBrowseUI implements ActionListener {
                     pageNumber = 1;
                     previousPageNavigateButton.setEnabled(false);
                     nextPageNavigateButton.setEnabled(true);
-                    filterVehicleList = searchTextField.getText().isEmpty() ? vehicleList : searchedVehicleList;
+                    filterVehicleList = searchedVehicleList.size()==0 ? vehicleList : searchedVehicleList;
                     filterVehicleList = utilityObject.filterVehicles(filterVehicleList, getFilterValues());
                     if(makeSelect.getSelectedItem().equals(DEFAULT) &&
                             typeSelect.getSelectedItem().equals(DEFAULT) &&
@@ -302,6 +303,7 @@ public class InventoryBrowseUI implements ActionListener {
                     imagePanelObjectsList = createResultsPanel(5);
                     display(filterVehicleList, imagePanelObjectsList);
                     searchedVehicleList = filterVehicleList;
+                    resetFilterParameters();
                     navigationLabel.setText("Page " + pageNumber);
                 }
                 break;
@@ -406,6 +408,7 @@ public class InventoryBrowseUI implements ActionListener {
         List<Vehicle> tempList = (pageNumber * 5 < vehiclesToDisplay.size()) ? vehiclesToDisplay.subList(((pageNumber - 1) * 5), (pageNumber * 5)) : vehiclesToDisplay.subList(((pageNumber - 1) * 5), vehiclesToDisplay.size());
         vehicleIDButtonList = new ArrayList<>();
         int counter = 0;
+    //    PictureManager.initDealerPhotoLibrary(dealer,  vehiclesToDisplay);
         for (Vehicle vehicle : tempList) {
             JLabel imageLabel;
             Image image = vehicle.getPhoto();
