@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.neuSep17.dao.IncentiveImple;
+import com.neuSep17.dao.PictureManager;
 import com.neuSep17.dto.Vehicle;
 import com.neuSep17.dto.Dealer;
 import com.neuSep17.dto.Incentive;
@@ -66,13 +67,19 @@ class VehicleDetailUI extends JFrame {
     private JLabel[] similarVehiclePics = new JLabel[4];
     private JLabel[] similarVehicleNames = new JLabel[4];
     private Vehicle[] selectedVehicle = new Vehicle[4];
+    private Vehicle[] vehi;
+    ArrayList<Vehicle> vehicleList;
 
     public VehicleDetailUI(Vehicle v, Dealer dealer) throws IOException {
 	System.out.println("Working inside vehicle");
+    
     	setType(Type.POPUP);
     	setBackground(new Color(255, 255, 255));
         this.vehicle = v;
         this.dealer = dealer;
+        
+        vehi = getSimilarVehicles(); 
+        PictureManager.initDealerPhotoLibrary(dealer.getName(),vehicleList);
         
         createComponents();
         addComponentsUsingLayout();
@@ -416,8 +423,10 @@ class VehicleDetailUI extends JFrame {
     private Vehicle [] getSimilarVehicles() {
 	// TODO Auto-generated method stub
 	Inventory inv = vimpl.getInventory(dealer.getId());
-	Collection<Vehicle> vehicles = inv.getVehicles();
-	return vehicles.toArray(new Vehicle[vehicles.size()]);
+	//Collection<Vehicle> vehicles = inv.getVehicles();
+    vehicleList = new ArrayList<Vehicle>(inv.getVehicles());
+      
+	return vehicleList.toArray(new Vehicle[vehicleList.size()]);
     }
 
     public void addComponentsUsingLayout() throws IOException {
@@ -474,7 +483,6 @@ class VehicleDetailUI extends JFrame {
 	Image im = null;
 	int i,m;
 	          
-       Vehicle[] vehi = getSimilarVehicles(); 
        int numOfSelectedVehicle = 0;
        for(i = 0 ; i < vehi.length;i++)
        {
