@@ -4,6 +4,6 @@ id~dealerId~title~startDate~endDate~description~cashValue~discountCriteria
 002~gmps-bresee~Thanksgiving~2016-05-01~2019-08-15~big deal for toyota~4000.00~Toyota+Corolla+2015
 003~gmps-brown-wood~Spring~2016-03-03~2018-12-22~big deal for Buick~1400.00~Buick+2017
 Ou8sJL~null~thanksgiving~2017-09-01~2017-12-23~sale~444.00~2017+suv+chevrolet+34567+12345+New+All+All+All
-004~gmps-covert-country~Spring~2016-03-03~2018-12-22~big deal for Buick~1400.00~chevrolet+new
-006~gmps-priority~Christmas~2017-12-01~2017-12-31~Big Deal for Chevrolet~1500.00~chevrolet+new+suv
+004~gmps-covert-country~Spring~2016-03-03~2018-12-22~big deal for Buick~1400.00~chevrolet+new+suv
+006~gmps-priority~Christmas~2017-12-01~2017-12-31~Big Deal for Chevrolet~1500.00~chevrolet+new+green
 007~gmps-davis-chevrolet~Christmas~2017-12-01~2017-12-31~Big Deal for Chevrolet~1700.00~chevrolet+new
