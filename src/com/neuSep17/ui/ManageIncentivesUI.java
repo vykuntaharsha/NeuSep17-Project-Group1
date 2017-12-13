@@ -42,7 +42,6 @@ public class ManageIncentivesUI extends IncentiveUI {
     private JLabel sort;
     private JComboBox order;
     private JTextField jtf;
-    private JButton viewAll;
 
     //  private IncentiveImple;
     public ManageIncentivesUI(String dealerid) throws FileNotFoundException {
@@ -95,33 +94,42 @@ public class ManageIncentivesUI extends IncentiveUI {
 
     public void addComponents() {
         // Header
-        JLabel headerTitle = new JLabel("IncentiveUtilities Lists and Management");
+        JLabel headerTitle = new JLabel("Manage Incentives (Dealer: "+dealerid+")");
+        headerTitle.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 50));
+
         JPanel title = new JPanel();
         title.add(headerTitle);
+
         sortPanel = new JPanel();
-        sort = new JLabel("Sort by");
+        sort = new JLabel("Sort by: ");
         jsort = createComboBox(new String[]{"ID", "Title", "StartDate", "EndDate", "Discount"});
+        order = createComboBox(new String[]{"asc", "desc"});
+
+        JLabel searchby = new JLabel(" Search by ID: ");
         jtf = new JTextField(5);
         searchButton = new JButton("Search");
-        viewAll = new JButton("View All");
-        order = createComboBox(new String[]{"asc", "desc"});
-        JLabel searchby = new JLabel("Search by ID");
+
         sortPanel.add(sort);
         sortPanel.add(jsort);
+        sortPanel.add(new JLabel(" "));
         sortPanel.add(order);
+        sortPanel.add(new JLabel("    "));
         sortPanel.add(searchby);
         sortPanel.add(jtf);
+        sortPanel.add(new JLabel(" "));
         sortPanel.add(searchButton);
-        sortPanel.add(viewAll);
+        sortPanel.add(new JLabel("    "));
+        // Add button
+        addButton = new JButton("Add New Incentives", createImageIcon("add.png"));
+        addButton.setOpaque(true);
+
+
+        sortPanel.add(addButton);
+
         headerPanel.add(title);
         headerPanel.add(sortPanel);
+
         mainFrame.add(headerPanel, BorderLayout.NORTH);
-
-
-        // Add button
-        addButton = createButton("Add New Incentives");
-        footerPanel.add(addButton);
-        mainFrame.add(footerPanel, BorderLayout.SOUTH);
 
         //add listpanel,according to sort and search
         displayIncentives(incentives);
@@ -157,14 +165,12 @@ public class ManageIncentivesUI extends IncentiveUI {
                     IncentiveUtilities i = new IncentiveUtilities();
                     i.updateIncentive(incentive);
                     i.EditIncentives(i);
-
-                    mainFrame.dispose();
-                    try {
-                        ManageIncentivesUI screen = new ManageIncentivesUI(ManageIncentivesUI.dealerid);
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
-                    refreshScreen();
+                    i.addListener(new IncentiveUtilities.MyEventListener() {
+                        @Override
+                        public void handleEvent(int evt) {
+                            refreshScreen();
+                        }
+                    });
                 }
             });
 
@@ -174,9 +180,14 @@ public class ManageIncentivesUI extends IncentiveUI {
                     int index = Integer.parseInt(num);
                     String incentiveId = incentives.get(index).getID();
                     try {
-                        IncentiveService.deleteAnIncentive(incentiveId);
-                        JOptionPane.showMessageDialog(null,
-                                "Incentive: "+incentiveId+" deleted successfully.");
+                        int confirmation = JOptionPane.showConfirmDialog(null,
+                                "Are you sure to delete this incentive: " +incentiveId+"?");
+
+                        if(confirmation == 0) {
+                            IncentiveService.deleteAnIncentive(incentiveId);
+                            JOptionPane.showMessageDialog(null,
+                                    "Incentive: "+incentiveId+" deleted successfully.");
+                        }
                     } catch (Exception e1) {
                         JOptionPane.showMessageDialog(null,
                                 "Failed to delete incentive: "+incentiveId);
@@ -275,12 +286,6 @@ public class ManageIncentivesUI extends IncentiveUI {
 
                 @Override
                 public void mouseClicked(MouseEvent arg0) {
-                    mainFrame.dispose();
-                    try {
-                        ManageIncentivesUI screen = new ManageIncentivesUI(ManageIncentivesUI.dealerid);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
                 }
             });
             final JButton deleteButton = deleteButtons[i];
@@ -297,12 +302,6 @@ public class ManageIncentivesUI extends IncentiveUI {
 
                 @Override
                 public void mouseClicked(MouseEvent arg0) {
-                    mainFrame.dispose();
-                    try {
-                        ManageIncentivesUI screen = new ManageIncentivesUI(ManageIncentivesUI.dealerid);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
                 }
             });
         }
@@ -322,27 +321,16 @@ public class ManageIncentivesUI extends IncentiveUI {
             public void mouseClicked(MouseEvent arg0) {
                 try {
                     IncentiveUtilities incentiveUtilities = new IncentiveUtilities();
-                    incentiveUtilities.addIncentives();
+                    incentiveUtilities.addIncentives(dealerid);
+                    incentiveUtilities.addListener(new IncentiveUtilities.MyEventListener() {
+                        @Override
+                        public void handleEvent(int evt) {
+                            refreshScreen();
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-        });
-
-        viewAll.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                viewAll.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                viewAll.setForeground(Color.GRAY);
-            }
-
-            public void mouseExited(MouseEvent e) {
-                viewAll.setCursor(Cursor.getDefaultCursor());
-                viewAll.setForeground(Color.BLACK);
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-                displayIncentives(Allincentives);
             }
         });
     }
