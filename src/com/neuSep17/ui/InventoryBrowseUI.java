@@ -12,7 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class InventoryBrowseUI implements ActionListener {
@@ -49,7 +51,7 @@ public class InventoryBrowseUI implements ActionListener {
 
         initializeJFrame();
         initializeJButtons();
-        initializeJComboBox();
+        initializeJComboBox(vehicleList,true);
         initializeJLabel();
         initializeJPanel();
         initializeJTextField();
@@ -91,30 +93,53 @@ public class InventoryBrowseUI implements ActionListener {
         nextPageNavigateButton.setEnabled(true);
     }
 
-    private void initializeJComboBox() {
+    private void initializeJComboBox(List<Vehicle> vehicles, boolean toggleSort) {
         String property;
         property = "category";
         String[] category = utilityObject.findUniqueVehiclePropertyValues(vehicles, property);
-        categorySelect = new JComboBox(category);
+        categorySelect = (categorySelect == null) ? new JComboBox() : categorySelect;
+        categorySelect.removeAllItems();
+        for(String item : category ){
+            categorySelect.addItem(item);
+        }
         categorySelect.setSelectedItem(DEFAULT);
         property = "make";
         String[] make = utilityObject.findUniqueVehiclePropertyValues(vehicles, property);
-        makeSelect = new JComboBox(make);
+        makeSelect = (makeSelect == null) ? new JComboBox() : makeSelect;
+        makeSelect.removeAllItems();
+        for(String item : make ){
+            makeSelect.addItem(item);
+        }
         makeSelect.setSelectedItem(DEFAULT);
         property = "type";
         String[] type = utilityObject.findUniqueVehiclePropertyValues(vehicles, property);
-        typeSelect = new JComboBox(type);
+        typeSelect = (typeSelect == null) ? new JComboBox() : typeSelect;
+        typeSelect.removeAllItems();
+        for(String item : type ){
+            typeSelect.addItem(item);
+        }
         typeSelect.setSelectedItem(DEFAULT);
         property = "year";
         String[] year = utilityObject.findUniqueVehiclePropertyValues(vehicles, property);
-        yearSelect = new JComboBox(year);
+        yearSelect = (yearSelect == null) ? new JComboBox() : yearSelect;
+        yearSelect.removeAllItems();
+        for(String item : year ){
+            yearSelect.addItem(item);
+        }
         yearSelect.setSelectedItem(DEFAULT);
         property = "price";
         String[] price = utilityObject.findUniqueVehiclePropertyValues(vehicles, property);
-        priceRangeSelect = new JComboBox(price);
+        priceRangeSelect = (priceRangeSelect == null) ? new JComboBox() : priceRangeSelect;
+        priceRangeSelect.removeAllItems();
+        for(String item : price ){
+            priceRangeSelect.addItem(item);
+        }
         priceRangeSelect.setSelectedItem(DEFAULT);
-        sortTypeSelect = new JComboBox(utilityObject.SORT_TYPE);
-        sortTypeSelect.setSelectedItem(DEFAULT);
+
+ if(toggleSort) {
+     sortTypeSelect = new JComboBox(utilityObject.SORT_TYPE);
+     sortTypeSelect.setSelectedItem(DEFAULT);
+ }
         categorySelect.setBounds(120, 10, 170, 20);
         makeSelect.setBounds(120, 50, 170, 20);
         typeSelect.setBounds(120, 90, 170, 20);
@@ -122,6 +147,10 @@ public class InventoryBrowseUI implements ActionListener {
         priceRangeSelect.setBounds(120, 170, 170, 20);
         sortTypeSelect.setBounds(790, 14, 200, 30);
 
+    }
+
+    private void resetFilterParameters() {
+        initializeJComboBox(searchedVehicleList,false);
     }
 
     private void initializeJLabel() {
@@ -132,7 +161,6 @@ public class InventoryBrowseUI implements ActionListener {
         priceLabel = new JLabel("PRICE");
         sortLabel = new JLabel("SORT BY");
         navigationLabel = new JLabel("Page " + pageNumber);
-
 
         categoryLabel.setBounds(40, 10, 80, 20);
         makeLabel.setBounds(40, 50, 40, 20);
@@ -243,6 +271,7 @@ public class InventoryBrowseUI implements ActionListener {
                         }
                         removeCurrentResultPanel();
                         addFilterResultPanel();
+                        resetFilterParameters();
                         imagePanelObjectsList = createResultsPanel(5);
                         display(searchedVehicleList, imagePanelObjectsList);
                         navigationLabel.setText("Page " + pageNumber);
@@ -254,6 +283,15 @@ public class InventoryBrowseUI implements ActionListener {
                     nextPageNavigateButton.setEnabled(true);
                     filterVehicleList = searchTextField.getText().isEmpty() ? vehicleList : searchedVehicleList;
                     filterVehicleList = utilityObject.filterVehicles(filterVehicleList, getFilterValues());
+                    if(makeSelect.getSelectedItem().equals(DEFAULT) &&
+                            typeSelect.getSelectedItem().equals(DEFAULT) &&
+                            categorySelect.getSelectedItem().equals(DEFAULT) &&
+                            yearSelect.getSelectedItem().equals(DEFAULT) &&
+                            priceRangeSelect.getSelectedItem().equals(DEFAULT)) {
+                        filterVehicleList = vehicleList;
+                        initializeJComboBox(vehicleList,false);
+                        searchTextField.setText("");
+                    }
                     if (sortTypeSelect.getSelectedItem().toString().contains("YEAR")) {
                         utilityObject.sortByYear(filterVehicleList, (sortTypeSelect.getSelectedItem().toString().equals("YEAR LOW TO HIGH")));
                     } else if (sortTypeSelect.getSelectedItem().toString().contains("PRICE")) {
@@ -263,6 +301,7 @@ public class InventoryBrowseUI implements ActionListener {
                     addFilterResultPanel();
                     imagePanelObjectsList = createResultsPanel(5);
                     display(filterVehicleList, imagePanelObjectsList);
+                    searchedVehicleList = filterVehicleList;
                     navigationLabel.setText("Page " + pageNumber);
                 }
                 break;
@@ -274,9 +313,9 @@ public class InventoryBrowseUI implements ActionListener {
                     addFilterResultPanel();
                     imagePanelObjectsList = createResultsPanel(5);
                     if (sortTypeSelect.getSelectedItem().toString().contains("YEAR")) {
-                        if (filterVehicleList.size() != 0) {
-                            utilityObject.sortByYear(filterVehicleList, (sortTypeSelect.getSelectedItem().toString().equals("YEAR LOW TO HIGH")));
-                            display(filterVehicleList, imagePanelObjectsList);
+                        if (searchedVehicleList.size() != 0) {
+                            utilityObject.sortByYear(searchedVehicleList, (sortTypeSelect.getSelectedItem().toString().equals("YEAR LOW TO HIGH")));
+                            display(searchedVehicleList, imagePanelObjectsList);
                             navigationLabel.setText("Page " + pageNumber);
                         } else {
                             utilityObject.sortByYear(vehicleList, (sortTypeSelect.getSelectedItem().toString().equals("YEAR LOW TO HIGH")));
@@ -285,9 +324,9 @@ public class InventoryBrowseUI implements ActionListener {
                         }
 
                     } else if (sortTypeSelect.getSelectedItem().toString().contains("PRICE")) {
-                        if (filterVehicleList.size() != 0) {
-                            utilityObject.sortByPrice(filterVehicleList, (sortTypeSelect.getSelectedItem().toString().equals("PRICE LOW TO HIGH")));
-                            display(filterVehicleList, imagePanelObjectsList);
+                        if (searchedVehicleList.size() != 0) {
+                            utilityObject.sortByPrice(searchedVehicleList, (sortTypeSelect.getSelectedItem().toString().equals("PRICE LOW TO HIGH")));
+                            display(searchedVehicleList, imagePanelObjectsList);
                             navigationLabel.setText("Page " + pageNumber);
                         } else {
                             utilityObject.sortByPrice(vehicleList, (sortTypeSelect.getSelectedItem().toString().equals("PRICE LOW TO HIGH")));
@@ -371,7 +410,7 @@ public class InventoryBrowseUI implements ActionListener {
             JLabel imageLabel;
             Image image = vehicle.getPhoto();
             if (image == null) {
-                imageLabel = new JLabel("No Image");
+                imageLabel = new JLabel("NO IMAGE");
             } else {
                 imageLabel = new JLabel(new ImageIcon(image));
             }
