@@ -385,6 +385,55 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
         makeItVisible();
     }
 
+    private void makeItVisible() {
+        // TODO Auto-generated method stub
+        setVisible(true);
+        this.addWindowListener(new WindowListener() {
+            
+            @Override
+            public void windowIconified(WindowEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+            @Override
+            public void windowOpened(WindowEvent e) {   
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // TODO Auto-generated method stub
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+    }
+
     //display the incentive which you are going to edit in editScreen
     private void showIncentive(IncentiveUtilities i) {
         idTextField.setEditable(true);
@@ -1193,11 +1242,11 @@ public class IncentiveUtilities extends JFrame implements Comparable<IncentiveUt
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
     }
+    
+     
 
-    private void makeItVisible() {
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
-    }
+    
+    
 
     //deleteIncentiveScreen
     public void delete(String incentID) {
