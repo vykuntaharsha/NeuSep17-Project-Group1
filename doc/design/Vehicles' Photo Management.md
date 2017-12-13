@@ -39,3 +39,6 @@ And the main implementation is in `src/com/neuSep17/dao/PictureManager.java`
 src/com/neuSep17/dao/PictureManagement.java
 
 src/com/neuSep17/ui/InventoryEditUI.java
+
+# Change History
+2017-12-12. The loading time for 1368 records took about 50 seconds, more than 95% are empty pictures. So try to use a hash map to make it quick.
