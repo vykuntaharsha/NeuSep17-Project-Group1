@@ -86,7 +86,7 @@ public class InventoryBrowseUtility {
                         .filter(v -> v.getBodyType().toUpperCase().equals(value)).collect(Collectors.toList());
                 break;
             case "Category":
-                System.out.println(vehicles.get(1).getCategory().toString());
+//                System.out.println(vehicles.get(1).getCategory().toString());
                 filterVehicles = vehicles.stream()
                         .filter(v -> v.getCategory().toString() == value).collect(Collectors.toList());
                 break;
