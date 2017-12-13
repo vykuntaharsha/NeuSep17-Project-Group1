@@ -427,8 +427,8 @@ public class InventoryBrowseUI implements ActionListener {
         vehicleIDButtonList=new ArrayList<>();
         int counter = 0;
         while (counter < 5 && startIndex < vehiclesToDisplay.size()) {
-           // Image image =  ImageIO.read(vehiclesToDisplay.get(startIndex).getPhotoURL().openStream());
-              Image image=vehiclesToDisplay.get(startIndex).getPhoto();
+            Image image =  ImageIO.read(vehiclesToDisplay.get(startIndex).getPhotoURL().openStream());
+         //     Image image=vehiclesToDisplay.get(startIndex).getPhoto();
             JLabel imageLabel = new JLabel(new ImageIcon(image));
             imageLabel.setBounds(95, 10, 100, 45);
             imagePanelObjectsList.get(counter).add(imageLabel);
