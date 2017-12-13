@@ -1,13 +1,13 @@
 package com.neuSep17.dao;
 
+import com.neuSep17.dto.Vehicle;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import javax.imageio.*;
-import javax.swing.SwingUtilities;
-
-import com.neuSep17.dto.Vehicle;
 
 /**
  * Design document: /doc/design/display-picture.md
@@ -18,6 +18,7 @@ import com.neuSep17.dto.Vehicle;
  * 0.1: 2017-11-30 Initialize.
  * 0.2: 2017-12-01 Use the relative path as the root of pictures
  * 1.0: 2017-12-05 Fixed some bugs and now it is release.
+ * 1.1: 2017-12-12 Put empty file names to a set to avoid file IO
  */
 public class PictureManager {
     //root direction of the picture files
@@ -25,6 +26,11 @@ public class PictureManager {
     private static final boolean DEBUG = false;
     private static URL defaultPhotoURL;
     private static BufferedImage defaultPhoto;
+    private static Set<Integer> emptyURLSet;
+    
+    static {
+//        invlidURLSet = 
+    }
 
     //replaced by the getPhoto() in the Vehicle class
     @Deprecated
@@ -95,7 +101,9 @@ public class PictureManager {
     public static BufferedImage loadImageFromURL(URL url) {
         BufferedImage image = null;
         try {
-            if(url.openStream()!=null) image = ImageIO.read(url);
+            int length = url.openConnection().getContentLength();
+            if (length > 0 && url.openStream() != null)
+                image = ImageIO.read(url);
         } catch (IOException e) {
             System.out.println("Cannot load the photo from " + url.toString());
             if(PropertyManager.getProperty("debug").equalsIgnoreCase("true"))  e.printStackTrace();
@@ -104,6 +112,10 @@ public class PictureManager {
         return image;
     }
     
+    /**
+     * @param image
+     * @param fileName
+     */
     private static void cacheImage(BufferedImage image, String fileName) {
         File file = new File(PICTURE_DIR, fileName);
         if (!file.exists()) {
