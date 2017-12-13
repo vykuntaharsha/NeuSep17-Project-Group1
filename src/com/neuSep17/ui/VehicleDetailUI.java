@@ -68,6 +68,7 @@ class VehicleDetailUI extends JFrame {
     private Vehicle[] selectedVehicle = new Vehicle[4];
 
     public VehicleDetailUI(Vehicle v, Dealer dealer) throws IOException {
+	System.out.println("Working inside vehicle");
     	setType(Type.POPUP);
     	setBackground(new Color(255, 255, 255));
         this.vehicle = v;
@@ -392,7 +393,7 @@ class VehicleDetailUI extends JFrame {
             {
                   FeatureCounter++;
             }
-		    else if(vehicle.getExteriorColor().toLowerCase().contains(value)||vehicle.getInteriorColor().toLowerCase().contains(value)))
+		    else if(vehicle.getExteriorColor().toLowerCase().contains(value)||vehicle.getInteriorColor().toLowerCase().contains(value))
             {
                   FeatureCounter++;
             }
