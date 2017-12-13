@@ -392,7 +392,7 @@ class VehicleDetailUI extends JFrame {
             {
                   FeatureCounter++;
             }
-		    else if(vehicle.getExteriorColor().contains(value)||vehicle.getInteriorColor().contains(value))
+		    else if(vehicle.getExteriorColor().toLowerCase().contains(value)||vehicle.getInteriorColor().toLowerCase().contains(value)))
             {
                   FeatureCounter++;
             }
@@ -400,7 +400,7 @@ class VehicleDetailUI extends JFrame {
 		    {
 		     FeatureCounter++;
 		    }
-		    System.out.println(FeatureCounter +" "+ vehicle.getExteriorColor().contains(value));
+		    System.out.println(FeatureCounter);
 		}
 		if(FeatureCounter == criteria.size())
 		  {
