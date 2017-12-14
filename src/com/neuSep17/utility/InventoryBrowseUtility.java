@@ -92,6 +92,9 @@ public class InventoryBrowseUtility {
                 break;
             case "Price":
                 String[] price = value.split("-", 2);
+                if(price[0].contains("above")){
+                    price[0]=price[0].split(" ")[1];
+                }
                 double lo = Double.parseDouble(price[0]);
                 if (price.length > 1) {
                     double hi = Double.parseDouble(price[1]);
