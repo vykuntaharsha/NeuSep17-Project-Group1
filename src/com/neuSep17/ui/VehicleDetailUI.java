@@ -140,7 +140,7 @@ class VehicleDetailUI extends JFrame {
          vehicleTable = new JTable(18,2);
          vehicleTable.setGridColor(new Color(153, 153, 51));
          vehicleTable.setBackground(new Color(245, 245, 220));
-         vehicleTable.setFont(new Font("Bookman Old Style", Font.BOLD, 19));
+         vehicleTable.setFont(new Font("Bookman Old Style", Font.PLAIN, 15));
          vehicleTable.setShowVerticalLines(false);
          vehicleTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
          vehicleTable.setSize(new Dimension(45, 50));
@@ -337,7 +337,8 @@ class VehicleDetailUI extends JFrame {
         			.addComponent(dealerTable, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         			.addContainerGap(225, Short.MAX_VALUE))
         );
-        dealerTab.setLayout(dealLayout);  
+        dealerTab.setLayout(dealLayout); 
+     
 
 
         tabs.add("Dealer",dealerTab);
@@ -438,7 +439,7 @@ class VehicleDetailUI extends JFrame {
         
         pageTitle = new JLabel(vehicle.getYear() + "   " + vehicle.getMake() + "   " + vehicle.getModel());
         pageTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        pageTitle.setFont(new Font("Californian FB", Font.BOLD, 40));
+        pageTitle.setFont(new Font("Californian FB", Font.BOLD, 30));
 
         // Get the screen size, for calculating the initial window size;
         screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -477,6 +478,12 @@ class VehicleDetailUI extends JFrame {
         moreVehiclesPanel.add(lblYouMayLike);       	        
         container.revalidate();
         container.repaint();
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+    }
     }
 
     private void createBottomPanel() {
@@ -521,7 +528,7 @@ class VehicleDetailUI extends JFrame {
        similarVehiclePics[0].setBounds(135, 42, 242, 138);
        similarVehiclePics[1].setBounds(529, 42, 242, 138);
        similarVehiclePics[2].setBounds(974, 42, 239, 138);        
-       similarVehiclePics[3].setBounds(1420, 42, 242, 138);
+       similarVehiclePics[3].setBounds(1420, 42, 240, 138);
         
        similarVehicleNames[0].setBounds(135, 186, 242, 20);
        similarVehicleNames[1].setBounds(529, 186, 242, 25);
