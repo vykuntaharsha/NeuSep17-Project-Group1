@@ -50,6 +50,7 @@ public class InventoryBrowseUI implements ActionListener {
         vehicles = utilityObject.setObjectsforUtility(dealerID);
         vehicleList = new ArrayList<>(vehicles);
 
+        PictureManager.initDealerPhotoLibrary(dealer, vehicleList);
         initializeJFrame();
         initializeJButtons();
         initializeJComboBox(vehicleList,true);
@@ -424,7 +425,7 @@ public class InventoryBrowseUI implements ActionListener {
             vehicleIDButton.setBounds(200, 10, 150, 20);
             vehicleIDButtonList.add(vehicleIDButton);
             JLabel vehicleCategoryLabel = new JLabel("Category: " + vehicle.getCategory().toString());
-            vehicleCategoryLabel.setBounds(400, 10, 100, 20);
+            vehicleCategoryLabel.setBounds(400, 10, 150, 20);
             JLabel vehicleMakeLabel = new JLabel("Make: " + vehicle.getMake());
             vehicleMakeLabel.setBounds(200, 40, 200, 20);
             JLabel vehicleTypeLabel = new JLabel("Type: " + vehicle.getBodyType());

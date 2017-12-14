@@ -70,7 +70,7 @@ public class DealerApplication extends IncentiveUI {
         Dimension screenSize = kit.getScreenSize();
         screenWidth = screenSize.width;
         screenHeight = screenSize.height;
-        mainFrame.setSize(2000,2000);
+        mainFrame.setSize(2400,2000);
         mainFrame.setVisible(true);
         mainFrame.setLayout(new GridLayout(3, 1));
 
